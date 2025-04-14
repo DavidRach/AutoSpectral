@@ -1,7 +1,8 @@
 # calculate_ssm.r
 
-#' calculate.ssm
+#' @title calculate.ssm
 #'
+#' @description
 #' Calculates a spillover spread matrix (ssm) for a set of fluorophores.
 #'
 #' @importFrom MASS ginv

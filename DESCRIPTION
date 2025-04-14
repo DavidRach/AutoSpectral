@@ -12,7 +12,7 @@ Authors@R: c(
 Description: Isolates and refines clean spectral signatures from 
     single stained controls. Deals with autofluorescence contamination in 
     controls effectively. Unmix fcs files with ordinary or weighted least squares.
-License: MIT + file LICENSE
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Imports:

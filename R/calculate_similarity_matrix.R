@@ -1,8 +1,8 @@
 # calculate_similarity_matrix.r
 
-#' calculate.similarity.matrix
+#' @title calculate.similarity.matrix
 #'
-#' Calculates the similarity matrix (set of cosine similarity values)
+#' @descrition Calculates the similarity matrix (set of cosine similarity values)
 #' for a set of fluorophores (a spectral panel).
 #'
 #' @importFrom lsa cosine

@@ -1,8 +1,8 @@
 # calculate_complexity_index.r
 
-#' calculate.complexity.index
+#' @title calculate.complexity.index
 #'
-#' Calculates the complexity index for a set of fluorophores (a spectral panel).
+#' @description Calculates the complexity index for a set of fluorophores (a spectral panel).
 #'
 #' @importFrom lsa cosine
 #' @param spectra Spectral signatures of fluorophores, normalized between 0 and 1,
