@@ -1,7 +1,8 @@
 # unmix_ols.r
 
-#' unmix.ols
+#' @title unmix.ols
 #'
+#' @description
 #' Performs spectral unmixing using ordinary least squares
 #'
 #' @param raw.data Expression data from raw fcs files. Cells in rows and detectors

@@ -21,7 +21,8 @@
 #' @param gate Logical, default is TRUE. Not currently in use. To be implemented
 #' to allow pre-gated data to be read in without applying additional gating here.
 #'
-#' @return Returns the flow.control list with the following components:
+#' @return flow.control
+#' Returns the flow.control list with the following components:
 #' \describe{
 #'   \item{filename}{Names of the single color control files.}
 #'   \item{fluorophore}{Corresponding fluorophores used in the experiment.}

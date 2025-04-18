@@ -1,0 +1,136 @@
+# generate spectral ribbon plots
+
+spectral.ribbon.plot <- function( pos.expr.data, neg.expr.data,
+                                       spectral.channel,
+                                       asp, fluor.name, plot.prefix = NULL,
+                                       af = FALSE, removed.data = NULL ){
+  
+  if( !af ) {
+    
+    if( is.null( plot.prefix ) ){
+      plot.prefix <- "Scatter match"
+    }
+    
+    figure.dir <- asp$figure.spectral.ribbon.dir
+    
+    neg.mfi <- apply( neg.expr.data[ , spectral.channel ], 2, median )
+    
+    pos.background.subtracted <- data.frame( pos.expr.data[ , spectral.channel ], 
+                                             check.names = FALSE )
+    pos.background.subtracted <- sweep( pos.background.subtracted, 2, neg.mfi, 
+                                        FUN = "-" )
+    
+    pos.data.plot <- data.frame( pos.expr.data[ , flow.control$spectral.channel ], 
+                                 check.names = FALSE )
+    
+    neg.data  <- data.frame( neg.expr.data[ , spectral.channel ],
+                             check.names = FALSE )
+    
+    pos.background.subtracted$group <- fluor.name
+    pos.data.plot$group <- paste( "Raw", fluor.name )
+    neg.data$group <- "Negative"
+    
+    ribbon.plot.data <- rbind( pos.background.subtracted, pos.data.plot, neg.data )
+    
+    ribbon.plot.data$group <- factor( ribbon.plot.data$group, 
+                                      levels = c( "Negative",
+                                                  paste( "Raw", fluor.name ),
+                                                  fluor.name ) )
+    
+  } else {
+    
+    if( is.null( plot.prefix ) ){
+      plot.prefix <- "AF removal"
+    }
+    
+    figure.dir <- asp$figure.clean.control.dir
+    
+    original.data <- data.frame( pos.expr.data[ , flow.control$spectral.channel ], 
+                                 check.names = FALSE )
+    
+    cleaned.data <- data.frame( neg.expr.data[ , spectral.channel ],
+                                check.names = FALSE )
+    
+    if( !is.null( removed.data ) ){
+      removed.data <- data.frame( removed.data[ , spectral.channel ],
+                                  check.names = FALSE )
+    }
+    
+    original.data$group <- paste( "Original", fluor.name )
+    cleaned.data$group <- paste( "Cleaned", fluor.name )
+    removed.data$group <- "Removed events"
+    
+    ribbon.plot.data <- rbind( original.data, cleaned.data, removed.data )
+    
+    ribbon.plot.data$group <- factor( ribbon.plot.data$group, 
+                                      levels = c( paste( "Original", fluor.name ),
+                                                  paste( "Cleaned", fluor.name ),
+                                                  "Removed events" ) )
+  }
+  
+  
+  
+  ribbon.plot.long <- tidyr::pivot_longer( ribbon.plot.data, 
+                                           cols = -group, 
+                                           names_to = "channel", 
+                                           values_to = "value" )
+  
+  ribbon.breaks <- asp$ribbon.breaks
+  ribbon.labels <- sapply( ribbon.breaks, function( x ) {
+    if ( x == 0 ) "0" else parse( text = paste0( "10^", log10( abs( x ) ) ) )
+  } )
+  ribbon.limits <- c( asp$ribbon.plot.min, asp$expr.data.max )
+  
+  # biexponential transform for scale
+  
+  biexp.transform <- flowjo_biexp( channelRange = asp$default.transformation.param$length, 
+                                  maxValue = asp$default.transformation.param$max.range, 
+                                  pos = asp$default.transformation.param$pos, 
+                                  neg = asp$default.transformation.param$neg, 
+                                  widthBasis = asp$default.transformation.param$width, 
+                                  inverse = FALSE )
+  
+  biexp.inverse <- flowjo_biexp( channelRange = asp$default.transformation.param$length, 
+                                maxValue = asp$default.transformation.param$max.range, 
+                                pos = asp$default.transformation.param$pos, 
+                                neg = asp$default.transformation.param$neg, 
+                                widthBasis = asp$default.transformation.param$width, 
+                                inverse = TRUE )
+  
+  plot.biexp.transform <- trans_new(
+    name = "biexp",
+    transform = biexp.transform,
+    inverse = biexp.inverse
+  )
+  
+  ribbon.plot <- suppressWarnings( ggplot( ribbon.plot.long, 
+          aes( factor( channel, levels = unique( channel ) ), value ) ) +
+    scale_y_continuous( trans = plot.biexp.transform, 
+                        breaks = ribbon.breaks,
+                        limits = ribbon.limits,
+                        labels = ribbon.labels ) +
+    geom_bin2d( bins = asp$ribbon.bins ) +
+    facet_wrap( ~ group, ncol = 1 ) +
+    xlab( "Detector" ) +
+    ylab( "Intensity" ) +
+    scale_fill_gradientn( colours = asp$density.palette.base.color,
+                          values = asp$ribbon.scale.values ) +
+    theme_minimal() +
+    theme( axis.text.x = element_text( angle = asp$ribbon.plot.axis.text.angle,
+                                       vjust = 1, hjust = 1 ),
+           panel.grid.minor = element_blank(),
+           legend.position = "none",
+           strip.text = element_text( size = asp$ribbon.plot.strip.text.size, 
+                                      face = asp$ribbon.plot.strip.text.face ) )
+  )
+
+  ribbon.plot.filename <- paste( plot.prefix, fluor.name, asp$ribbon.plot.filename )
+  
+  suppressWarnings(
+    ggsave( ribbon.plot.filename, plot = ribbon.plot,
+            path = figure.dir,
+            width = asp$ribbon.plot.width, height = asp$ribbon.plot.height )
+  )
+  
+  
+}

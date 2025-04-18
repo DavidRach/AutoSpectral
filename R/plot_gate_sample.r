@@ -1,0 +1,95 @@
+# plot_gate_sample.r
+
+
+# Plots pre-defined gate on sample.
+
+plot.gate.sample <- function( samp, gate.data, gate.marker, gate.boundary,
+                              scatter.and.channel.label, control.type, asp )
+{
+  
+  if( control.type == "beads" ){ 
+    
+    gate.bound.density.bw.factor <- asp$plot.gate.factor * asp$gate.bound.density.bw.factor.beads
+    gate.bound.density.grid.n <- asp$plot.gate.factor * asp$gate.bound.density.grid.n.beads
+      
+    } else { 
+      
+    gate.bound.density.bw.factor <- asp$plot.gate.factor * asp$gate.bound.density.bw.factor.cells
+    gate.bound.density.grid.n <- asp$plot.gate.factor * asp$gate.bound.density.grid.n.cells
+      
+    }
+  
+  bandwidth.x <- gate.bound.density.bw.factor * dpik( gate.data[ , 1 ] )
+  bandwidth.y <- gate.bound.density.bw.factor * dpik( gate.data[ , 2 ] )
+  
+  
+  gate.bound.density <- bkde2D(
+    gate.data,
+    bandwidth = c( bandwidth.x, bandwidth.y ),
+    gridsize = c( gate.bound.density.grid.n, gate.bound.density.grid.n ) )
+  
+  names( gate.bound.density ) <- c( "x", "y", "z" )
+  
+  gate.data.ggp <- data.frame(
+    x = gate.data[ , 1 ],
+    y = gate.data[ , 2 ],
+    z = interp.surface( gate.bound.density, gate.data ) )
+  
+  gate.boundary.ggp <- data.frame(
+    x = c( gate.boundary$x,
+           gate.boundary$x[ 1 ] ),
+    y = c( gate.boundary$y,
+           gate.boundary$y[ 1 ] )
+  )
+  
+  density.palette <- get.density.palette( gate.data.ggp$z, asp )
+  
+  x.lab.idx <- which( scatter.and.channel.label == gate.marker[ 1 ] )
+  x.lab <- names( scatter.and.channel.label[ x.lab.idx ] )
+  y.lab.idx <- which( scatter.and.channel.label == gate.marker[ 2 ] )
+  y.lab <- names( scatter.and.channel.label[ y.lab.idx ] )
+  
+  gate.plot <- ggplot( gate.data.ggp, aes( .data$x, .data$y,
+        color = .data$z ) ) +
+    scale_x_continuous(
+      name = x.lab,
+      breaks = seq( asp$scatter.data.min.x,
+                    asp$scatter.data.max.x, asp$data.step ),
+      labels = paste0( round( seq( asp$scatter.data.min.x, asp$scatter.data.max.x,
+                                   asp$data.step ) / 1e6, 1 ), "e6" ),
+      limits = c( asp$scatter.data.min.x,
+                  asp$scatter.data.max.x ),
+      expand = expansion( asp$figure.gate.scale.expand ) ) +
+    scale_y_continuous(
+      name = y.lab,
+      breaks = seq( asp$scatter.data.min.y,
+                    asp$scatter.data.max.y, asp$data.step ),
+      labels = paste0( round( seq( asp$scatter.data.min.y, asp$scatter.data.max.y,
+                                   asp$data.step ) / 1e6, 1 ), "e6" ),
+      limits = c( asp$scatter.data.min.y,
+                  asp$scatter.data.max.y ),
+      expand = expansion( asp$figure.gate.scale.expand ) ) +
+    geom_scattermore( pointsize = asp$figure.gate.point.size,
+                stroke = 0.1 * asp$figure.gate.point.size, alpha = 1 ) +
+    scale_color_gradientn( "", labels = NULL, colors = density.palette,
+        guide = guide_colorbar( barwidth = asp$figure.gate.bar.width,
+            barheight = asp$figure.gate.bar.height ) ) +
+    geom_path( aes( .data$x, .data$y, color = NULL ),
+               data = gate.boundary.ggp, linewidth = asp$figure.gate.line.size ) +
+    theme_bw() +
+    theme( plot.margin = margin( asp$figure.margin, asp$figure.margin,
+                                 asp$figure.margin, asp$figure.margin ),
+           legend.position = "none",
+           axis.ticks = element_line( linewidth = asp$figure.panel.line.size ),
+           axis.text = element_text( size = asp$figure.axis.text.size ),
+           axis.title = element_text( size = asp$figure.axis.title.size ),
+           panel.border = element_rect( linewidth = asp$figure.panel.line.size ),
+           panel.grid.major = element_blank(),
+           panel.grid.minor = element_blank() )
+  
+  ggsave( file.path( asp$figure.gate.dir, sprintf( "%s.jpg", samp ) ),
+          plot = gate.plot, width = asp$figure.width,
+          height = asp$figure.height )
+  
+}
+

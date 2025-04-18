@@ -4,50 +4,51 @@
 #'
 #' @description
 #' A four-part function to clean single color controls in order to extract
-#' fluorophore signatures. Any part can be run independently.
-#' Stage 1: PeacoQC to eliminate flow artefacts.
-#' Stage 2: Trimming to eliminate extreme events.
-#' Stage 3: AF noise removal using PCA unmixing on matching unstained (cells only).
-#' Stage 4: brightest event selection from positive, universal negative from
-#' matching negative and downsampling to speed up rlm spectra optimization.
+#'     fluorophore signatures. Any part can be run independently.
+#'     Stage 1: PeacoQC to eliminate flow artefacts.
+#'     Stage 2: Trimming to eliminate extreme events.
+#'     Stage 3: AF noise removal using PCA unmixing on matching unstained (cells only).
+#'     Stage 4: brightest event selection from positive, universal negative from
+#'     matching negative and downsampling to speed up rlm spectra optimization.
 #'
 #' @param flow.control Prepare using define.flow.control. List of the data and
-#' essential information about the cytometer and data structure.
-#' @param asp Prepare using get.autospectral.param. A list of essential parameters.
+#'     essential information about the cytometer and data structure.
+#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#'     A list of essential parameters.
 #' @param time.clean Logical, default is FALSE. Determines whether to run PeacoQC to
-#' remove time-based inconsistencies in the controls.
+#'     remove time-based inconsistencies in the controls.
 #' @param trim Logical, default is FALSE. Determines whether to remove extreme
-#' events (positive and negative) from controls. Extent of trimming is determined
-#' by trim.factor. Include trim.factor if setting trim to TRUE.
+#'     events (positive and negative) from controls. Extent of trimming is determined
+#'     by trim.factor. Include trim.factor if setting trim to TRUE.
 #' @param trim.factor Numeric. Default is asp$rlm.trim.factor. Include trim.factor
-#' if setting trim to TRUE.
+#'     if setting trim to TRUE.
 #' @param af.remove Logical, default is FALSE. Determines whether to remove
-#' intrusive autofluorescence contamination from cell controls using PCA-based
-#' identification and gating. Requires universal negatives to be defined in the
-#' control file and subsequently in flow.control via define.flow.control.
+#'     intrusive autofluorescence contamination from cell controls using PCA-based
+#'     identification and gating. Requires universal negatives to be defined in the
+#'     control file and subsequently in flow.control via define.flow.control.
 #' @param universal.negative Logical, default is TRUE. Determines whether to
-#' use a universal negative sample as the negative for spectral extraction.
-#' Requires universal negatives to be defined in the
-#' control file and subsequently in flow.control via define.flow.control.
+#'     use a universal negative sample as the negative for spectral extraction.
+#'     Requires universal negatives to be defined in the
+#'     control file and subsequently in flow.control via define.flow.control.
 #' @param downsample Logical, default is TRUE. Determines whether to reduce cell
-#' and bead control events to speed up processing.
+#'     and bead control events to speed up processing.
 #' @param negative.n Number of events to include in the downsampled negative
-#' population. Default is asp$negative.n.
+#'     population. Default is asp$negative.n.
 #' @param positive.n Number of events to include in the downsampled positive
-#' population. Default is asp$positive.n
+#'     population. Default is asp$positive.n
 #' @param scatter.match Logical, default is TRUE. Determines whether to select
-#' negative events based scatter profiles matching the positive events. Scatter
-#' matching defines a region of FSC and SSC determined by the distribution of
-#' selected positive events (see positive.n) and defines a gate for this region.
+#'     negative events based scatter profiles matching the positive events. Scatter
+#'     matching defines a region of FSC and SSC determined by the distribution of
+#'     selected positive events (see positive.n) and defines a gate for this region.
 #' @param refactor Logical, default is TRUE. Reassigns event indices after cleaning
-#' steps, setting up fresh, consistent indices.
+#'     steps, setting up fresh, consistent indices.
 #' @param return.separately Logical, default is FALSE. Provides the option to
-#' return the cleaned expression data as an output as well as storing the clean
-#' data in flow.control.
+#'     return the cleaned expression data as an output as well as storing the clean
+#'     data in flow.control.
 #'
 #' @return No returns unless return.separately is set to TRUE. Output is stored
-#' in flow.control so that flow.control can be used subsequenlty as a complete
-#' data set.
+#'     in flow.control so that flow.control can be used subsequenlty as a complete
+#'     data set.
 #' @export
 
 

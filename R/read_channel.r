@@ -1,0 +1,49 @@
+# read_channel.r
+
+read.channel <- function( control.dir, control.def.file, asp )
+{
+    # read markers from file if available
+    if ( ! is.null( asp$marker.file.name ) &&
+            file.exists( asp$marker.file.name ) )
+        return( read.table( asp$marker.file.name, sep = ",",
+            stringsAsFactors = FALSE ) )
+
+    # read definition of controls
+    control <- read.csv( control.def.file, stringsAsFactors = FALSE )
+
+    # get used channels from controls
+    control <- filter( control, filename != "" )
+    
+    check.critical( anyDuplicated( control$file.name ) == 0,
+                    "duplicated filenames in fcs data" )
+    
+    flow.set.channel <- colnames( suppressWarnings( read.FCS( file.path( control.dir, 
+                                                               control$filename[ 1 ] ) ) ) )
+      # sapply( control$filename[ 1 ], function( cf )
+      # colnames( suppressWarnings( read.FCS( file.path( control.dir, cf ) ) ) ) )
+
+    # correct channel names
+    flow.set.channel.corrected <- flow.set.channel
+
+    for ( fmfc.idx in 1 : nchar( asp$marker.forbidden.char ) )
+    {
+        fmfc <- substr( asp$marker.forbidden.char, fmfc.idx, fmfc.idx )
+
+        flow.set.channel.corrected <- gsub( fmfc, asp$marker.substitution.char,
+              flow.set.channel.corrected, fixed = TRUE )
+    }
+
+    # save list of markers
+    flow.set.channel.table <- data.frame( flow.set.channel, 
+             flow.set.channel.corrected, stringsAsFactors = FALSE )
+    
+    colnames( flow.set.channel.table ) <- c( "flow.set.channel",
+                   "flow.set.channel.corrected" )
+
+    if ( ! is.null( asp$marker.file.name ) )
+        write.table( flow.set.channel.table, file = asp$marker.file.name,
+            row.names = FALSE, col.names = FALSE, sep = "," )
+
+    flow.set.channel.table
+}
+
