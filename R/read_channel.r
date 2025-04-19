@@ -1,5 +1,23 @@
 # read_channel.r
 
+
+#' @title Read Channel Information
+#'
+#' @description This function reads channel information from control files and
+#'     corrects channel names based on specified forbidden characters.
+#'
+#' @importFrom utils read.csv read.table write.table
+#' @importFrom flowCore read.FCS
+#' @importFrom dplyr filter
+#' @importFrom utils globalVariables
+#'
+#' @param control.dir Directory containing control files.
+#' @param control.def.file File containing control definitions.
+#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#'
+#' @return A data frame containing the original and corrected channel names.
+#' @export
+
 read.channel <- function( control.dir, control.def.file, asp )
 {
     # read markers from file if available
@@ -11,13 +29,15 @@ read.channel <- function( control.dir, control.def.file, asp )
     # read definition of controls
     control <- read.csv( control.def.file, stringsAsFactors = FALSE )
 
+    utils::globalVariables( c( "filename" ) )
+
     # get used channels from controls
     control <- filter( control, filename != "" )
-    
+
     check.critical( anyDuplicated( control$file.name ) == 0,
                     "duplicated filenames in fcs data" )
-    
-    flow.set.channel <- colnames( suppressWarnings( read.FCS( file.path( control.dir, 
+
+    flow.set.channel <- colnames( suppressWarnings( read.FCS( file.path( control.dir,
                                                                control$filename[ 1 ] ) ) ) )
       # sapply( control$filename[ 1 ], function( cf )
       # colnames( suppressWarnings( read.FCS( file.path( control.dir, cf ) ) ) ) )
@@ -34,9 +54,9 @@ read.channel <- function( control.dir, control.def.file, asp )
     }
 
     # save list of markers
-    flow.set.channel.table <- data.frame( flow.set.channel, 
+    flow.set.channel.table <- data.frame( flow.set.channel,
              flow.set.channel.corrected, stringsAsFactors = FALSE )
-    
+
     colnames( flow.set.channel.table ) <- c( "flow.set.channel",
                    "flow.set.channel.corrected" )
 

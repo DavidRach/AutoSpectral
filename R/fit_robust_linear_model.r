@@ -10,6 +10,9 @@
 #' @description Returns a matrix by rows, with the intercept and p-value, and
 #'     coefficient and p-value, of a robust linear model fitted to the input data.
 #'     Reverts to a standard linear model in case of no convergence.
+#'
+#' @importFrom MASS rlm
+#' @importFrom stats lm
 #' @param x.data A vector containing the predictor variable data.
 #' @param y.data A vector containing the response variable data.
 #' @param x.name The name of the predictor variable.
@@ -17,12 +20,8 @@
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
 #'     A list of essential parameters.
 #' @return A matrix with the intercept and p-value, and coefficient and p-value.
-#' @examples
-#' \dontrun{
-#' fit.robust.linear.model(x.data, y.data, x.name, y.name, asp)
-#' }
-#' @importFrom MASS rlm
-#' @importFrom stats lm
+#' @export
+
 
 
 fit.robust.linear.model <-  function( x.data, y.data, x.name, y.name, asp )

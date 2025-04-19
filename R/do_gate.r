@@ -1,7 +1,7 @@
 # do_gate.r
 
 
-#' @title do.gate
+#' @title Do Gate
 #' @description
 #' Perform gating on scatter parameters
 #'     Returns a vector with the indexes of events inside the initial gate on
@@ -19,7 +19,7 @@
 #'
 #'
 #' @importFrom KernSmooth bkde2D
-#' @importFrom deldir deldir tile.list
+#' @importFrom deldir deldir tile.list which.tile
 #' @importFrom sp point.in.polygon
 #' @importFrom tripack tri.mesh convex.hull
 #'
@@ -31,10 +31,7 @@
 #' @param control.type The type of control used, beads or cells.
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
 #' @return A vector with the indexes of events inside the initial gate.
-#' @examples
-#' \dontrun{
-#' do.gate(gate.data, viability.gate, large.gate, samp, scatter.and.channel.label, control.type, asp)
-#' }
+#' @export
 
 
 do.gate <- function( gate.data, viability.gate, large.gate,

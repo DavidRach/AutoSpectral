@@ -3,14 +3,17 @@
 
 #' Perform Quality Control on Flow Cytometry Data using PeacoQC
 #'
-#' This function performs quality control on flow cytometry data using the PeacoQC method. It transforms the data, removes margins, and identifies good cells. The function also optionally plots the results and saves the cleaned data.
+#' This function performs quality control on flow cytometry data using the
+#' PeacoQC method. It transforms the data, removes margins, and identifies
+#' good cells. The function also optionally plots the results and saves
+#' the cleaned data.
 #'
 #' @title Perform Quality Control on Flow Cytometry Data using PeacoQC
-#' @description Performs quality control on flow cytometry data using the PeacoQC method.
+#' @description Performs quality control on flow cytometry data using the
+#'     PeacoQC method.
 #'
-#' @importFrom flowCore transform flowFrame exprs keyword
-#' @importFrom flowWorkspace transformList
-#' @importFrom PeacoQC PeacoQC PlotPeacoQC
+#' @importFrom flowCore transform flowFrame exprs keyword transformList keyword<-
+#' @importFrom PeacoQC PeacoQC PlotPeacoQC RemoveMargins
 #'
 #' @param dirty.expr A matrix containing the raw expression data, pre-cleaning.
 #' @param sample.name The name of the sample.
@@ -19,25 +22,22 @@
 #' @param transform.inv The inverse transformation function.
 #' @param output.dir The directory to save output files.
 #' @param time.param The time channel parameter.
-#' @param all.channels A vector of all channels to be included in the final cleaned data.
+#' @param all.channels A vector of all channels to be included in the final
+#'     cleaned data.
+#' @param asp The AutoSpectral parameter list.
 #' @return A matrix with the cleaned expression data.
-#' @examples
-#' \dontrun{
-#' do.peacoQC(dirty.expr, sample.name, spectral.channel, biexp.transform, transform.inv, output.dir, time.param, all.channels)
-#' }
-
+#' @export
 
 
 do.peacoQC <- function( dirty.expr, sample.name, spectral.channel,
                         biexp.transform, transform.inv,
-                        output.dir, time.param, all.channels ){
+                        output.dir, time.param, all.channels, asp ){
 
   transform.list <- transformList( spectral.channel, biexp.transform )
 
   dirty.ff <- flowFrame( dirty.expr )
 
   keyword( dirty.ff )$FILENAME <- sample.name
-
 
   dirty.ff <- transform( dirty.ff, transform.list )
 

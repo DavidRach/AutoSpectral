@@ -1,54 +1,20 @@
 # plot_convergence.r
-#
-# Copyright (c) 2020 VIB (Belgium) & Babraham Institute (United Kingdom)
-#
-# Software written by Carlos P. Roca, as research funded by the European Union.
-#
-# This software may be modified and distributed under the terms of the MIT
-# license. See the LICENSE file for details.
 
-
-#' Plot AutoSpill convergence
+#' @title Plot Convergence
+#' @description Plots convergence of iterative refinement of the spillover matrix.
 #'
-#' Plots convergence of iterative refinement of the spillover matrix.
-#'
-#' @param convergence.log Dataframe with convergence data of AutoSpill.
-#' @param popnegpop.slope Matrix with slope errors resulting from calculating
-#'     spillover with positive and negative populations. Optional parameter, it
-#'     can be \code{NULL}.
-#' @param asp List with AutoSpill parameters.
-#'
-#' @return \code{NULL}.
-#'
-#' @references Roca \emph{et al}:
-#'     AutoSpill: A method for calculating spillover coefficients to compensate
-#'     or unmix high-parameter flow cytometry data.
-#'     \emph{bioRxiv} 2020.06.29.177196;
-#'     \href{https://doi.org/10.1101/2020.06.29.177196}{doi:10.1101/2020.06.29.177196}
-#'     (2020).
-#'
-#' @seealso \code{\link{refine.spillover}}, \code{\link{process.posnegpop}},
-#'     and \code{\link{get.autospill.param}}.
-#'
+#' @importFrom ggplot2 ggplot aes labs geom_hline geom_point scale_x_continuous
+#' @importFrom ggplot2 scale_y_log10 scale_shape_manual theme_bw theme
+#' @importFrom ggplot2 element_line element_text element_rect margin ggsave
+#' @param convergence.log Dataframe with convergence data of AutoSpectral.
+#' @param asp List with AutoSpectral parameters.
+#' @return None. The function saves the generated convergence plot to a file.
 #' @export
 
-plot.convergence <- function( convergence.log, popnegpop.slope, asp )
+plot.convergence <- function( convergence.log, asp )
 {
     convergence.ggdata <- convergence.log
     convergence.ggdata$delta.change <- abs( convergence.ggdata$delta.change )
-
-    if ( ! is.null( popnegpop.slope ) )
-    {
-        slope.error <- popnegpop.slope - diag( nrow( popnegpop.slope ) )
-
-        posnegpop.delta <- sd( slope.error )
-        posnegpop.delta.max <- max( abs( slope.error ) )
-    }
-    else
-    {
-        posnegpop.delta <- NULL
-        posnegpop.delta.max <- NULL
-    }
 
     plot.xaxis.max  <- ceiling( max( convergence.log$iter ) / 10 ) * 10
     if ( plot.xaxis.max == 10 )
@@ -97,16 +63,6 @@ plot.convergence <- function( convergence.log, popnegpop.slope, asp )
             panel.border = element_rect( linewidth = asp$figure.panel.line.size ),
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank() )
-
-    if ( ! is.null( posnegpop.delta ) && ! is.null( posnegpop.delta.max ) )
-        convergence.ggplot <- convergence.ggplot +
-            geom_point( aes( x = 0, y = posnegpop.delta, shape = "posnegpop" ),
-                size = asp$figure.convergence.point.size,
-                color = asp$convergence.color.delta ) +
-            geom_point( aes( x = 0, y = posnegpop.delta.max,
-                    shape = "posnegpop" ),
-                size = asp$figure.convergence.point.size,
-                color = asp$convergence.color.delta.max )
 
     ggsave( file.path( asp$figure.convergence.dir,
         sprintf( "%s.jpg", asp$convergence.file.name ) ),

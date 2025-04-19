@@ -8,13 +8,9 @@
 #' @title Get Autospectral Parameters for Aurora Cytometer
 #' @description Returns parameters for running a calculation of unmixing with
 #'     autospectral, without creating any figures or tables.
-#' @importsFrom base get0
 #' @param autosp.param A list of initial autospectral parameters.
 #' @return A list of autospectral parameters specific to the Aurora cytometer.
-#' @examples
-#' \dontrun{
-#' get.autospectral.param.aurora(autosp.param)
-#' }
+#' @export
 
 
 get.autospectral.param.aurora <- function( autosp.param )

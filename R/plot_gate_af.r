@@ -1,9 +1,31 @@
 # plot_gate_af.r
 
+#' @title Plot Gate with Intermediate Steps
+#'
+#' @description This function plots the gate, including intermediate steps,
+#'     using ggplot2 and other necessary packages.
+#'
+#' @importFrom ggplot2 ggplot aes scale_x_continuous scale_y_continuous
+#' @importFrom ggplot2 scale_color_gradientn theme_bw theme element_line
+#' @importFrom ggplot2 element_text element_rect margin expansion ggsave
+#' @importFrom ggplot2 guide_colorbar
+#' @importFrom scattermore geom_scattermore
+#' @importFrom fields interp.surface
+#' @importFrom rlang .data
+#'
+#' @param samp Sample identifier.
+#' @param gate.data Data frame containing gate data points.
+#' @param gate.bound List containing gate boundary information.
+#' @param gate.region List containing gate region information.
+#' @param gate.population List containing gate population information.
+#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#'
+#' @return Saves the plot as a JPEG file in the specified directory.
+#' @export
 
-# Plots gate, including intermediate steps.
 
-plot.gate.af <- function( samp, gate.data, gate.bound, gate.region, 
+
+plot.gate.af <- function( samp, gate.data, gate.bound, gate.region,
                           gate.population, asp )
 {
     gate.data.ggp <- data.frame(
@@ -15,17 +37,17 @@ plot.gate.af <- function( samp, gate.data, gate.bound, gate.region,
 
     # get axis labels
     axes.labels <- colnames( gate.data )
-    
+
     # get data range & step
     x.min <- min( gate.data[ , 1 ] )
     x.max <- max( gate.data[ , 1 ] )
-    
+
     y.min <- min( gate.data[ , 2 ] )
     y.max <- max( gate.data[ , 2 ] )
-    
+
     x.breaks <- round( seq( x.min, x.max, length.out = 10 ) )
     y.breaks <- round( seq( y.min, y.max, length.out = 10 ) )
-    
+
     gate.plot <- ggplot( gate.data.ggp, aes( .data$x, .data$y,
             color = .data$z ) ) +
         scale_x_continuous(
@@ -94,7 +116,7 @@ plot.gate.af <- function( samp, gate.data, gate.bound, gate.region,
     gate.plot <- gate.plot +
             geom_path( aes( .data$x, .data$y, color = NULL ),
                 data = gate.region.ggp, linewidth = asp$figure.gate.line.size )
- 
+
    gate.boundary.ggp <- data.frame(
             x = c( gate.population$boundary$x,
                 gate.population$boundary$x[ 1 ] ),
@@ -105,8 +127,8 @@ plot.gate.af <- function( samp, gate.data, gate.bound, gate.region,
     gate.plot <- gate.plot +
             geom_path( aes( .data$x, .data$y, color = NULL ),
                 data = gate.boundary.ggp, linewidth = asp$figure.gate.line.size )
-  
-    ggsave( file.path( asp$figure.clean.control.dir, 
+
+    ggsave( file.path( asp$figure.clean.control.dir,
                        paste( samp, asp$af.plot.define.filename, ".jpg" ) ),
             plot = gate.plot, width = asp$figure.width,
             height = asp$figure.height )

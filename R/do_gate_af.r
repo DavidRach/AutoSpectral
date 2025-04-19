@@ -12,7 +12,7 @@
 #'     gate on autofluorescence parameters.
 #'
 #' @importFrom KernSmooth bkde2D
-#' @importFrom deldir deldir tile.list
+#' @importFrom deldir deldir tile.list which.tile
 #' @importFrom sp point.in.polygon
 #' @importFrom tripack tri.mesh convex.hull
 #'
@@ -21,10 +21,7 @@
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
 #'     A list of essential parameters.
 #' @return A vector with the indexes of events inside the initial gate.
-#' @examples
-#' \dontrun{
-#' do.gate.af(gate.data, samp, asp)
-#' }
+#' @export
 
 
 

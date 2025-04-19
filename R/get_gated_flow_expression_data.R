@@ -9,8 +9,8 @@
 #' @title Get Gated Flow Expression Data
 #' @description Retrieves gated flow cytometry expression data for specified samples,
 #'     removing out-of-range events and applying gating boundaries.
-#' @importsFrom flowCore read.FCS exprs
-#' @importsFrom sp point.in.polygon
+#' @importFrom flowCore read.FCS exprs
+#' @importFrom sp point.in.polygon
 #' @param samp The sample identifier.
 #' @param file.name A vector of file names for the samples.
 #' @param control.dir The directory containing the control files.
@@ -23,12 +23,7 @@
 #' @param scatter.and.channel.label A label for scatter and channel.
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
 #' @return A matrix with the gated expression data.
-#' @examples
-#' \dontrun{
-#' get.gated.flow.expression.data(samp, file.name, control.dir,
-#'     scatter.and.spectral.channel, spectral.channel, set.resolution,
-#'     flow.gate, gate.list, scatter.param, scatter.and.channel.label, asp)
-#' }
+#' @export
 
 
 get.gated.flow.expression.data <- function( samp, file.name, control.dir,

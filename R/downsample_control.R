@@ -9,8 +9,6 @@
 #' @description Downsamples control data by selecting a specified number of
 #'     positive and negative events based on peak channel values.
 #'
-#' @importFrom base sort
-#'
 #' @param clean.expr.data A list containing cleaned expression data for each sample.
 #' @param samp The sample identifier.
 #' @param peak.channels A vector of peak channels for the samples.
@@ -19,10 +17,7 @@
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
 #'     A list of essential parameters.
 #' @return A matrix with the selected expression data.
-#' @examples
-#' \dontrun{
-#' downsample.control(clean.expr.data, samp, peak.channels, negative.n, positive.n, asp)
-#' }
+#' @export
 
 
 

@@ -1,14 +1,16 @@
 # read_scatter_parameter.r
-#
-# Copyright (c) 2020 VIB (Belgium) & Babraham Institute (United Kingdom)
-#
-# Software written by Carlos P. Roca, as research funded by the European Union.
-#
-# This software may be modified and distributed under the terms of the MIT
-# license. See the LICENSE file for details.
 
-
-# Returns a vector with two scatter parameters.
+#' @title Read Scatter Parameters
+#'
+#' @description This function reads scatter parameters from a specified file or
+#'     uses default scatter parameters if the file is not available.
+#'
+#' @importFrom utils read.csv
+#'
+#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#'
+#' @return A vector of scatter parameters.
+#' @export
 
 read.scatter.parameter <- function( asp )
 {

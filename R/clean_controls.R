@@ -1,6 +1,6 @@
 # clean_controls.r
 
-#' @title clean.controls
+#' @title Clean Controls
 #'
 #' @description
 #' A four-part function to clean single color controls in order to extract
@@ -324,14 +324,3 @@ clean.controls <- function( flow.control, asp,
   if ( return.separately )
     return( clean.expr )
 }
-
-
-
-
-
-
-
-
-
-
-

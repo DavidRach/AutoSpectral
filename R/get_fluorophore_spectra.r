@@ -10,9 +10,7 @@
 #' @title Get Fluorophore Spectra
 #' @description Retrieves the fluorophore spectra for flow cytometry data,
 #'     optionally using cleaned expression data and biexponential transformation.
-#' @importsFrom flowCore flowjo_biexp
-#' @importsFrom progressr with_progress progressor
-#' @importsFrom stats predict
+#' @importFrom flowWorkspace flowjo_biexp
 #' @param flow.control A list containing flow cytometry control data.
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
 #' @param use.clean.expr Logical indicating whether to use cleaned expression data
@@ -22,11 +20,7 @@
 #' @param af.spectra Optional autofluorescence spectra to include.
 #' @param plot.prefix Optional prefix for plot titles (default is "Initial").
 #' @return A matrix with the fluorophore spectra.
-#' @examples
-#' \dontrun{
-#' get.fluorophore.spectra(flow.control, asp, use.clean.expr = FALSE,
-#'     biexp = FALSE, af.spectra = NULL, plot.prefix = "Initial")
-#' }
+#' @export
 
 
 get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
@@ -74,45 +68,41 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
       expr.data <- apply( expr.data, 2, biexp.transform )
     }
 
-    marker.spectra <- progressr::with_progress({
+    marker.spectra <- lapply( fluorophore.samples, function( samp ) {
 
-      p <- progressr::progressor( steps = length( fluorophore.samples ) + 1 )
+      cat( sprintf( "Processing %s", samp ) )
 
-      lapply( fluorophore.samples, function( samp ) {
+      peak.channel <- fluorophore.channels[ fluorophore.samples == samp ]
 
-        p( message( sprintf( "Processing %s", samp ) ) )
+      peak.channel.expr <- expr.data[
+        which( fluorophore.event.samples == samp ),
+        peak.channel ]
 
-        peak.channel <- fluorophore.channels[ fluorophore.samples == samp ]
+      fluor.spectra.coef <- spectra.zero
 
-        peak.channel.expr <- expr.data[
-          which( fluorophore.event.samples == samp ),
-          peak.channel ]
+      for ( channel in flow.control$spectral.channel ) {
+        if ( channel == peak.channel ) {
+          fluor.spectra.coef[ channel ] <- 1.0
+        } else {
+          channel.expr <- expr.data[
+            which( fluorophore.event.samples == samp ),
+            channel ]
 
-        fluor.spectra.coef <- spectra.zero
+          # fit robust linear model
+          spectra.model.result <- fit.robust.linear.model(
+            peak.channel.expr, channel.expr,
+            peak.channel, channel, asp )
 
-        for ( channel in flow.control$spectral.channel ) {
-          if ( channel == peak.channel ) {
-            fluor.spectra.coef[ channel ] <- 1.0
-          } else {
-            channel.expr <- expr.data[
-              which( fluorophore.event.samples == samp ),
-              channel ]
-
-            # fit robust linear model
-            spectra.model.result <- fit.robust.linear.model(
-              peak.channel.expr, channel.expr,
-              peak.channel, channel, asp )
-
-            fluor.spectra.coef[ channel ] <- spectra.model.result[ 2 ]
-          }
+          fluor.spectra.coef[ channel ] <- spectra.model.result[ 2 ]
         }
+      }
 
-        # normalize fluor.spectra.coef
-        fluor.spectra.coef <- fluor.spectra.coef / max( fluor.spectra.coef )
+      # normalize fluor.spectra.coef
+      fluor.spectra.coef <- fluor.spectra.coef / max( fluor.spectra.coef )
 
-        fluor.spectra.coef
-      })
-    })
+      fluor.spectra.coef
+
+    } )
 
     marker.spectra <- do.call( rbind, marker.spectra )
     rownames( marker.spectra ) <- fluorophore.samples
@@ -129,45 +119,41 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
       expr.data <- apply( expr.data, 2, biexp.transform )
     }
 
-    marker.spectra <- progressr::with_progress({
+    marker.spectra <- lapply( fluorophore.samples, function( samp ) {
 
-      p <- progressr::progressor(steps = length( fluorophore.samples ) + 1 )
+      cat( sprintf( "Processing %s", samp ) )
 
-      lapply( fluorophore.samples, function( samp ) {
+      peak.channel <- fluorophore.channels[ fluorophore.samples == samp ]
 
-        p( sprintf( "Processing %s", samp ) )
+      peak.channel.expr <- expr.data[
+        which( fluorophore.event.samples == samp ),
+        peak.channel ]
 
-        peak.channel <- fluorophore.channels[ fluorophore.samples == samp ]
+      fluor.spectra.coef <- spectra.zero
 
-        peak.channel.expr <- expr.data[
-          which( fluorophore.event.samples == samp ),
-          peak.channel ]
+      for ( channel in flow.control$spectral.channel ) {
+        if ( channel == peak.channel ) {
+          fluor.spectra.coef[ channel ] <- 1.0
+        } else {
+          channel.expr <- expr.data[
+            which( fluorophore.event.samples == samp ),
+            channel ]
 
-        fluor.spectra.coef <- spectra.zero
+          # fit robust linear model
+          spectra.model.result <- fit.robust.linear.model(
+            peak.channel.expr, channel.expr,
+            peak.channel, channel, asp )
 
-        for ( channel in flow.control$spectral.channel ) {
-          if ( channel == peak.channel ) {
-            fluor.spectra.coef[ channel ] <- 1.0
-          } else {
-            channel.expr <- expr.data[
-              which( fluorophore.event.samples == samp ),
-              channel ]
-
-            # fit robust linear model
-            spectra.model.result <- fit.robust.linear.model(
-              peak.channel.expr, channel.expr,
-              peak.channel, channel, asp )
-
-            fluor.spectra.coef[ channel ] <- spectra.model.result[ 2 ]
-          }
+          fluor.spectra.coef[ channel ] <- spectra.model.result[ 2 ]
         }
+      }
 
-        # normalize fluor.spectra.coef
-        fluor.spectra.coef <- fluor.spectra.coef / max( fluor.spectra.coef )
+      # normalize fluor.spectra.coef
+      fluor.spectra.coef <- fluor.spectra.coef / max( fluor.spectra.coef )
 
-        fluor.spectra.coef
-      })
-    })
+      fluor.spectra.coef
+
+    } )
 
     marker.spectra <- do.call( rbind, marker.spectra )
     rownames( marker.spectra ) <- fluorophore.samples
@@ -181,7 +167,7 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
       fluorophore.spectra.plot <- rbind( fluorophore.spectra.plot, af.spectra )
     }
 
-    plot.spectra( fluorophore.spectra.plot, flow.control, plot.title,
+    plot.spectra( fluorophore.spectra.plot, flow.control, asp, plot.title,
                  asp$figure.spectra.dir )
   }
 

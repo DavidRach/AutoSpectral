@@ -1,11 +1,4 @@
 # check_critical.r
-#
-# Copyright (c) 2020 VIB (Belgium) & Babraham Institute (United Kingdom)
-#
-# Software written by Carlos P. Roca, as research funded by the European Union.
-#
-# This software may be modified and distributed under the terms of the MIT
-# license. See the LICENSE file for details.
 
 #' @title check.critical
 #'

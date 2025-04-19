@@ -2,15 +2,14 @@
 
 #' @title calculate.ssm
 #'
-#' @description
-#' Calculates a spillover spread matrix (ssm) for a set of fluorophores.
+#' @description Calculates a spillover spread matrix (ssm) for a set of fluorophores.
 #'
 #' @importFrom MASS ginv
 #' @param spectra Spectral signatures of fluorophores, normalized between 0 and 1,
-#' with fluorophores in rows and detectors (channels) in columns. More than one
-#' spectra are needed to calculate anything here.
+#'     with fluorophores in rows and detectors (channels) in columns. More than one
+#'     spectra are needed to calculate anything here.
 #' @return The spillover spread matrix (ssm) for the
-#' spectral flow cytometry panel. Spread from row fluor into column fluor.
+#'     spectral flow cytometry panel. Spread from row fluor into column fluor.
 #' @export
 
 calculate.ssm <- function( spectra ) {

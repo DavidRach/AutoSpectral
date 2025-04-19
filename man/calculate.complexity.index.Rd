@@ -13,7 +13,7 @@ spectra are needed to calculate anything here.}
 }
 \value{
 The complexity index (condition number) for the
-spectral flow cytometry panel.
+    spectral flow cytometry panel.
 }
 \description{
 Calculates the complexity index for a set of fluorophores (a spectral panel).

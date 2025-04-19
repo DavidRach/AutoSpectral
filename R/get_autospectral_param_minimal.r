@@ -7,12 +7,10 @@
 #'
 #' @title Get Minimal Autospectral Parameters
 #' @description Returns a minimal set of autospectral parameters.
-#' @importsFrom RColorBrewer brewer.pal
+#' @importFrom RColorBrewer brewer.pal
+#' @importFrom parallelly availableCores
 #' @return A list of minimal autospectral parameters.
-#' @examples
-#' \dontrun{
-#' get.autospectral.param.minimal()
-#' }
+#' @export
 
 
 get.autospectral.param.minimal <- function()
@@ -92,6 +90,11 @@ get.autospectral.param.minimal <- function()
       scatter.match.threshold = 0.8,
       negative.n = 1000,
       positive.n = 500,
+      scatter.match.plot.width = 12,
+      scatter.match.plot.height = 6,
+      scatter.match.plot.filename = "universal negative scatter plot.jpg",
+      scatter.match.plot.text.size = 15,
+      scatter.match.plot.text.face = "bold",
 
       min.cell.warning.n = 500,
       min.cell.stop.n = 50,

@@ -1,9 +1,8 @@
 # create_directory.r
 
-#' @title create.directory
+#' @title Create Directory
 #'
-#' @description
-#' Creates figure and table directories.
+#' @description Creates figure and table directories.
 #'
 #' @param asp The AutoSpectral parameter list defined using get.autospectral.param.
 #' @return No returns. Creates directories in the current working directory.

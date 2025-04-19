@@ -8,13 +8,9 @@
 #' @title Get Autospectral Parameters for DiscoverA8 Cytometer
 #' @description Returns parameters for running a calculation of unmixing with
 #'     autospectral, without creating any figures or tables.
-#' @importsFrom base get0
 #' @param autosp.param A list of initial autospectral parameters.
 #' @return A list of autospectral parameters specific to the DiscoverA8 cytometer.
-#' @examples
-#' \dontrun{
-#' get.autospectral.param.a8(autosp.param)
-#' }
+#' @export
 
 
 get.autospectral.param.a8 <- function( autosp.param )

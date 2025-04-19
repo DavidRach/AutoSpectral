@@ -1,28 +1,42 @@
 # refine_unmixing.r
 
-#' Refine spectra coefficients
+#' @title Refine Unmixing
 #'
-#' Refines spectra coefficients iteratively.
+#' @description This function refines the unmixing process for spectral data,
+#'     iteratively updating the spectra matrix and calculating unmixing errors.
+#'
+#' @importFrom flowWorkspace flowjo_biexp
+#' @importFrom stats sd
+#' @importFrom utils write.csv
+#'
+#' @param spectra.initial Initial spectra matrix.
+#' @param flow.control List containing flow control information.
+#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param clean.expr Logical indicating whether to clean expression data.
+#' @param plot.prefix Optional prefix for the plot title.
+#'
+#' @return The refined spectra matrix.
+#' @export
 
 
-refine.unmixing <- function( spectra.initial, flow.control, asp, 
+refine.unmixing <- function( spectra.initial, flow.control, asp,
                                   clean.expr = FALSE, plot.prefix = "Refined" )
 {
-  
+
   if( !is.null( plot.prefix ) ){
     plot.title <- paste( plot.prefix, asp$spectra.file.name )
   } else {
     plot.title <- asp$spectra.file.name
   }
-    
+
     fluorophores <- rownames( spectra.initial )
-    
+
     if( "AF" %in% fluorophores ){
       af.control <- "AF"
     }
-    
+
     peak.channels <- apply( spectra.initial, 1, which.max )
-  
+
     biexp.transform <- flowjo_biexp(
       channelRange = asp$default.transformation.param$length,
       maxValue = asp$default.transformation.param$max.range,
@@ -31,7 +45,7 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
       widthBasis = asp$default.transformation.param$width,
       inverse = FALSE
     )
-    
+
     transform.inv <- flowjo_biexp(
       channelRange = asp$default.transformation.param$length,
       maxValue = asp$default.transformation.param$max.range,
@@ -40,7 +54,7 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
       widthBasis = asp$default.transformation.param$width,
       inverse = TRUE
     )
-    
+
     # set initial values for iteration variables
     rs.convergence <- FALSE
     rs.exit <- FALSE
@@ -67,58 +81,58 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
         delta.change = numeric(),
         stringsAsFactors = FALSE
     )
-    
+
     # set initial values for spectra calculation
-    spectra.zero <- matrix( 0, nrow = length( fluorophores ), 
+    spectra.zero <- matrix( 0, nrow = length( fluorophores ),
                             ncol = flow.control$spectral.channel.n )
     rownames( spectra.zero ) <- fluorophores
     colnames( spectra.zero ) <- flow.control$spectral.channel
-    
+
     for ( name in names( peak.channels ) ) {
       row <- which( rownames( spectra.zero ) == name )
       col <- peak.channels[ name ]
       spectra.zero[ row, col ] <- 1
     }
-    
+
     spectra.curr <- spectra.zero
     spectra.update <- spectra.zero
-    
+
     spectra.update <- spectra.initial - spectra.curr
-    
+
     # get raw expression data and spectra
     if( clean.expr ){
-      
+
       expr.data <- flow.control$clean.expr[ , flow.control$spectral.channel ]
-      
-      flow.event.sample <- flow.control$clean.event.sample[ flow.control$clean.event.sample 
+
+      flow.event.sample <- flow.control$clean.event.sample[ flow.control$clean.event.sample
                                                             %in% fluorophores ]
       flow.event.sample <- factor( flow.event.sample, levels = unique( flow.event.sample ) )
-      
+
     } else {
-      
-      expr.data <- flow.control$expr.data[ flow.control$event.sample %in% fluorophores, 
+
+      expr.data <- flow.control$expr.data[ flow.control$event.sample %in% fluorophores,
                                            flow.control$spectral.channel ]
-      
+
       # merge data
       flow.event.sample <- flow.control$event.sample[ flow.control$event.sample %in% fluorophores ]
       flow.event.sample <- factor( flow.event.sample, levels = unique( flow.event.sample ) )
-      
+
     }
-    
+
     while ( ! rs.exit )
     {
         # update spectra matrix and calculate unmixing matrix
         spectra.curr <- spectra.curr + spectra.update
-        
+
         spectra.curr.original <- spectra.curr
 
         # get unmixed expression data
         expr.data.unmix <- unmix.ols( expr.data, spectra.curr.original )
-        
+
         if ( ! rs.scale.untransformed ){
           expr.data.unmix <- apply( expr.data.unmix, 2, biexp.transform )
         }
-        
+
         check.critical(
           identical( colnames( expr.data.unmix ),
                      rownames( spectra.curr.original ) ),
@@ -131,24 +145,24 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
           rs.scale.untransformed, transform.inv,
           flow.event.sample, asp
         )
-        
+
         # backconvert error to raw space
         M <- t( spectra.curr.original )
         unmixing.matrix.curr <- solve(t(M) %*% M) %*% t(M)
-        
-        unmixing.error.pseudo.inv <- solve( t( unmixing.error$slop ) 
+
+        unmixing.error.pseudo.inv <- solve( t( unmixing.error$slop )
                                             %*% unmixing.error$slop ) %*% t( unmixing.error$slop )
-        
-        
+
+
         unmixing.matrix.update <- t( t( unmixing.matrix.curr ) %*% unmixing.error.pseudo.inv )
-        
-        
-        spectra.update.reverted <- solve( unmixing.matrix.update %*% 
+
+
+        spectra.update.reverted <- solve( unmixing.matrix.update %*%
                                             t( unmixing.matrix.update) ) %*% unmixing.matrix.update
-        
+
         spectra.update.reverted <- t( apply( spectra.update.reverted,
                                              1, function( x ) x/max( x ) ) )
-        
+
         # get slope error and update delta variables
         slope.error <- spectra.update.reverted - spectra.curr.original
 
@@ -216,10 +230,10 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
 
         # update spectra matrix
         spectra.update <- rs.lambda * slope.error
-        
+
     }
 
-    
+
     # save and plot convergence and error metrics
     # save and plot slope error
     if( ! is.null( asp$table.slope.error.dir ) )
@@ -228,26 +242,26 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
                                              sprintf( "%s.csv", asp$slope.error.file.name ),
                                              sprintf( "%s_%0*d.csv", asp$slope.error.file.name,
                                                       rs.iter.width, rs.iter ) )
-      
+
       write.csv( slope.error,
                  file = file.path( asp$table.slope.error.dir,
                                    table.slope.error.file.name ) )
-      
+
     }
-    
+
     if( ! is.null( asp$figure.slope.error.dir ) )
     {
       figure.slope.error.file.name <- sprintf( "%s%s.jpg",
                                                asp$slope.error.file.name,
                                                ifelse( rs.iter.last, "",
                                                        sprintf( "_%0*d", rs.iter.width, rs.iter ) ) )
-      
+
       plot.density.log( slope.error, "unmixing error",
                         file.path( asp$figure.slope.error.dir,
                                    figure.slope.error.file.name ),
                         asp )
     }
-    
+
     # save and plot skewness
     if( ! is.null( asp$table.skewness.dir ) )
     {
@@ -255,12 +269,12 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
                                           sprintf( "%s.csv", asp$skewness.file.name ),
                                           sprintf( "%s_%0*d.csv", asp$skewness.file.name,
                                                    rs.iter.width, rs.iter ) )
-      
+
       write.csv( unmixing.error$skew,
                  file = file.path( asp$table.skewness.dir,
                                    table.skewness.file.name ) )
     }
-    
+
     if( ! is.null( asp$figure.skewness.dir ) )
     {
       if ( ! is.null( af.control ) )
@@ -269,47 +283,47 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
           - which( colnames( unmixing.error$skew ) == af.control ) ]
       else
         spillover.skewness <- unmixing.error$skew
-      
+
       figure.skewness.file.name <- sprintf( "%s%s.jpg",
                                             asp$skewness.file.name,
                                             ifelse( rs.iter.last, "",
                                                     sprintf( "_%0*d", rs.iter.width, rs.iter ) ) )
-      
+
       plot.density.log( spillover.skewness, "spillover skewness",
                         file.path( asp$figure.skewness.dir,
                                    figure.skewness.file.name ),
                         asp )
     }
-    
+
     if ( ! is.null( asp$table.convergence.dir ) ){
       write.csv( rs.convergence.log,
                  file = file.path( asp$table.convergence.dir,
                  sprintf( "%s.csv", asp$convergence.file.name ) ),
                  row.names = FALSE )
     }
-        
+
 
     if ( ! is.null( asp$figure.convergence.dir ) ){
-      
-      plot.convergence( rs.convergence.log, NULL, asp )
+
+      plot.convergence( rs.convergence.log, asp )
     }
-    
+
     # save spectral matrix
     if( ! is.null( asp$table.spectra.dir ) )
     {
       table.spectra.file.name <- sprintf( "%s.csv", plot.title )
-      
+
       write.csv( spectra.update.reverted,
                  file = file.path( asp$table.spectra.dir,
                                    table.spectra.file.name ) )
     }
-    
+
     # plot spectra
     if( ! is.null( asp$figure.similarity.heatmap.dir ) ){
-      plot.spectra( spectra.update.reverted, flow.control, plot.title,
+      plot.spectra( spectra.update.reverted, flow.control, asp, plot.title,
                     asp$figure.spectra.dir )
     }
-    
+
     # plot similarity matrix heatmap
     if( ! is.null( asp$figure.spectra.dir ) ){
       plot.similarity.matrix( spectra.update.reverted, asp, plot.prefix )
@@ -319,6 +333,6 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
     check.critical( rs.convergence,
         "no convergence in refinement of spectra matrix" )
 
-    spectra.update.reverted
+    return( spectra.update.reverted )
 }
 

@@ -11,18 +11,18 @@
 #' @title Fit Spline to Autofluorescence Data
 #' @description Fits a spline to autofluorescence data, removing extreme events
 #'     and defining bounds equally far from zero.
+#'
+#' @importFrom MASS rlm
+#' @importFrom tripack tri.mesh convex.hull
+#' @importFrom stats predict
 #' @param af.data A matrix containing the autofluorescence data.
 #' @param af.gate.idx A vector of indexes indicating the gate.
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
 #'     A list of essential parameters.
 #' @return A list with the boundaries of the events within the specified number
 #'     of standard deviations from the spline.
-#' @examples
-#' \dontrun{
-#' fit.af.spline(af.data, af.gate.idx, asp)
-#' }
-#' @importFrom MASS rlm
-#' @importFrom tripack tri.mesh convex.hull
+#' @export
+
 
 
 fit.af.spline <- function( af.data, af.gate.idx, asp ){

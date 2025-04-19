@@ -1,4 +1,4 @@
-# get_autospill_param.r
+# get_autospectral_param.r
 
 
 #' Get Autospectral Parameters
@@ -8,15 +8,11 @@
 #'
 #' @title Get Autospectral Parameters
 #' @description Retrieves autospectral parameters for a specified cytometer.
-#' @importsFrom base get0
 #' @param cytometer The type of cytometer (default is "aurora").
 #' @param figures Logical indicating whether to set up directory parameters for
 #'     figures and tables (default is TRUE).
 #' @return A list of autospectral parameters.
-#' @examples
-#' \dontrun{
-#' get.autospectral.param(cytometer = "aurora", figures = TRUE)
-#' }
+#' @export
 
 
 get.autospectral.param <- function( cytometer = "aurora", figures = TRUE )

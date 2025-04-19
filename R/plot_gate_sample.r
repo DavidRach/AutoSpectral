@@ -1,54 +1,78 @@
 # plot_gate_sample.r
 
+#' @title Plot Pre-defined Gate on Sample
+#'
+#' @description This function plots a pre-defined gate on a sample,
+#'     using ggplot2 and other necessary packages.
+#'
+#' @importFrom ggplot2 ggplot aes scale_x_continuous scale_y_continuous
+#' @importFrom ggplot2 scale_color_gradientn theme_bw theme element_line
+#' @importFrom ggplot2 element_text element_rect margin expansion ggsave
+#' @importFrom ggplot2 guide_colorbar geom_text
+#' @importFrom scattermore geom_scattermore
+#' @importFrom KernSmooth bkde2D dpik
+#' @importFrom fields interp.surface
+#' @importFrom rlang .data
+#'
+#' @param samp Sample identifier.
+#' @param gate.data Matrix containing gate data points.
+#' @param gate.marker Vector containing gate marker names.
+#' @param gate.boundary List containing gate boundary information.
+#' @param scatter.and.channel.label Named vector mapping scatter and channel labels.
+#' @param control.type Type of control ("beads" or "cells").
+#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#'
+#' @return Saves the plot as a JPEG file in the specified directory.
+#' @export
 
-# Plots pre-defined gate on sample.
+
 
 plot.gate.sample <- function( samp, gate.data, gate.marker, gate.boundary,
                               scatter.and.channel.label, control.type, asp )
 {
-  
-  if( control.type == "beads" ){ 
-    
+
+  if( control.type == "beads" ){
+
     gate.bound.density.bw.factor <- asp$plot.gate.factor * asp$gate.bound.density.bw.factor.beads
     gate.bound.density.grid.n <- asp$plot.gate.factor * asp$gate.bound.density.grid.n.beads
-      
-    } else { 
-      
+
+    } else {
+
     gate.bound.density.bw.factor <- asp$plot.gate.factor * asp$gate.bound.density.bw.factor.cells
     gate.bound.density.grid.n <- asp$plot.gate.factor * asp$gate.bound.density.grid.n.cells
-      
+
     }
-  
+
   bandwidth.x <- gate.bound.density.bw.factor * dpik( gate.data[ , 1 ] )
   bandwidth.y <- gate.bound.density.bw.factor * dpik( gate.data[ , 2 ] )
-  
-  
+
+
   gate.bound.density <- bkde2D(
     gate.data,
     bandwidth = c( bandwidth.x, bandwidth.y ),
     gridsize = c( gate.bound.density.grid.n, gate.bound.density.grid.n ) )
-  
+
   names( gate.bound.density ) <- c( "x", "y", "z" )
-  
+
   gate.data.ggp <- data.frame(
     x = gate.data[ , 1 ],
     y = gate.data[ , 2 ],
     z = interp.surface( gate.bound.density, gate.data ) )
-  
+
   gate.boundary.ggp <- data.frame(
     x = c( gate.boundary$x,
            gate.boundary$x[ 1 ] ),
     y = c( gate.boundary$y,
            gate.boundary$y[ 1 ] )
   )
-  
+
   density.palette <- get.density.palette( gate.data.ggp$z, asp )
-  
+
   x.lab.idx <- which( scatter.and.channel.label == gate.marker[ 1 ] )
   x.lab <- names( scatter.and.channel.label[ x.lab.idx ] )
   y.lab.idx <- which( scatter.and.channel.label == gate.marker[ 2 ] )
   y.lab <- names( scatter.and.channel.label[ y.lab.idx ] )
-  
+
   gate.plot <- ggplot( gate.data.ggp, aes( .data$x, .data$y,
         color = .data$z ) ) +
     scale_x_continuous(
@@ -86,10 +110,10 @@ plot.gate.sample <- function( samp, gate.data, gate.marker, gate.boundary,
            panel.border = element_rect( linewidth = asp$figure.panel.line.size ),
            panel.grid.major = element_blank(),
            panel.grid.minor = element_blank() )
-  
+
   ggsave( file.path( asp$figure.gate.dir, sprintf( "%s.jpg", samp ) ),
           plot = gate.plot, width = asp$figure.width,
           height = asp$figure.height )
-  
+
 }
 

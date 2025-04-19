@@ -16,5 +16,5 @@ The similarity matrix for the spectral flow cytometry panel.
 }
 \description{
 Calculates the similarity matrix (set of cosine similarity values)
-for a set of fluorophores (a spectral panel).
+    for a set of fluorophores (a spectral panel).
 }

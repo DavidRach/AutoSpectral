@@ -13,7 +13,7 @@ spectra are needed to calculate anything here.}
 }
 \value{
 The spillover spread matrix (ssm) for the
-spectral flow cytometry panel. Spread from row fluor into column fluor.
+    spectral flow cytometry panel. Spread from row fluor into column fluor.
 }
 \description{
 Calculates a spillover spread matrix (ssm) for a set of fluorophores.
