@@ -20,7 +20,9 @@
 
 create.control.file <- function( control.dir, asp ){
 
-  fluorophore.database <- read.csv( file.path( asp$database.dir, "fluorophore_database.csv" ) )
+  data.path <- system.file( "extdata", "fluorophore_database.csv",
+                            package = "AutoSpectral" )
+  fluorophore.database <- read.csv( data.path )
   fluorophore.database[ fluorophore.database == "" ] <- NA
 
   control.files <- list.files( control.dir )
