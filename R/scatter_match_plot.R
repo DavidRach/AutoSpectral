@@ -9,7 +9,7 @@
 #' @importFrom ggplot2 xlab ylab scale_x_continuous scale_y_continuous theme_bw
 #' @importFrom ggplot2 theme element_rect element_text margin ggsave guide_colorbar
 #' @importFrom rlang .data
-#' @importFrom utils globalVariables
+#'
 #' @importFrom scattermore geom_scattermore
 #' @param pos.expr.data A matrix containing the positive expression data.
 #' @param neg.expr.data A matrix containing the negative expression data.
@@ -31,8 +31,6 @@ scatter.match.plot <- function( pos.expr.data, neg.expr.data, fluor.name,
 
   pos.scatter.plot$group <- fluor.name
   neg.scatter.plot$group <- "Negative"
-
-  utils::globalVariables( c( "group" ) )
 
   scatter.plot.data <- rbind( pos.scatter.plot, neg.scatter.plot )
 

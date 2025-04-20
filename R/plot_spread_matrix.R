@@ -10,7 +10,6 @@
 #' @importFrom ggplot2 coord_fixed element_text labs ggsave
 #' @importFrom dplyr mutate %>%
 #' @importFrom tidyr pivot_longer
-#' @importFrom utils globalVariables
 #'
 #' @param spectra Matrix containing spectral data. Fluorophores x detectors.
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
@@ -42,8 +41,6 @@ plot.spread.matrix <- function( spectra, asp, plot.prefix = NULL ) {
                              levels = rownames( ssm.df ) ) ) %>%
     pivot_longer( cols = -Fluor1, names_to = "Fluor2", values_to = "value" ) %>%
     mutate( Fluor2 = factor( Fluor2, levels = rev( colnames( ssm.df ) ) ) )
-
-  utils::globalVariables( c( "Fluor1", "Fluor2", "value" ) )
 
   ssm.heatmap <- ggplot( ssm.df, aes( Fluor1, Fluor2, fill = value ) ) +
     geom_tile() +

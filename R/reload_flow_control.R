@@ -5,7 +5,7 @@
 #' @description This function reloads essential information from control files
 #'     to permit rapid unmixing at a later date.
 #'
-#' @importFrom utils read.csv globalVariables
+#' @importFrom utils read.csv
 #' @importFrom dplyr filter
 #'
 #' @param control.def.file File containing control definitions.
@@ -34,8 +34,6 @@ reload.flow.control <- function( control.def.file, control.dir, asp ) {
 
   control.table <- read.csv( control.def.file, na.strings = "",
                              stringsAsFactors = FALSE )
-
-  utils::globalVariables( c( "filename" ) )
 
   control.table <- filter( control.table, filename != "" )
 

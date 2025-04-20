@@ -9,7 +9,7 @@
 #' @importFrom ggplot2 element_blank ggsave
 #' @importFrom flowWorkspace flowjo_biexp
 #' @importFrom scales trans_new
-#' @importFrom utils globalVariables
+#'
 #' @param pos.expr.data A matrix containing the positive expression data.
 #' @param neg.expr.data A matrix containing the negative expression data.
 #' @param spectral.channel A character vector specifying the spectral channels.
@@ -94,8 +94,6 @@ spectral.ribbon.plot <- function( pos.expr.data, neg.expr.data,
                                            cols = -group,
                                            names_to = "channel",
                                            values_to = "value" )
-
-  utils::globalVariables( c( "group", "channel", "value" ) )
 
   ribbon.breaks <- asp$ribbon.breaks
   ribbon.labels <- sapply( ribbon.breaks, function( x ) {

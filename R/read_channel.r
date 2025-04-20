@@ -9,7 +9,6 @@
 #' @importFrom utils read.csv read.table write.table
 #' @importFrom flowCore read.FCS
 #' @importFrom dplyr filter
-#' @importFrom utils globalVariables
 #'
 #' @param control.dir Directory containing control files.
 #' @param control.def.file File containing control definitions.
@@ -28,8 +27,6 @@ read.channel <- function( control.dir, control.def.file, asp )
 
     # read definition of controls
     control <- read.csv( control.def.file, stringsAsFactors = FALSE )
-
-    utils::globalVariables( c( "filename" ) )
 
     # get used channels from controls
     control <- filter( control, filename != "" )

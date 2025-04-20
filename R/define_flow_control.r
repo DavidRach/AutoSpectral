@@ -12,7 +12,6 @@
 #'
 #' @importFrom future plan multisession
 #' @importFrom future.apply future_lapply
-#' @importFrom utils globalVariables
 #'
 #' @param control.dir file path to the single stained control fcs files
 #' @param control.def.file csv file defining the single color control file names,
@@ -85,8 +84,6 @@ define.flow.control <- function( control.dir, control.def.file, asp,
 
     control.table <- read.csv( control.def.file, na.strings = "",
         stringsAsFactors = FALSE )
-
-    utils::globalVariables( c( "filename" ) )
 
     control.table <- filter( control.table, filename != "" )
 

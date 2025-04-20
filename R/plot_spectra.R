@@ -11,7 +11,7 @@
 #' @importFrom ggplot2 ggplot aes geom_path geom_point labs theme_minimal
 #' @importFrom ggplot2 element_text facet_wrap ggsave
 #' @importFrom tidyr pivot_longer
-#' @importFrom utils read.csv globalVariables
+#' @importFrom utils read.csv
 #' @importFrom stats setNames
 #'
 #' @param spectral.matrix Matrix containing spectral data.
@@ -54,8 +54,6 @@ plot.spectra <- function( spectral.matrix, flow.control, asp,
   fluor.spectra.long <- pivot_longer( fluor.spectra.plotting, -c( Fluorophore, Laser ),
                                       names_to = "Detector",
                                       values_to = "Intensity" )
-
-  utils::globalVariables( c( "Fluorophore", "Laser", "Detector", "Intensity" ) )
 
   fluor.spectra.long$Detector <-  factor( fluor.spectra.long$Detector,
                                          levels = unique( fluor.spectra.long$Detector ),

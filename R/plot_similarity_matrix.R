@@ -10,7 +10,6 @@
 #' @importFrom dplyr mutate %>%
 #' @importFrom tidyr pivot_longer
 #' @importFrom lsa cosine
-#' @importFrom utils globalVariables
 #'
 #' @param spectra Data frame containing spectral data.
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
@@ -43,8 +42,6 @@ plot.similarity.matrix <- function( spectra, asp, plot.prefix = NULL ){
                              levels = rownames( similarity.df ) ) ) %>%
     pivot_longer( cols = -Fluor1, names_to = "Fluor2", values_to = "value" ) %>%
     mutate( Fluor2 = factor( Fluor2, levels = rev( colnames( similarity.matrix ) ) ) )
-
-  utils::globalVariables( c( "Fluor1", "Fluor2", "value" ) )
 
   similarity.heatmap <- ggplot( similarity.df, aes( Fluor1, Fluor2, fill = value ) ) +
     geom_tile() +
