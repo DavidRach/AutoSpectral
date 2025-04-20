@@ -70,7 +70,7 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
 
     marker.spectra <- lapply( fluorophore.samples, function( samp ) {
 
-      cat( sprintf( "Processing %s", samp ) )
+      cat( paste( "Processing", samp, "\n" ) )
 
       peak.channel <- fluorophore.channels[ fluorophore.samples == samp ]
 
@@ -121,7 +121,7 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
 
     marker.spectra <- lapply( fluorophore.samples, function( samp ) {
 
-      cat( sprintf( "Processing %s", samp ) )
+      cat( paste( "Processing", samp, "\n" ) )
 
       peak.channel <- fluorophore.channels[ fluorophore.samples == samp ]
 
@@ -212,7 +212,7 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
 
     If one of the pair is AF, the other likely has minimal signal.
     In this case, run clean.controls and set use.clean.expr to TRUE.
-    If you have already done that, manually inspect the control for real signal." )
+    If you have already done that, manually inspect the control for real signal. \n" )
   }
 
   marker.spectra

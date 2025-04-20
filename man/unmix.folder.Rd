@@ -6,11 +6,12 @@
 \usage{
 unmix.folder(
   fcs.dir,
-  raw.channels,
   spectra,
   asp,
+  flow.control,
   method = "ols",
   output.dir = NULL,
+  file.suffix = NULL,
   include.raw = FALSE,
   include.imaging = FALSE,
   allow.negative = TRUE
@@ -19,21 +20,27 @@ unmix.folder(
 \arguments{
 \item{fcs.dir}{Directory containing FCS files to be unmixed.}
 
-\item{raw.channels}{Vector of raw channel names.}
-
 \item{spectra}{Matrix containing spectra information.}
 
 \item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+
+\item{flow.control}{A list containing flow cytometry control parameters.}
 
 \item{method}{Method to be used for unmixing (default is "ols").}
 
 \item{output.dir}{Directory to save the unmixed FCS files (default is asp$unmixed.fcs.dir).}
 
-\item{include.raw}{Logical indicating whether to include raw data in the output.}
+\item{file.suffix}{A character string to append to the output file name.
+Default is NULL.}
 
-\item{include.imaging}{Logical indicating whether to include imaging data in the output.}
+\item{include.raw}{Logical indicating whether to include raw data in the output.
+Default is FALSE.}
 
-\item{allow.negative}{Logical indicating whether to allow negative coefficients.}
+\item{include.imaging}{Logical indicating whether to include imaging data in the output.
+Default is FALSE.}
+
+\item{allow.negative}{Logical indicating whether to allow negative coefficients.
+Default is TRUE.}
 }
 \value{
 None. Saves the unmixed FCS files to the specified output directory.

@@ -24,6 +24,12 @@ You can install the development version of AutoSpectral from
 [GitHub](https://github.com/) with:
 
 ``` r
+
+# Install missing Bioconductor packages
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+BiocManager::install(c("flowWorkspace", "flowCore", "PeacoQC", "Biobase"))
+
 # install.packages("remotes")
 remotes::install_github("DrCytometer/AutoSpectral")
 ```
@@ -33,7 +39,7 @@ remotes::install_github("DrCytometer/AutoSpectral")
 This is a basic example of the workflow, using samples from the ID7000:
 
 ``` r
-library(AutoSpectral)
+library( AutoSpectral )
 
 # define the location of the single-stained control files
 control.dir <- "./Cell controls"
@@ -73,9 +79,8 @@ no.af.spectra <- univ.neg.spectra[ ! rownames( univ.neg.spectra ) == "AF", ]
 
 ## unmixing
 # set the location of the raw files to be unmixed
-# sample.dir <- "./Raw samples"
+sample.dir <- "./Raw samples"
 
 # perform unmixing, here we will unmix all fcs files in the folder using wls
-unmix.folder( sample.dir, flow.control$spectral.channel, no.af.spectra, asp,
-              method = "wls" )
+unmix.folder( sample.dir, no.af.spectra, asp, flow.control, method = "wls" )
 ```

@@ -38,7 +38,9 @@ plot.spectra <- function( spectral.matrix, flow.control, asp,
   # get excitation laser
   laser.order <- c( "UV", "Violet","Blue", "YellowGreen", "Red" )
 
-  fluorophore.database <- read.csv( file.path( asp$database.dir, "fluorophore_database.csv" ) )
+  data.path <- system.file( "extdata", "fluorophore_database.csv",
+                            package = "AutoSpectral" )
+  fluorophore.database <- read.csv( data.path )
   fluorophore.database[ fluorophore.database == "" ] <- NA
   lasers <- setNames( fluorophore.database$excitation.laser, fluorophore.database$fluorophore )
 

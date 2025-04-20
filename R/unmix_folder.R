@@ -10,22 +10,28 @@
 #' @importFrom future.apply future_lapply
 #'
 #' @param fcs.dir Directory containing FCS files to be unmixed.
-#' @param raw.channels Vector of raw channel names.
 #' @param spectra Matrix containing spectra information.
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param flow.control A list containing flow cytometry control parameters.
 #' @param method Method to be used for unmixing (default is "ols").
 #' @param output.dir Directory to save the unmixed FCS files (default is asp$unmixed.fcs.dir).
+#' @param file.suffix A character string to append to the output file name.
+#'     Default is NULL.
 #' @param include.raw Logical indicating whether to include raw data in the output.
+#'     Default is FALSE.
 #' @param include.imaging Logical indicating whether to include imaging data in the output.
+#'     Default is FALSE.
 #' @param allow.negative Logical indicating whether to allow negative coefficients.
+#'     Default is TRUE.
 #'
 #' @return None. Saves the unmixed FCS files to the specified output directory.
 #' @export
 
 
-unmix.folder <- function( fcs.dir, raw.channels, spectra, asp,
+unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
                           method = "ols",
                           output.dir = NULL,
+                          file.suffix = NULL,
                           include.raw = FALSE,
                           include.imaging = FALSE,
                           allow.negative = TRUE ){
@@ -45,7 +51,8 @@ unmix.folder <- function( fcs.dir, raw.channels, spectra, asp,
     lapply.function <- lapply.sequential
   }
 
-  lapply.function( files.to.unmix, FUN = unmix.fcs, raw.channels, spectra, asp,
-                   method, output.dir, include.raw, include.imaging, allow.negative )
+  lapply.function( files.to.unmix, FUN = unmix.fcs, spectra, asp, flow.control,
+                   method, output.dir, file.suffix, include.raw,
+                   include.imaging, allow.negative )
 
 }
