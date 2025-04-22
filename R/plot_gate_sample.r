@@ -46,7 +46,6 @@ plot.gate.sample <- function( samp, gate.data, gate.marker, gate.boundary,
   bandwidth.x <- gate.bound.density.bw.factor * dpik( gate.data[ , 1 ] )
   bandwidth.y <- gate.bound.density.bw.factor * dpik( gate.data[ , 2 ] )
 
-
   gate.bound.density <- bkde2D(
     gate.data,
     bandwidth = c( bandwidth.x, bandwidth.y ),

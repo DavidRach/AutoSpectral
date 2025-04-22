@@ -35,9 +35,10 @@ get.gated.flow.expression.data <- function( samp, file.name, control.dir,
 
   flow.file <- file.name[ samp ]
 
-  fcs.data <- suppressWarnings( read.FCS( file.path( control.dir, flow.file ), transformation = NULL,
-                        truncate_max_range = FALSE,
-                        emptyValue = FALSE ) )
+  fcs.data <- suppressWarnings( read.FCS( file.path( control.dir, flow.file ),
+                                          transformation = NULL,
+                                          truncate_max_range = FALSE,
+                                          emptyValue = FALSE ) )
 
   # read exprs for scatter and spectral channels only
   expr.data <- exprs( fcs.data )[ , scatter.and.spectral.channel ]
