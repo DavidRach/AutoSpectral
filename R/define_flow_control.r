@@ -12,6 +12,7 @@
 #'
 #' @importFrom future plan multisession
 #' @importFrom future.apply future_lapply
+#' @importFrom dplyr filter
 #'
 #' @param control.dir file path to the single stained control fcs files
 #' @param control.def.file csv file defining the single color control file names,
@@ -59,9 +60,9 @@ define.flow.control <- function( control.dir, control.def.file, asp,
 {
   # set up parallel processing
   if( asp$parallel ){
-      plan( multisession, workers = asp$worker.process.n )
+      future::plan( future::multisession, workers = asp$worker.process.n )
       options( future.globals.maxSize = asp$max.memory.n )
-      lapply.function <- future_lapply
+      lapply.function <- future.apply::future_lapply
     } else {
       lapply.function <- lapply.sequential
     }
@@ -85,7 +86,7 @@ define.flow.control <- function( control.dir, control.def.file, asp,
     control.table <- read.csv( control.def.file, na.strings = "",
         stringsAsFactors = FALSE )
 
-    control.table <- filter( control.table, filename != "" )
+    control.table <- dplyr::filter( control.table, filename != "" )
 
     check.critical( anyDuplicated( control.table$filename ) == 0,
         "duplicated filenames in fcs data" )

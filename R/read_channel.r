@@ -29,15 +29,13 @@ read.channel <- function( control.dir, control.def.file, asp )
     control <- read.csv( control.def.file, stringsAsFactors = FALSE )
 
     # get used channels from controls
-    control <- filter( control, filename != "" )
+    control <- dplyr::filter( control, filename != "" )
 
     check.critical( anyDuplicated( control$file.name ) == 0,
                     "duplicated filenames in fcs data" )
 
-    flow.set.channel <- colnames( suppressWarnings( read.FCS( file.path( control.dir,
-                                                               control$filename[ 1 ] ) ) ) )
-      # sapply( control$filename[ 1 ], function( cf )
-      # colnames( suppressWarnings( read.FCS( file.path( control.dir, cf ) ) ) ) )
+    flow.set.channel <- colnames( suppressWarnings( flowCore::exprs( flowCore::read.FCS( file.path( control.dir,
+                                                               control$filename[ 1 ] ) ) ) ) )
 
     # correct channel names
     flow.set.channel.corrected <- flow.set.channel
