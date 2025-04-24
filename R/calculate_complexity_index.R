@@ -14,9 +14,12 @@
 
 calculate.complexity.index <- function( spectra ) {
 
-  similarity.matrix <- cosine( t( spectra ) )
+  svd.result <- svd( spectra )
 
-  complexity.index <- sum( similarity.matrix[ lower.tri( similarity.matrix ) ] )
+  singular.values <- svd.result$d
+
+  complexity.index <- max( singular.values ) / min( singular.values )
+
   complexity.index <- round( complexity.index, 2 )
 
   return( complexity.index )

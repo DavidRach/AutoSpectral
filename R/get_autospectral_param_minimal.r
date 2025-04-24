@@ -63,6 +63,8 @@ get.autospectral.param.minimal <- function()
 
       database.dir = "./source/fluorophore_database/",
 
+      similarity.warning.n = 0.95,
+
       ### autofluorescence and control cleaning parameters
       # peacoqc
       peacoqc.method = "MAD",
@@ -219,10 +221,9 @@ get.autospectral.param.minimal <- function()
       fix.downsample.n = 30000,
       fix.positivity.threshold = 0.99,
 
-      fix.spectra.filename
-      fix.spillover.filename
-      fix.compensation.filename
-
+      fix.spectra.filename = "fixed_spectra",
+      fix.spillover.filename = "fixed_spillover",
+      fix.compensation.filename = "fixed_compensation",
 
       ### directory parameters
       unmixed.fcs.dir = "AutoSpectral_unmixed",

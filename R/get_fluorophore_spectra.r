@@ -189,7 +189,8 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
 
   unique.similarity <- similarity.matrix * lower.tri( similarity.matrix )
 
-  similarity.idx <- which( unique.similarity > 0.95, arr.ind = TRUE )
+  similarity.idx <- which( unique.similarity > asp$similarity.warning.n,
+                           arr.ind = TRUE )
 
   similarity.error <- nrow( similarity.idx ) > 0
 
@@ -199,7 +200,7 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
     similarity.values <- similarity.matrix[ similarity.idx ]
 
     similarity.qc <- data.frame( Fluor1 = fluor1, Fluor2 = fluor2,
-                                similarity = similarity.values )
+                                Similarity = similarity.values )
 
     print( similarity.qc )
 

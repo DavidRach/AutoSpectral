@@ -32,8 +32,7 @@ plot.similarity.matrix <- function( spectra, asp, plot.prefix = NULL ){
   # similarity matrix
   similarity.matrix <- cosine( t( spectra ) )
 
-  complexity.index <- sum( similarity.matrix[ lower.tri( similarity.matrix ) ] )
-  complexity.index <- round( complexity.index, 2 )
+  complexity.index <- calculate.complexity.index( spectra )
 
   similarity.df <- as.data.frame( similarity.matrix )
 
