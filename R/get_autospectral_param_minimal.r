@@ -19,26 +19,20 @@ get.autospectral.param.minimal <- function()
 
     list(
 
-      # cytometer parameters
-
+      ### cytometer parameters
+      # these may be updated by calling a specific cytometer
       cytometer = NULL,
 
       scatter.data.min.x = NULL,
-
       scatter.data.max.x = NULL,
-
       scatter.data.min.y = NULL,
-
       scatter.data.max.y = NULL,
 
       expr.data.min = NULL,
-
       expr.data.max = NULL,
 
       default.scatter.parameter = NULL,
-
       default.time.parameter = "Time",
-
       default.transformation.param = NULL,
 
       non.spectral.channel = NULL,
@@ -50,13 +44,30 @@ get.autospectral.param.minimal <- function()
       viability.gate.scaling = 0.67,
 
       large.gate.quantile = 0.25,
-      large.gate.scaling.x = 1.5,
-      large.gate.scaling.y = 4,
+      large.gate.scaling.x = 3,
+      large.gate.scaling.y = 6,
 
-      # autofluorescence and control cleaning parameters
+      ### general parameters
+      verbose = TRUE,
 
+      parallel = FALSE,
+
+      worker.process.n = availableCores() - 1,
+
+      max.memory.n = 2 * 1024^3,
+
+      antigen.autof = "AF",
+
+      marker.forbidden.char = " !\"#$%&'*,/:;?@[\\]^{|}~",
+      marker.substitution.char = "-",
+
+      database.dir = "./source/fluorophore_database/",
+
+      ### autofluorescence and control cleaning parameters
+      # peacoqc
       peacoqc.method = "MAD",
 
+      # Autofluorescence gating for removal
       af.density.threshold = 0.75,
 
       af.gate.param = list(
@@ -85,6 +96,7 @@ get.autospectral.param.minimal <- function()
       af.plot.define.filename = "AF identification",
       af.plot.filename = "AF removal",
 
+      # universal negative selection parameters
       positivity.threshold = 0.995,
       positivity.threshold.af = 0.95,
       scatter.match.threshold = 0.8,
@@ -96,9 +108,11 @@ get.autospectral.param.minimal <- function()
       scatter.match.plot.text.size = 15,
       scatter.match.plot.text.face = "bold",
 
+      ### settings to control what happens if you don't have enough data
       min.cell.warning.n = 500,
       min.cell.stop.n = 50,
 
+      ### spectral ribbon plot parameters
       ribbon.plot.min = -1e3,
       ribbon.breaks = NULL,
       ribbon.scale.colors = c( NA, "#440154FF", "#238A8DFF", "#55C667FF",
@@ -112,27 +126,8 @@ get.autospectral.param.minimal <- function()
       ribbon.plot.strip.text.size = 15,
       ribbon.plot.strip.text.face = "bold",
 
-      # general parameters
-
-      verbose = TRUE,
-
-      parallel = TRUE,
-
-      worker.process.n = availableCores() - 1,
-
-      max.memory.n = 2 * 1024^3,
-
-      antigen.autof = "AF",
-
-      marker.forbidden.char = " !\"#$%&'*,/:;?@[\\]^{|}~",
-      marker.substitution.char = "-",
-
-      database.dir = "./source/fluorophore_database/",
-
-      # algorithm parameters
-
+      ### gating parameters
       # gate parameters for cells
-
       default.gate.param.cells = list(
         density.threshold = 0.05,
         region.auto = TRUE,
@@ -165,7 +160,6 @@ get.autospectral.param.minimal <- function()
       gate.downsample.n.cells = 100000,
 
       # gate parameters for beads
-
       default.gate.param.beads = list(
         density.threshold = 0.05,
         region.auto = TRUE,
@@ -197,6 +191,7 @@ get.autospectral.param.minimal <- function()
       gate.region.max.density.grid.n.beads = 100,
       gate.downsample.n.beads = 10000,
 
+      ### refine spillover (unmixing) parameters
       rlm.iter.max = 100,
       rlm.trim.factor = 0.003,
       rlm.downsample.n = 25000,
@@ -212,8 +207,24 @@ get.autospectral.param.minimal <- function()
       rs.delta.threshold.tran = 1e-4,
       rs.delta.threshold.change = 1e-6,
 
-      # directory parameters
+      convergence.color.delta = color.pal[ 7 ],    # brown
+      convergence.color.delta.max = color.pal[ 5 ],    # orange
+      convergence.color.delta.change = color.pal[ 8 ],    # pink
+      convergence.shape.linear = "triangle",
+      convergence.shape.biexp = "circle",
+      convergence.shape.posnegpop = "triangle open",
 
+      ### fix my unmix parameters
+      fix.iter.max = 20,
+      fix.downsample.n = 30000,
+      fix.positivity.threshold = 0.99,
+
+      fix.spectra.filename
+      fix.spillover.filename
+      fix.compensation.filename
+
+
+      ### directory parameters
       unmixed.fcs.dir = "AutoSpectral_unmixed",
 
       figure.scatter.dir.base = NULL,
@@ -234,14 +245,14 @@ get.autospectral.param.minimal <- function()
       table.slope.error.dir = NULL,
       table.skewness.dir = NULL,
 
-      # filename parameters
-
+      ### filename parameters
+      # files you can use to load in information
       marker.file.name = NULL,
-
       gate.parameter.file.name = "fcs_gate_parameter.csv",
       scatter.parameter.file.name = "fcs_scatter_parameter.csv",
       transformation.parameter.file.name = "fcs_transformation_parameter.csv",
 
+      # how the output files will be called
       convergence.file.name = "autospectral_convergence",
       af.file.name = "autospectral autofluorescence",
       spectra.file.name = "autospectral spectra",
@@ -250,51 +261,21 @@ get.autospectral.param.minimal <- function()
       similarity.heatmap.file.name = "autospectral_similarity_matrix",
       ssm.heatmap.file.name = "autospectral_spread_matrix",
 
-      # table parameters
-
-      rs.save.table.initial = FALSE,
-      rs.save.table.every = 0,
-
-      # graphics parameters
-
-      rs.plot.figure.initial = FALSE,
-      rs.plot.figure.every = 0,
-
-      convergence.color.delta = color.pal[ 7 ],    # brown
-      convergence.color.delta.max = color.pal[ 5 ],    # orange
-      convergence.color.delta.change = color.pal[ 8 ],    # pink
-      convergence.shape.linear = "triangle",
-      convergence.shape.biexp = "circle",
-      convergence.shape.posnegpop = "triangle open",
-
+      ### plotting parameters
+      # color palette for dot plots
       density.color.single = "blue3",
       density.color.initial = color.pal[ 3 ],    # green
       density.color.final = color.pal[ 2 ],    # blue
       density.color.posnegpop = color.pal[ 1 ],    # red
       density.palette.n = 1000,
       density.palette.base.n = 1000000,
-      density.palette.base.color = c( "blue", "cyan", "green", "yellow",
-                                      "red" ),
+      density.palette.base.color = c( "blue", "cyan", "green", "yellow", "red" ),
 
-      gate.plot.stage = FALSE,
+      # gating plot figure parameters
       gate.tesselation.color = "blue3",
       gate.downsample.seed = 5000,
 
-      matrix.marker.color = "blue3",
-      matrix.marker.proper.color = "red3",
-      matrix.wavelength.min = 300,
-      matrix.wavelength.max = 900,
-
-      scatter.plot.scale.other = FALSE,
-      scatter.expr.color.unco = "blue",
-      scatter.expr.color.comp = "black",
-      scatter.scale.breaks.coef = 2.0,
-      scatter.ref.line.unco = FALSE,
-      scatter.ref.line.color = "green3",
-      scatter.ref.line.size.factor = 1.8,
-
       # parameters for main figures
-
       figure.width = 8.0,
       figure.height = 6.0,
       figure.margin = 4.0,
