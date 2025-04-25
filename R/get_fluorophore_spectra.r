@@ -5,11 +5,13 @@
 #'
 #' This function retrieves the fluorophore spectra for flow cytometry data,
 #'     optionally using cleaned expression data and biexponential transformation.
-#'     It also plots and saves the spectra, and performs cosine similarity QC for controls.
+#'     It also plots and saves the spectra, and performs cosine similarity QC for
+#'     controls.
 #'
 #' @title Get Fluorophore Spectra
 #' @description Retrieves the fluorophore spectra for flow cytometry data,
 #'     optionally using cleaned expression data and biexponential transformation.
+#'
 #' @importFrom flowWorkspace flowjo_biexp
 #' @param flow.control A list containing flow cytometry control data.
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
@@ -19,6 +21,7 @@
 #'     (default is FALSE).
 #' @param af.spectra Optional autofluorescence spectra to include.
 #' @param plot.prefix Optional prefix for plot titles (default is "Initial").
+#'
 #' @return A matrix with the fluorophore spectra.
 #' @export
 
@@ -185,7 +188,7 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
     plot.spread.matrix( fluorophore.spectra.plot, asp, plot.prefix )
   }
 
-  similarity.matrix <- cosine( t( fluorophore.spectra.plot ) )
+  similarity.matrix <- cosine.similarity( t( fluorophore.spectra.plot ) )
 
   unique.similarity <- similarity.matrix * lower.tri( similarity.matrix )
 

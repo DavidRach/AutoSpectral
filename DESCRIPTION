@@ -37,7 +37,6 @@ Imports:
     future.apply,
     ggplot2,
     grDevices,
-    lsa,
     moments,
     parallelly,
     rlang,

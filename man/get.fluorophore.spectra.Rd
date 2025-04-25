@@ -40,5 +40,6 @@ Get Fluorophore Spectra
 
 This function retrieves the fluorophore spectra for flow cytometry data,
     optionally using cleaned expression data and biexponential transformation.
-    It also plots and saves the spectra, and performs cosine similarity QC for controls.
+    It also plots and saves the spectra, and performs cosine similarity QC for
+    controls.
 }

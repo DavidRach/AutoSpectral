@@ -9,7 +9,6 @@
 #' @importFrom ggplot2 coord_fixed element_text labs ggsave
 #' @importFrom dplyr mutate %>%
 #' @importFrom tidyr pivot_longer
-#' @importFrom lsa cosine
 #'
 #' @param spectra Data frame containing spectral data.
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
@@ -30,7 +29,7 @@ plot.similarity.matrix <- function( spectra, asp, plot.prefix = NULL ){
   }
 
   # similarity matrix
-  similarity.matrix <- cosine( t( spectra ) )
+  similarity.matrix <- cosine.similarity( t( spectra ) )
 
   complexity.index <- calculate.complexity.index( spectra )
 
