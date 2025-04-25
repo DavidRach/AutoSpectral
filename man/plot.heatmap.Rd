@@ -4,16 +4,41 @@
 \alias{plot.heatmap}
 \title{Plot Heatmap}
 \usage{
-\method{plot}{heatmap}(matrix, asp, plot.prefix = NULL, number.labels)
+\method{plot}{heatmap}(
+  matrix,
+  asp,
+  number.labels,
+  plot.prefix = NULL,
+  legend.label = "heatmap",
+  triangular = FALSE,
+  output.dir = NULL,
+  fixed.scale = FALSE,
+  scale.min = NULL,
+  scale.max = NULL
+)
 }
 \arguments{
 \item{matrix}{Matrix or dataframe containing spectral data.}
 
 \item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
 
+\item{number.labels}{Logical indicating whether to add number labels to the heatmap.}
+
 \item{plot.prefix}{Optional prefix for the plot filename.}
 
-\item{number.labels}{Logical indicating whether to add number labels to the heatmap.}
+\item{triangular}{Logical. Plot the lower triangle of the matrix only,
+diagonal included. Default is FALSE.}
+
+\item{output.dir}{Optional output directory. Default is NULL, in which case
+the similarity heatmap folder will be used.}
+
+\item{fixed.scale}{Logical, determines whether to use an externally supplied
+fixed scale (min and max) for the heatmap color scale. Useful for putting
+multiple plots on the same scale.}
+
+\item{scale.min}{Optional numeric. Minimum for the fixed color scale.}
+
+\item{scale.max}{Optional numeric. Maximum for the fixed color scale.}
 }
 \value{
 Saves the heatmap plot as a JPEG file and the SSM data as a CSV file

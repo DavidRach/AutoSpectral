@@ -23,7 +23,7 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
                                   clean.expr = FALSE, plot.prefix = "Refined" )
 {
 
-  if( !is.null( plot.prefix ) ){
+  if ( !is.null( plot.prefix ) ) {
     plot.title <- paste( plot.prefix, asp$spectra.file.name )
   } else {
     plot.title <- asp$spectra.file.name
@@ -31,7 +31,7 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
 
     fluorophores <- rownames( spectra.initial )
 
-    if( "AF" %in% fluorophores ){
+    if ( "AF" %in% fluorophores ) {
       af.control <- "AF"
     }
 
@@ -100,7 +100,7 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
     spectra.update <- spectra.initial - spectra.curr
 
     # get raw expression data and spectra
-    if( clean.expr ){
+    if ( clean.expr ) {
 
       expr.data <- flow.control$clean.expr[ , flow.control$spectral.channel ]
 
@@ -193,7 +193,7 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
         }
 
         # update iteration variables
-        if( rs.scale.untransformed && rs.delta.max < rs.delta.threshold )
+        if ( rs.scale.untransformed && rs.delta.max < rs.delta.threshold )
         {
             # switch to bi-exponential scale and reset lambda and delta history
             rs.scale.untransformed <- FALSE
@@ -236,7 +236,7 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
 
     # save and plot convergence and error metrics
     # save and plot slope error
-    if( ! is.null( asp$table.slope.error.dir ) )
+    if ( ! is.null( asp$table.slope.error.dir ) )
     {
       table.slope.error.file.name <- ifelse( rs.iter.last,
                                              sprintf( "%s.csv", asp$slope.error.file.name ),
@@ -249,7 +249,7 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
 
     }
 
-    if( ! is.null( asp$figure.slope.error.dir ) )
+    if ( ! is.null( asp$figure.slope.error.dir ) )
     {
       figure.slope.error.file.name <- sprintf( "%s%s.jpg",
                                                asp$slope.error.file.name,
@@ -263,7 +263,7 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
     }
 
     # save and plot skewness
-    if( ! is.null( asp$table.skewness.dir ) )
+    if ( ! is.null( asp$table.skewness.dir ) )
     {
       table.skewness.file.name <- ifelse( rs.iter.last,
                                           sprintf( "%s.csv", asp$skewness.file.name ),
@@ -275,7 +275,7 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
                                    table.skewness.file.name ) )
     }
 
-    if( ! is.null( asp$figure.skewness.dir ) )
+    if ( ! is.null( asp$figure.skewness.dir ) )
     {
       if ( ! is.null( af.control ) )
         spillover.skewness <- unmixing.error$skew[
@@ -309,7 +309,7 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
     }
 
     # save spectral matrix
-    if( ! is.null( asp$table.spectra.dir ) )
+    if ( ! is.null( asp$table.spectra.dir ) )
     {
       table.spectra.file.name <- sprintf( "%s.csv", plot.title )
 
@@ -319,13 +319,13 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
     }
 
     # plot spectra
-    if( ! is.null( asp$figure.similarity.heatmap.dir ) ){
+    if ( ! is.null( asp$figure.similarity.heatmap.dir ) ){
       plot.spectra( spectra.update.reverted, flow.control, asp, plot.title,
                     asp$figure.spectra.dir )
     }
 
     # plot similarity matrix heatmap
-    if( ! is.null( asp$figure.spectra.dir ) ){
+    if ( ! is.null( asp$figure.spectra.dir ) ){
       plot.similarity.matrix( spectra.update.reverted, asp, plot.prefix )
     }
 

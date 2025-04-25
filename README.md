@@ -6,6 +6,8 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
+AutoSpectral is AutoSpill updated for the spectral flow era.
+
 The goal of AutoSpectral is to provide you with the best possible
 spectral signatures of the fluorophores in your single-stained controls.
 Whether or not these accurately model your fully stained samples will
