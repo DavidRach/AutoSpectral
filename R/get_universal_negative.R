@@ -40,8 +40,8 @@ get.universal.negative <- function( clean.expr.data, samp,
                                     control.type,
                                     scatter.match = TRUE ){
 
-  if( asp$verbose )
-    print( paste( "Getting universal negative for", samp ) )
+  if ( asp$verbose )
+    cat( paste( "\033[34m", "Getting universal negative for", samp, "\033[0m", "\n" ) )
 
   pos.control.expr <- clean.expr.data[[ samp ]]
 
@@ -65,22 +65,22 @@ get.universal.negative <- function( clean.expr.data, samp,
   pos.above.threshold <- pos.peak.channel[ pos.peak.channel > positivity.threshold ]
 
   # warn if few events in positive
-  if( length( pos.above.threshold ) < asp$min.cell.warning.n ){
-    cat( paste( "Warning! Fewer than",  asp$min.cell.warning.n,
-    "gated events in", samp ), "\n"  )
+  if ( length( pos.above.threshold ) < asp$min.cell.warning.n ){
+    cat( paste( "\033[31m", "Warning! Fewer than",  asp$min.cell.warning.n,
+    "gated events in", samp ),  "\033[0m", "\n"  )
   }
 
-  # stop if fewer than minimum acceptable events
-  if( length( pos.above.threshold ) < asp$min.cell.stop.n ){
+  # stop if fewer than minimum acceptable events, returning original data
+  if ( length( pos.above.threshold ) < asp$min.cell.stop.n ){
     return( rbind( pos.control.expr, neg.control.expr ) )
   }
 
   check.critical( length( pos.above.threshold > asp$min.cell.stop.n ),
-                  paste( "Error! Fewer than", asp$min.cell.warning.n,
-                  "events remain in", samp, "\n" ) )
+                  paste( "\033[31m", "Error! Fewer than", asp$min.cell.warning.n,
+                  "events remain in", samp, "\033[0m", "\n" ) )
 
   # select only brightest positive.n events
-  if( length( pos.above.threshold ) >= positive.n ){
+  if ( length( pos.above.threshold ) >= positive.n ){
     pos.selected <- sort( pos.above.threshold, decreasing = TRUE )[ 1:positive.n ]
   } else {
     pos.selected <- pos.above.threshold
@@ -94,11 +94,11 @@ get.universal.negative <- function( clean.expr.data, samp,
   # if using beads, default to no matching
   sample.control.type <- control.type[[ samp ]]
 
-  if( sample.control.type == "beads" ) {
+  if ( sample.control.type == "beads" ) {
     scatter.match <- FALSE
   }
 
-  if( scatter.match ) {
+  if ( scatter.match ) {
 
     pos.scatter.coord <- pos.selected.expr[ , scatter.param ]
 
@@ -140,30 +140,36 @@ get.universal.negative <- function( clean.expr.data, samp,
 
     neg.population.idx <- which( neg.scatter.matched.pip != 0 )
 
-    neg.population.idx <- sample( neg.population.idx, negative.n )
+    # warn if few events in negative
+    if ( length( neg.population.idx ) < asp$min.cell.warning.n ){
+      cat( paste( "\033[31m", "Warning! Fewer than",  asp$min.cell.warning.n,
+                  "scatter-matched negative events for", samp ),  "\033[0m", "\n"  )
+    }
+
+    # stop if fewer than minimum acceptable events, returning original negative
+    if ( length( neg.population.idx ) < asp$min.cell.stop.n ){
+      return( rbind( pos.selected.expr, neg.control.expr ) )
+    }
+
+    if ( length( neg.population.idx ) > negative.n )
+      neg.population.idx <- sample( neg.population.idx, negative.n )
+
     neg.scatter.matched <- neg.control.expr[ neg.population.idx, ]
 
   } else {
-
     neg.population.idx <- sample( 1:nrow( neg.control.expr ), negative.n )
-
     neg.scatter.matched <- neg.control.expr[ neg.population.idx, ]
-
   }
 
 
-  if( !is.null( asp$figure.spectral.ribbon.dir ) ){
-
+  if ( !is.null( asp$figure.spectral.ribbon.dir ) ){
     spectral.ribbon.plot( pos.selected.expr, neg.scatter.matched,
                                spectral.channel, asp, samp )
-
   }
 
-  if( !is.null( asp$figure.scatter.dir.base ) ){
-
+  if ( !is.null( asp$figure.scatter.dir.base ) ){
     scatter.match.plot( pos.selected.expr, neg.scatter.matched, samp,
                         scatter.param, asp )
-
   }
 
   rbind( pos.selected.expr, neg.scatter.matched )

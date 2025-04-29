@@ -19,7 +19,7 @@ get.autospectral.param <- function( cytometer = "aurora", figures = TRUE )
 {
   autosp.param <- get.autospectral.param.minimal()
 
-  if( figures ){
+  if ( figures ){
 
     # directory parameters
 

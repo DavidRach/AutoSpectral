@@ -23,8 +23,9 @@
 remove.af <- function( clean.expr.data, samp, af.artefact, spectral.channel,
                        universal.negative, asp ) {
 
-  if( asp$verbose )
-    print( paste( "Removing autofluorescence contamination in", samp ) )
+  if ( asp$verbose )
+    cat( paste( "\033[34m", "Removing autofluorescence contamination in", samp,
+                "\033[0m", "\n" ) )
 
   # match universal negative
   matching.negative <- universal.negative[[ samp ]]
@@ -42,7 +43,7 @@ remove.af <- function( clean.expr.data, samp, af.artefact, spectral.channel,
   gate.data <- unmix.ols( expr.data, af.components )
 
   # apply af boundary gates
-  if( length( af.boundaries ) == 2 ){
+  if ( length( af.boundaries ) == 2 ){
 
     gate.population.pip.lower <- point.in.polygon(
       gate.data[ , 1 ], gate.data[ , 2 ],
@@ -66,9 +67,9 @@ remove.af <- function( clean.expr.data, samp, af.artefact, spectral.channel,
   }
 
 
-  if( !is.null( asp$figure.clean.control.dir ) ) {
+  if ( !is.null( asp$figure.clean.control.dir ) ) {
 
-    if( length( af.boundaries ) == 2 ){
+    if ( length( af.boundaries ) == 2 ){
 
       plot.gate.af.sample( samp, af.data = gate.data,
                            af.boundaries$lower, af.boundaries$upper,
@@ -84,7 +85,7 @@ remove.af <- function( clean.expr.data, samp, af.artefact, spectral.channel,
 
   }
 
-  if( !is.null( asp$figure.spectral.ribbon.dir ) ) {
+  if ( !is.null( asp$figure.spectral.ribbon.dir ) ) {
 
     spectral.ribbon.plot( expr.data, expr.data[ gate.population.idx, ],
                           spectral.channel, asp, samp,

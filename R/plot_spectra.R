@@ -78,7 +78,7 @@ plot.spectra <- function( spectral.matrix, flow.control, asp,
           width = plot.width, height = plot.height,
           limitsize = FALSE )
 
-  if( split.lasers ){
+  if ( split.lasers ){
     # get number of lasers used
     laser.n <- length( unique( fluor.spectra.plotting$Laser ) )
 

@@ -47,7 +47,7 @@ plot.gate.af.sample <- function( samp, af.data,
     y = af.data[ , 2 ],
     z = interp.surface( af.bound.density, af.data ) )
 
-  if( !is.null( af.boundary.lower ) ){
+  if ( !is.null( af.boundary.lower ) ){
     af.boundary.lower.ggp <- data.frame(
       x = c( af.boundary.lower$x,
              af.boundary.lower$x[ 1 ] ),
@@ -93,7 +93,7 @@ plot.gate.af.sample <- function( samp, af.data,
       limits = c( y.min, y.max ),
       expand = expansion( asp$af.figure.gate.scale.expand ) ) +
     geom_scattermore( pointsize = 1.2 * asp$figure.gate.point.size,
-                      stroke = 0.1 * asp$figure.gate.point.size, alpha = 1 ) +
+                      stroke = 0.1 * asp$figure.gate.point.size, alpha = 1, na.rm = TRUE ) +
     scale_color_gradientn( "", labels = NULL, colors = density.palette,
                            guide = guide_colorbar( barwidth = asp$figure.gate.bar.width,
                                                    barheight = asp$figure.gate.bar.height ) ) +
@@ -114,7 +114,7 @@ plot.gate.af.sample <- function( samp, af.data,
     geom_path( aes( .data$x, .data$y, color = NULL ),
                data = af.boundary.upper.ggp, linewidth = asp$figure.gate.line.size )
 
-  if( !is.null( af.boundary.lower ) ){
+  if ( !is.null( af.boundary.lower ) ){
     gate.plot <- gate.plot +
       geom_path( aes( .data$x, .data$y, color = NULL ),
                  data = af.boundary.lower.ggp, linewidth = asp$figure.gate.line.size )

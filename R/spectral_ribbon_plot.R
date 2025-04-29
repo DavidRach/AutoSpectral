@@ -28,9 +28,9 @@ spectral.ribbon.plot <- function( pos.expr.data, neg.expr.data,
                                        asp, fluor.name, plot.prefix = NULL,
                                        af = FALSE, removed.data = NULL ){
 
-  if( !af ) {
+  if ( !af ) {
 
-    if( is.null( plot.prefix ) ){
+    if ( is.null( plot.prefix ) ){
       plot.prefix <- "Scatter match"
     }
 
@@ -61,7 +61,7 @@ spectral.ribbon.plot <- function( pos.expr.data, neg.expr.data,
                                                   fluor.name ) )
   } else {
 
-    if( is.null( plot.prefix ) ){
+    if ( is.null( plot.prefix ) ){
       plot.prefix <- "AF removal"
     }
 
@@ -73,7 +73,7 @@ spectral.ribbon.plot <- function( pos.expr.data, neg.expr.data,
     cleaned.data <- data.frame( neg.expr.data[ , spectral.channel ],
                                 check.names = FALSE )
 
-    if( !is.null( removed.data ) ){
+    if ( !is.null( removed.data ) ){
       removed.data <- data.frame( removed.data[ , spectral.channel ],
                                   check.names = FALSE )
     }

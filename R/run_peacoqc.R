@@ -18,7 +18,7 @@ run.peacoQC <- function( expr.data, spectral.channel,
                               all.channels, asp ){
 
   # set up parallel processing
-  if( asp$parallel ){
+  if ( asp$parallel ){
     plan( multisession, workers = asp$worker.process.n )
     options( future.globals.maxSize = asp$max.memory.n )
     lapply.function <- future_lapply
@@ -66,9 +66,9 @@ run.peacoQC <- function( expr.data, spectral.channel,
 
   low.sample.n <- which( clean.expr.n < asp$min.cell.warning.n )
 
-  if( any( clean.expr.n < asp$min.cell.warning.n ) ){
-    cat( paste( "Warning! Fewer than", asp$min.cell.warning.n,
-                "gated events in", names( low.sample.n ), "\n"  ) )
+  if ( any( clean.expr.n < asp$min.cell.warning.n ) ){
+    cat( paste( "\033[31m", "Warning! Fewer than", asp$min.cell.warning.n,
+                "gated events in", names( low.sample.n ), "\033[0m", "\n"  ) )
   }
 
   return( clean.expr )

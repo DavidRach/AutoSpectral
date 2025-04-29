@@ -47,7 +47,7 @@ create.control.file <- function( control.dir, asp ){
   control.def.file$fluorophore <- fluorophore.matches[ control.def.file$filename ]
 
   # set corresponding peak detectors based on cytometer
-  if( asp$cytometer == "Aurora" ){
+  if ( asp$cytometer == "Aurora" ){
     detectors <- setNames( fluorophore.database$channel.Aurora, fluorophore.database$fluorophore )
 
   } else if ( asp$cytometer == "ID7000" ){
@@ -69,7 +69,7 @@ create.control.file <- function( control.dir, asp ){
   control.def.file$channel <- detectors[ detector.idx ]
 
   control.def.file$control.type <- sapply( control.def.file$filename, function( filename ){
-    if( grepl( "cells", filename, ignore.case = TRUE ) ){
+    if ( grepl( "cells", filename, ignore.case = TRUE ) ){
       type <- "cells"
     } else if ( grepl( "beads", filename, ignore.case = TRUE ) ){
       type <- "beads"
@@ -112,10 +112,11 @@ create.control.file <- function( control.dir, asp ){
   # check for duplicate fluorophores
   duplicate.fluorophores <- anyDuplicated( control.def.file$fluorophore )
 
-  if( duplicate.fluorophores != 0 ){
-    cat( "Warning! Duplicated fluorophore names appear in the control file.
+  if ( duplicate.fluorophores != 0 ){
+    cat( paste( "\033[31m",
+    "Warning! Duplicated fluorophore names appear in the control file.
            Inspect and remove any extra single color control files or edit the control file to be accurate.
-           Only one control may be used per fluorophore." )
+           Only one control may be used per fluorophore.", "\033[0m", "\n" ) )
   }
 
 }

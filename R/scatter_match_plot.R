@@ -37,7 +37,6 @@ scatter.match.plot <- function( pos.expr.data, neg.expr.data, fluor.name,
   bandwidth.x <- asp$gate.bound.density.bw.factor.cells * dpik( scatter.plot.data[ , 1 ] )
   bandwidth.y <- asp$gate.bound.density.bw.factor.cells * dpik( scatter.plot.data[ , 2 ] )
 
-
   scatter.density <- bkde2D(
     scatter.plot.data,
     bandwidth = c( bandwidth.x, bandwidth.y ),
@@ -56,7 +55,7 @@ scatter.match.plot <- function( pos.expr.data, neg.expr.data, fluor.name,
 
   ggplot( data.ggp, aes( .data$x, .data$y, color = .data$z, group ) ) +
     geom_scattermore( pointsize = asp$figure.gate.point.size,
-                      stroke = asp$figure.gate.point.size, alpha = 1 ) +
+                      stroke = asp$figure.gate.point.size, alpha = 1, na.rm = TRUE ) +
 
     scale_color_gradientn( "", labels = NULL, colors = density.palette,
           guide = guide_colorbar( barwidth = asp$figure.gate.bar.width,
@@ -93,7 +92,6 @@ scatter.match.plot <- function( pos.expr.data, neg.expr.data, fluor.name,
            panel.border = element_rect( linewidth = asp$figure.panel.line.size ),
            panel.grid.major = element_blank(),
            panel.grid.minor = element_blank() )
-
 
   scatter.plot.filename <- paste( fluor.name, asp$scatter.match.plot.filename )
 

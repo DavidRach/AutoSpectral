@@ -32,7 +32,7 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control, method = "ols",
                        include.imaging = FALSE,
                        allow.negative = TRUE ){
 
-  if( is.null( output.dir ) ){
+  if ( is.null( output.dir ) ){
     output.dir <- asp$unmixed.fcs.dir
   }
 
@@ -84,7 +84,7 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control, method = "ols",
     other.exprs <- other.exprs[ , asp$time.and.scatter ]
   }
 
-  if( include.raw ){
+  if ( include.raw ){
     # add back raw exprs and others
     unmixed.data <- cbind( fcs.exprs, unmixed.data )
   } else {

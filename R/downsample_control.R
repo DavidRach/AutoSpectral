@@ -24,8 +24,8 @@
 downsample.control <- function( clean.expr.data, samp, peak.channels,
                                  negative.n, positive.n, asp ){
 
-  if( asp$verbose )
-    print( paste( "Downsampling", samp ) )
+  if ( asp$verbose )
+    cat( paste( "\033[34m", "Downsampling", samp, "\033[0m", "\n" ) )
 
   # should just pass control's data
   pos.control.expr <- clean.expr.data[[ samp ]]

@@ -73,7 +73,7 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
 
     marker.spectra <- lapply( fluorophore.samples, function( samp ) {
 
-      cat( paste( "Processing", samp, "\n" ) )
+      cat( paste( "\033[32m", "Processing", samp, "\033[0m", "\n" ) )
 
       peak.channel <- fluorophore.channels[ fluorophore.samples == samp ]
 
@@ -124,7 +124,7 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
 
     marker.spectra <- lapply( fluorophore.samples, function( samp ) {
 
-      cat( paste( "Processing", samp, "\n" ) )
+      cat( paste("\033[32m", "Processing", samp, "\033[0m", "\n" ) )
 
       peak.channel <- fluorophore.channels[ fluorophore.samples == samp ]
 
@@ -181,12 +181,8 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
   }
 
   # cosine similarity QC for controls
-  if ( !is.null( asp$figure.similarity.heatmap.dir ) ) {
-
+  if ( !is.null( asp$figure.similarity.heatmap.dir ) )
     plot.similarity.matrix( fluorophore.spectra.plot, asp, plot.prefix )
-
-    plot.spread.matrix( fluorophore.spectra.plot, asp, plot.prefix )
-  }
 
   similarity.matrix <- cosine.similarity( t( fluorophore.spectra.plot ) )
 
@@ -207,7 +203,7 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
 
     print( similarity.qc )
 
-    cat( "Similarity over 0.95 detected for one or more pairs of fluorophores.
+    cat( "\033[31m Similarity over 0.95 detected for one or more pairs of fluorophores.
 
     Check the table below for problematic combinations.
     If both Fluor1 and Fluor2 are fluorophores,
@@ -216,7 +212,8 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
 
     If one of the pair is AF, the other likely has minimal signal.
     In this case, run clean.controls and set use.clean.expr to TRUE.
-    If you have already done that, manually inspect the control for real signal. \n" )
+    If you have already done that, manually inspect the control for real signal.
+         \033[0m \n" )
   }
 
   marker.spectra

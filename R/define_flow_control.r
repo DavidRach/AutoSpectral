@@ -59,7 +59,7 @@ define.flow.control <- function( control.dir, control.def.file, asp,
                                     gate = TRUE )
 {
   # set up parallel processing
-  if( asp$parallel ){
+  if ( asp$parallel ){
       future::plan( future::multisession, workers = asp$worker.process.n )
       options( future.globals.maxSize = asp$max.memory.n )
       lapply.function <- future.apply::future_lapply
@@ -169,7 +169,7 @@ define.flow.control <- function( control.dir, control.def.file, asp,
 
     flow.antigen[ flow.fluorophore == "AF" ] <- "AF"
     flow.antigen[ is.na( flow.antigen ) ] <- "other"
-    if( is.na( flow.channel[ flow.fluorophore == "AF" ] ) )
+    if ( is.na( flow.channel[ flow.fluorophore == "AF" ] ) )
         flow.channel[ flow.fluorophore == "AF" ] <- asp$af.channel
     # note: currently leaves NA for duplicated universal negatives
 
@@ -306,7 +306,9 @@ define.flow.control <- function( control.dir, control.def.file, asp,
                                 seq_len( flow.sample.event.number ), sep = "_")
 
         if ( flow.sample.event.number < 500 )
-          cat( paste( "Warning! Fewer than 500 gated events in", flow.file.name[ fs.idx ] ) )
+          cat( paste( "\033[31m",  "Warning! Fewer than 500 gated events in",
+                      flow.file.name[ fs.idx ],
+                      "\033[0m", "\n" ) )
 
         if ( flow.sample.event.number > flow.sample.event.number.max )
             flow.sample.event.number.max <- flow.sample.event.number

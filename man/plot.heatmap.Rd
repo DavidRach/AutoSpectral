@@ -26,6 +26,8 @@
 
 \item{plot.prefix}{Optional prefix for the plot filename.}
 
+\item{legend.label}{Character string that will appear on the heatmap legend.}
+
 \item{triangular}{Logical. Plot the lower triangle of the matrix only,
 diagonal included. Default is FALSE.}
 

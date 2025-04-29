@@ -256,7 +256,7 @@ do.gate.af <- function( gate.data, samp, asp ) {
     plot.gate.af( samp, gate.data, gate.bound, gate.region,
                   gate.population, asp )
 
-  if( asp$af.gate.bound.strict ) {
+  if ( asp$af.gate.bound.strict ) {
 
     gate.population.idx <- which( gate.population.pip != 0 )
 

@@ -144,8 +144,8 @@ get.autospectral.param.minimal <- function()
       gate.data.trim.factor.y.min.cells = 0.01,
       gate.data.trim.factor.y.max.cells = 0.99,
 
-      gate.bound.density.bw.factor.cells = 3.0,
-      gate.bound.density.grid.n.cells = 100,
+      gate.bound.density.bw.factor.cells = 6.0,
+      gate.bound.density.grid.n.cells = 1000,
       gate.bound.density.neigh.size.cells = 3,
 
       gate.bound.density.max.target.cells = 1,
@@ -153,12 +153,12 @@ get.autospectral.param.minimal <- function()
       gate.bound.density.max.exclusion.y.cells = 0.05,
       gate.bound.density.max.mad.factor.cells = 2.0,
 
-      gate.region.density.bw.factor.cells = 2.0,
-      gate.region.density.grid.n.cells = 100,
+      gate.region.density.bw.factor.cells = 6.0,
+      gate.region.density.grid.n.cells = 1000,
       gate.region.density.neigh.size.cells = 2,
 
-      gate.region.max.density.bw.factor.cells = 1.0,
-      gate.region.max.density.grid.n.cells = 100,
+      gate.region.max.density.bw.factor.cells = 6.0,
+      gate.region.max.density.grid.n.cells = 1000,
       gate.downsample.n.cells = 100000,
 
       # gate parameters for beads
@@ -176,8 +176,8 @@ get.autospectral.param.minimal <- function()
       gate.data.trim.factor.y.min.beads = 0.01,
       gate.data.trim.factor.y.max.beads = 0.99,
 
-      gate.bound.density.bw.factor.beads = 3.0,
-      gate.bound.density.grid.n.beads = 100,
+      gate.bound.density.bw.factor.beads = 6.0,
+      gate.bound.density.grid.n.beads = 1000,
       gate.bound.density.neigh.size.beads = 3,
 
       gate.bound.density.max.target.beads = 1,
@@ -185,12 +185,12 @@ get.autospectral.param.minimal <- function()
       gate.bound.density.max.exclusion.y.beads = 0.05,
       gate.bound.density.max.mad.factor.beads = 3.0,
 
-      gate.region.density.bw.factor.beads = 2.0,
-      gate.region.density.grid.n.beads = 100,
+      gate.region.density.bw.factor.beads = 6.0,
+      gate.region.density.grid.n.beads = 1000,
       gate.region.density.neigh.size.beads = 2,
 
-      gate.region.max.density.bw.factor.beads = 1.0,
-      gate.region.max.density.grid.n.beads = 100,
+      gate.region.max.density.bw.factor.beads = 6.0,
+      gate.region.max.density.grid.n.beads = 1000,
       gate.downsample.n.beads = 10000,
 
       ### refine spillover (unmixing) parameters
@@ -217,13 +217,19 @@ get.autospectral.param.minimal <- function()
       convergence.shape.posnegpop = "triangle open",
 
       ### fix my unmix parameters
-      fix.iter.max = 20,
-      fix.downsample.n = 30000,
-      fix.positivity.threshold = 0.99,
-
-      fix.spectra.filename = "fixed_spectra",
-      fix.spillover.filename = "fixed_spillover",
-      fix.compensation.filename = "fixed_compensation",
+      fix.unmixing.dir = "./Fix_my_unmix",
+      fix.unmixing.plot = "Fixing_unmixing_plot.jpg",
+      fix.unmixing.heatmap = "Fixing_unmixing_heatmap",
+      fix.spectra.filename = "Fixed_spectra.csv",
+      fix.spillover.filename = "Fixed_spillover.csv",
+      fix.compensation.filename = "Fixed_compensation.csv",
+      fix.compensation.flowjo = "Fixed_compensation.mtx",
+      fix.unmix.plot.breaks = c( -1e3, -1e2, -10, 0, 10, 1e2, 1e3, 3e3,
+                                 1e4, 3e4, 1e5, 3e5, 1e6 ),
+      fix.unmix.figure.width = 12,
+      fix.unmix.figure.height = 6,
+      fix.unmix.bw.factor = 10,
+      fix.unmix.grid.n = 2000,
 
       ### directory parameters
       unmixed.fcs.dir = "AutoSpectral_unmixed",

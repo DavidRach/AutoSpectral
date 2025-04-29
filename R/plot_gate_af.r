@@ -63,7 +63,7 @@ plot.gate.af <- function( samp, gate.data, gate.bound, gate.region,
             limits = c( y.min, y.max ),
             expand = expansion( asp$af.figure.gate.scale.expand ) ) +
         geom_scattermore( pointsize = 1.2 * asp$figure.gate.point.size,
-            stroke = 0.1 * asp$figure.gate.point.size, alpha = 1 ) +
+            stroke = 0.1 * asp$figure.gate.point.size, alpha = 1, na.rm = TRUE ) +
         scale_color_gradientn( "", labels = NULL, colors = density.palette,
             guide = guide_colorbar( barwidth = asp$figure.gate.bar.width,
                 barheight = asp$figure.gate.bar.height ) ) +
@@ -80,7 +80,7 @@ plot.gate.af <- function( samp, gate.data, gate.bound, gate.region,
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank() )
 
-        gate.bound.ggp <- data.frame(
+    gate.bound.ggp <- data.frame(
             x = c(
                 gate.bound$x.low,
                 gate.bound$x.high,

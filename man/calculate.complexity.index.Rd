@@ -2,7 +2,7 @@
 % Please edit documentation in R/calculate_complexity_index.R
 \name{calculate.complexity.index}
 \alias{calculate.complexity.index}
-\title{calculate.complexity.index}
+\title{Calculate Complexity Index}
 \usage{
 calculate.complexity.index(spectra)
 }
@@ -16,5 +16,6 @@ The complexity index (condition number) for the
     spectral flow cytometry panel.
 }
 \description{
-Calculates the complexity index for a set of fluorophores (a spectral panel).
+Calculates the complexity index (condition number) for a set of
+    fluorophores (a spectral panel).
 }

@@ -33,21 +33,21 @@ match.fluorophores <- function( control.filenames, fluorophore.database ){
       grepl( pattern, filename, perl = TRUE )
     }) ]
 
-    if( length( fluorophore ) == 0 ){
+    if ( length( fluorophore ) == 0 ){
       fluorophore <- fluorophore.database$fluorophore[ sapply( fluorophore.database$synonym1, function( fluor ) {
         mod.fluor <- gsub( " ", "\\\\s*", fluor )
         pattern <- paste0( delim.start, mod.fluor, delim.end )
         grepl( pattern, filename, perl = TRUE )
       }) ]
 
-      if( length( fluorophore ) == 0 ){
+      if ( length( fluorophore ) == 0 ){
         fluorophore <- fluorophore.database$fluorophore[ sapply( fluorophore.database$synonym2, function( fluor ) {
           mod.fluor <- gsub( " ", "\\\\s*", fluor )
           pattern <- paste0( delim.start, mod.fluor, delim.end )
           grepl( pattern, filename, perl = TRUE )
         }) ]
 
-        if( length( fluorophore ) == 0 ){
+        if ( length( fluorophore ) == 0 ){
           fluorophore <- fluorophore.database$fluorophore[ sapply( fluorophore.database$synonym3, function( fluor ) {
             mod.fluor <- gsub( " ", "\\\\s*", fluor )
             pattern <- paste0( delim.start, mod.fluor, delim.end )
@@ -58,7 +58,7 @@ match.fluorophores <- function( control.filenames, fluorophore.database ){
       }
     }
 
-    if( length( fluorophore ) == 0 ){
+    if ( length( fluorophore ) == 0 ){
 
       fluorophore <- "No match"
 

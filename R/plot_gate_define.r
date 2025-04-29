@@ -72,14 +72,17 @@ plot.gate.define <- function( samp, gate.data, gate.marker, gate.bound,
         gate.region$y.low )
     )
 
+    gate.population$boundary$x[gate.population$boundary$x >
+                                 asp$scatter.data.max.x] <- asp$scatter.data.max.x
+    gate.population$boundary$y[gate.population$boundary$y >
+                                 asp$scatter.data.max.y] <- asp$scatter.data.max.y
+
     gate.boundary.ggp <- data.frame(
       x = c( gate.population$boundary$x,
              gate.population$boundary$x[ 1 ] ),
       y = c( gate.population$boundary$y,
              gate.population$boundary$y[ 1 ] )
     )
-
-
 
     density.palette <- get.density.palette( gate.data.ggp$z, asp )
 
@@ -109,7 +112,7 @@ plot.gate.define <- function( samp, gate.data, gate.marker, gate.bound,
                         asp$scatter.data.max.y ),
             expand = expansion( asp$figure.gate.scale.expand ) ) +
         geom_scattermore( pointsize = asp$figure.gate.point.size,
-            stroke = 0.1 * asp$figure.gate.point.size, alpha = 1 ) +
+            stroke = 0.1 * asp$figure.gate.point.size, alpha = 1, na.rm = TRUE ) +
         scale_color_gradientn( "", labels = NULL, colors = density.palette,
             guide = guide_colorbar( barwidth = asp$figure.gate.bar.width,
                 barheight = asp$figure.gate.bar.height ) ) +

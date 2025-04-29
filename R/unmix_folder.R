@@ -36,14 +36,14 @@ unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
                           include.imaging = FALSE,
                           allow.negative = TRUE ){
 
-  if( is.null( output.dir ) ){
+  if ( is.null( output.dir ) ){
     output.dir <- asp$unmixed.fcs.dir
   }
 
   files.to.unmix <- list.files( fcs.dir, pattern = ".fcs", full.names = TRUE )
 
   # set up parallel processing
-  if( asp$parallel ){
+  if ( asp$parallel ){
     plan( multisession, workers = asp$worker.process.n )
     options( future.globals.maxSize = asp$max.memory.n )
     lapply.function <- future_lapply

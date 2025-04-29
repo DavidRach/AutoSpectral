@@ -7,7 +7,7 @@
 cosine.similarity(spectra.t)
 }
 \arguments{
-\item{spectra}{The transposed spectral matrix (or dataframe), represented as
+\item{spectra.t}{The transposed spectral matrix (or dataframe), represented as
 detectors in rows and fluorophores in columns.}
 }
 \value{

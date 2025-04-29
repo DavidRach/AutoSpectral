@@ -28,7 +28,7 @@ get.unmixing.error <- function( expr.data.unmix, fluorophores,
                                 scale.untransformed, transform.inv,
                                 flow.event.sample, asp ){
 
-  if( asp$parallel ){
+  if ( asp$parallel ){
     plan( multisession, workers = asp$worker.process.n )
     options( future.globals.maxSize = asp$max.memory.n )
     lapply.function <- future_lapply
@@ -53,7 +53,7 @@ get.unmixing.error <- function( expr.data.unmix, fluorophores,
 
     for( channel in fluorophores ){
 
-      if( channel == fluorophore.proper ){
+      if ( channel == fluorophore.proper ){
 
         unmixed.spillover.corr.coef[ channel ] <- 1.0
         unmixed.spillover.corr.slop[ channel ] <- 1.0

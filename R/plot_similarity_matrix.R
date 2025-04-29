@@ -19,7 +19,7 @@
 
 plot.similarity.matrix <- function( spectra, asp, plot.prefix = NULL ){
 
-  if( !is.null( plot.prefix ) ){
+  if ( !is.null( plot.prefix ) ){
     similarity.heatmap.filename <- paste0( plot.prefix, " ",
                                            asp$similarity.heatmap.file.name,
                                            ".jpg" )

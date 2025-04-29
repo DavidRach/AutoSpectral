@@ -9,9 +9,9 @@
 #'
 #'     Proceeds in three steps:
 #' \itemize{
-#'   \item Defines bound by data trimming
-#'   \item Defines region around the target maximum found in bound
-#'   \item Defines gate around target maximum, only in region
+#'   \item Defines bound by data trimming
+#'   \item Defines region around the target maximum found in bound
+#'   \item Defines gate around target maximum, only in region
 #' }
 #'
 #'     Uses numerical search of maxima over estimated densities.
@@ -38,7 +38,7 @@ do.gate <- function( gate.data, viability.gate, large.gate,
                      samp, scatter.and.channel.label, control.type, asp )
 {
     # set parameters for beads or cells
-    if( control.type == "beads" ){
+    if ( control.type == "beads" ){
       default.gate.param <- asp$default.gate.param.beads
       gate.data.trim.factor.x.min <- asp$gate.data.trim.factor.x.min.beads
       gate.data.trim.factor.x.max <- asp$gate.data.trim.factor.x.max.beads
@@ -302,7 +302,7 @@ do.gate <- function( gate.data, viability.gate, large.gate,
         gate.data[ , 2 ] > gate.region.y.low &
         gate.data[ , 2 ] < gate.region.y.high )
 
-    if( viability.gate ){
+    if ( viability.gate ){
 
       gate.region.voronoi <- NULL
 
@@ -455,7 +455,7 @@ do.gate <- function( gate.data, viability.gate, large.gate,
       gate.population.strict.idx <- gate.population.strict.idx[
         ! duplicated( data.frame( gate.data[ gate.population.strict.idx, ] ) ) ]
 
-      if( large.gate ){
+      if ( large.gate ){
 
         original.hull <- convex.hull( tri.mesh(
           gate.data[ gate.population.strict.idx, 1 ],

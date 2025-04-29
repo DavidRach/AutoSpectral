@@ -28,16 +28,16 @@ run.trim.events <- function( trim.sample.data, trim.sample,
 
   low.sample.n <- which( trimmed.expr.n < asp$min.cell.warning.n )
 
-  if( any( trimmed.expr.n < asp$min.cell.warning.n ) ){
-    cat( paste( "Warning! Fewer than", asp$min.cell.warning.n,
-                "gated events in", names( low.sample.n ), "\n"  ) )
+  if ( any( trimmed.expr.n < asp$min.cell.warning.n ) ){
+    cat( paste( "\033[31m", "Warning! Fewer than", asp$min.cell.warning.n,
+                "gated events in", names( low.sample.n ), "\033[0m", "\n"  ) )
   }
 
   low.sample.n <- which( trimmed.expr.n < asp$min.cell.stop.n )
 
   # for any samples that have been trimmed to fewer than 50 events,
   # return untrimmed data
-  if( any( trimmed.expr.n < asp$min.cell.stop.n ) ){
+  if ( any( trimmed.expr.n < asp$min.cell.stop.n ) ){
     for ( low.n in names( low.sample.n ) ) {
       trimmed.expr[[ low.n ]] <- trim.sample.data[[ low.n ]]
     }
@@ -45,9 +45,9 @@ run.trim.events <- function( trim.sample.data, trim.sample,
 
   rm( trim.sample.data )
 
-  if( any( trimmed.expr.n < asp$min.cell.stop.n ) ){
-    cat( paste( "Warning! Fewer than", asp$min.cell.stop.n,
-                "gated events in", names( low.sample.n ), "\n"  ) )
+  if ( any( trimmed.expr.n < asp$min.cell.stop.n ) ){
+    cat( paste( "\033[31m", "Warning! Fewer than", asp$min.cell.stop.n,
+                "gated events in", names( low.sample.n ), "\033[0m", "\n"  ) )
   }
 
   return( trimmed.expr )

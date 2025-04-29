@@ -30,8 +30,9 @@
 identify.af.artefacts <- function( clean.expr, universal.neg,
                                    spectral.channel, asp ) {
 
-  if( asp$verbose )
-    print( paste( "Identifying autofluorescence contamination in", universal.neg ) )
+  if ( asp$verbose )
+    cat( paste( "\033[34m", "Identifying autofluorescence contamination in",
+                universal.neg, "\033[0m", "\n" ) )
 
   expr.data.neg <- clean.expr[[ universal.neg ]][ , spectral.channel ]
 
@@ -65,7 +66,7 @@ identify.af.artefacts <- function( clean.expr, universal.neg,
     gate.data[ , 1 ], gate.data[ , 2 ],
     af.boundaries$upper$x, af.boundaries$upper$y )
 
-  if( asp$af.remove.pop != 1 ) {
+  if ( asp$af.remove.pop != 1 ) {
     # return both boundaries
     gate.population.idx <- which( gate.population.pip.lower == 0 &
                                     gate.population.pip.upper == 0 )
@@ -76,7 +77,7 @@ identify.af.artefacts <- function( clean.expr, universal.neg,
 
     pip.upper.sum <- sum( gate.population.pip.upper )
 
-    if( pip.upper.sum >= pip.lower.sum ) {
+    if ( pip.upper.sum >= pip.lower.sum ) {
 
       gate.population.idx <- which( gate.population.pip.upper == 0 )
 
@@ -93,9 +94,9 @@ identify.af.artefacts <- function( clean.expr, universal.neg,
     }
   }
 
-  if( !is.null( asp$figure.clean.control.dir ) ) {
+  if ( !is.null( asp$figure.clean.control.dir ) ) {
 
-    if( length( af.boundaries ) == 2 ){
+    if ( length( af.boundaries ) == 2 ){
 
       plot.gate.af.sample( universal.neg, af.data = gate.data,
                            af.boundaries$lower, af.boundaries$upper,
@@ -112,7 +113,7 @@ identify.af.artefacts <- function( clean.expr, universal.neg,
 
   }
 
-  if( !is.null( asp$figure.clean.control.dir ) ) {
+  if ( !is.null( asp$figure.clean.control.dir ) ) {
 
     spectral.ribbon.plot( expr.data.neg, expr.data.neg[ gate.population.idx, ],
                           spectral.channel, asp, universal.neg,

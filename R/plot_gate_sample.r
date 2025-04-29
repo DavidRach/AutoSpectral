@@ -31,7 +31,7 @@ plot.gate.sample <- function( samp, gate.data, gate.marker, gate.boundary,
                               scatter.and.channel.label, control.type, asp )
 {
 
-  if( control.type == "beads" ){
+  if ( control.type == "beads" ){
 
     gate.bound.density.bw.factor <- asp$plot.gate.factor * asp$gate.bound.density.bw.factor.beads
     gate.bound.density.grid.n <- asp$plot.gate.factor * asp$gate.bound.density.grid.n.beads
@@ -57,6 +57,9 @@ plot.gate.sample <- function( samp, gate.data, gate.marker, gate.boundary,
     x = gate.data[ , 1 ],
     y = gate.data[ , 2 ],
     z = interp.surface( gate.bound.density, gate.data ) )
+
+  gate.boundary$x[gate.boundary$x > asp$scatter.data.max.x] <- asp$scatter.data.max.x
+  gate.boundary$y[gate.boundary$y > asp$scatter.data.max.y] <- asp$scatter.data.max.y
 
   gate.boundary.ggp <- data.frame(
     x = c( gate.boundary$x,
@@ -93,7 +96,7 @@ plot.gate.sample <- function( samp, gate.data, gate.marker, gate.boundary,
                   asp$scatter.data.max.y ),
       expand = expansion( asp$figure.gate.scale.expand ) ) +
     geom_scattermore( pointsize = asp$figure.gate.point.size,
-                stroke = 0.1 * asp$figure.gate.point.size, alpha = 1 ) +
+                stroke = 0.1 * asp$figure.gate.point.size, alpha = 1, na.rm = TRUE ) +
     scale_color_gradientn( "", labels = NULL, colors = density.palette,
         guide = guide_colorbar( barwidth = asp$figure.gate.bar.width,
             barheight = asp$figure.gate.bar.height ) ) +

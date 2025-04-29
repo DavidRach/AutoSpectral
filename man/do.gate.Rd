@@ -39,9 +39,9 @@ Perform gating on scatter parameters
 
     Proceeds in three steps:
 \itemize{
-   \item Defines bound by data trimming
-   \item Defines region around the target maximum found in bound
-   \item Defines gate around target maximum, only in region
+  \item Defines bound by data trimming
+  \item Defines region around the target maximum found in bound
+  \item Defines gate around target maximum, only in region
 }
 
     Uses numerical search of maxima over estimated densities.

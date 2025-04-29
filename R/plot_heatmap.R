@@ -14,8 +14,9 @@
 #'
 #' @param matrix Matrix or dataframe containing spectral data.
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
-#' @param plot.prefix Optional prefix for the plot filename.
 #' @param number.labels Logical indicating whether to add number labels to the heatmap.
+#' @param plot.prefix Optional prefix for the plot filename.
+#' @param legend.label Character string that will appear on the heatmap legend.
 #' @param triangular Logical. Plot the lower triangle of the matrix only,
 #'     diagonal included. Default is FALSE.
 #' @param output.dir Optional output directory. Default is NULL, in which case

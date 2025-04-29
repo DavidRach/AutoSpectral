@@ -147,18 +147,22 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
         )
 
         # backconvert error to raw space
-        M <- t( spectra.curr.original )
-        unmixing.matrix.curr <- solve(t(M) %*% M) %*% t(M)
+        # M <- t( spectra.curr.original )
+        # unmixing.matrix.curr <- solve( t( M ) %*% M ) %*% t( M )
 
-        unmixing.error.pseudo.inv <- solve( t( unmixing.error$slop )
-                                            %*% unmixing.error$slop ) %*% t( unmixing.error$slop )
-
-
-        unmixing.matrix.update <- t( t( unmixing.matrix.curr ) %*% unmixing.error.pseudo.inv )
+        # unmixing.error.pseudo.inv <- solve( t( unmixing.error$slop )
+        #                                     %*% unmixing.error$slop ) %*% t( unmixing.error$slop )
 
 
-        spectra.update.reverted <- solve( unmixing.matrix.update %*%
-                                            t( unmixing.matrix.update) ) %*% unmixing.matrix.update
+        # unmixing.matrix.update <- t( t( unmixing.matrix.curr ) %*% unmixing.error.pseudo.inv )
+
+
+        # spectra.update.reverted <- solve( unmixing.matrix.update %*%
+        #                                     t( unmixing.matrix.update) ) %*% unmixing.matrix.update
+
+        print( unmixing.error$slop )
+        spectra.update.reverted <- spectra.curr %*% unmixing.error$slop
+        print( spectra.update.reverted )
 
         spectra.update.reverted <- t( apply( spectra.update.reverted,
                                              1, function( x ) x/max( x ) ) )

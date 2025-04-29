@@ -1,8 +1,9 @@
 # calculate_complexity_index.r
 
-#' @title calculate.complexity.index
+#' @title Calculate Complexity Index
 #'
-#' @description Calculates the complexity index for a set of fluorophores (a spectral panel).
+#' @description Calculates the complexity index (condition number) for a set of
+#'     fluorophores (a spectral panel).
 #'
 #' @param spectra Spectral signatures of fluorophores, normalized between 0 and 1,
 #'     with fluorophores in rows and detectors (channels) in columns. More than one
