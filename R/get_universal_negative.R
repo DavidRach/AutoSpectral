@@ -148,6 +148,13 @@ get.universal.negative <- function( clean.expr.data, samp,
 
     # stop if fewer than minimum acceptable events, returning original negative
     if ( length( neg.population.idx ) < asp$min.cell.stop.n ){
+
+      # downsample original negative
+      if ( nrow( neg.control.expr ) > negative.n ) {
+        neg.population.idx <- sample( nrow( neg.control.expr ), negative.n )
+        neg.control.expr <- neg.control.expr[ neg.population.idx, ]
+      }
+
       return( rbind( pos.selected.expr, neg.control.expr ) )
     }
 

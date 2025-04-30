@@ -7,7 +7,7 @@
 #'
 #' @title Get Minimal Autospectral Parameters
 #' @description Returns a minimal set of autospectral parameters.
-#' @importFrom RColorBrewer brewer.pal
+#'
 #' @importFrom parallelly availableCores
 #' @return A list of minimal autospectral parameters.
 #' @export
@@ -15,7 +15,8 @@
 
 get.autospectral.param.minimal <- function()
 {
-    color.pal <- brewer.pal( 9, "Set1" )
+    color.pal <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00",
+                  "#FFFF33", "#A65628", "#F781BF", "#999999")
 
     list(
 
