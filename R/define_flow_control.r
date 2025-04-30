@@ -69,6 +69,9 @@ define.flow.control <- function( control.dir, control.def.file, asp,
 
 
     # read channels from controls
+    if (asp$verbose )
+      cat( "\033[34m Reading control information \033[0m \n" )
+
     flow.set.channel.table <- read.channel( control.dir, control.def.file, asp )
 
     flow.set.channel <- flow.set.channel.table[[ 1 ]]
@@ -92,6 +95,9 @@ define.flow.control <- function( control.dir, control.def.file, asp,
         "duplicated filenames in fcs data" )
 
     # define samples (replicate variously gated negatives)
+    if (asp$verbose )
+      cat( "\033[34m Matching negatives for the controls \033[0m \n" )
+
     control.table$sample <- control.table$fluorophore
 
     control.table$universal.negative[ is.na( control.table$universal.negative )] <- FALSE
@@ -123,6 +129,9 @@ define.flow.control <- function( control.dir, control.def.file, asp,
     }
 
     # define gates needed
+    if (asp$verbose )
+      cat( "\033[34m Determining the gates that will be needed \033[0m \n" )
+
     gate.types <- data.frame( type = control.table$control.type,
                               viability = control.table$is.viability,
                               large.gate = control.table$large.gate )
@@ -190,6 +199,9 @@ define.flow.control <- function( control.dir, control.def.file, asp,
     names( flow.large.gate ) <- flow.sample
 
     # read scatter parameters
+    if (asp$verbose )
+      cat( "\033[34m Determining channels to be used \033[0m \n" )
+
     flow.scatter.parameter <- read.scatter.parameter( asp )
 
     # set scatter parameters and channels
@@ -243,9 +255,15 @@ define.flow.control <- function( control.dir, control.def.file, asp,
       asp$data.step
 
     # create figure and table directories
+    if (asp$verbose )
+      cat( "\033[34m Creating output folders \033[0m \n" )
+
     create.directory( asp )
 
     # define gates on downsampled pooled fcs by type
+    if (asp$verbose )
+      cat( "\033[34m Defining the gates \033[0m \n" )
+
     gate.list <- list()
 
     for( gate in gate.type ){
@@ -281,8 +299,10 @@ define.flow.control <- function( control.dir, control.def.file, asp,
 
     }
 
-
     # read in fcs files, selecting data within pre-defined gates
+    if (asp$verbose )
+      cat( "\033[34m Reading FCS files \033[0m \n" )
+
     flow.expr.data <- lapply.function( flow.sample, FUN = get.gated.flow.expression.data,
                               flow.file.name, control.dir,
                               scatter.and.spectral.channel = flow.scatter.and.channel.spectral,
@@ -293,8 +313,11 @@ define.flow.control <- function( control.dir, control.def.file, asp,
                               scatter.and.channel.label = flow.scatter.and.channel.label,
                               asp = asp )
 
-
     names( flow.expr.data ) <- flow.sample
+
+    # organize data
+    if (asp$verbose )
+      cat( "\033[34m Organizing control info \033[0m \n" )
 
     flow.sample.event.number.max <- 0
 
@@ -378,6 +401,8 @@ define.flow.control <- function( control.dir, control.def.file, asp,
         expr.data = flow.expr.data
     )
 
+    if (asp$verbose )
+      cat( "\033[32m Control setup complete! \n Review gates in figure_gate. \033[0m \n" )
 
     flow.control
 }

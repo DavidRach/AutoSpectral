@@ -95,7 +95,7 @@ get.autospectral.param.minimal <- function()
       af.remove.pop = 1,
 
       af.plot.bw.factor = 5,
-      af.plot.density.grid.n = 100,
+      af.plot.density.grid.n = 200,
       af.plot.define.filename = "AF identification",
       af.plot.filename = "AF removal",
 
@@ -146,7 +146,7 @@ get.autospectral.param.minimal <- function()
       gate.data.trim.factor.y.max.cells = 0.99,
 
       gate.bound.density.bw.factor.cells = 6.0,
-      gate.bound.density.grid.n.cells = 1000,
+      gate.bound.density.grid.n.cells = 100,
       gate.bound.density.neigh.size.cells = 3,
 
       gate.bound.density.max.target.cells = 1,
@@ -155,11 +155,11 @@ get.autospectral.param.minimal <- function()
       gate.bound.density.max.mad.factor.cells = 2.0,
 
       gate.region.density.bw.factor.cells = 6.0,
-      gate.region.density.grid.n.cells = 1000,
+      gate.region.density.grid.n.cells = 100,
       gate.region.density.neigh.size.cells = 2,
 
       gate.region.max.density.bw.factor.cells = 6.0,
-      gate.region.max.density.grid.n.cells = 1000,
+      gate.region.max.density.grid.n.cells = 100,
       gate.downsample.n.cells = 100000,
 
       # gate parameters for beads
@@ -178,7 +178,7 @@ get.autospectral.param.minimal <- function()
       gate.data.trim.factor.y.max.beads = 0.99,
 
       gate.bound.density.bw.factor.beads = 6.0,
-      gate.bound.density.grid.n.beads = 1000,
+      gate.bound.density.grid.n.beads = 100,
       gate.bound.density.neigh.size.beads = 3,
 
       gate.bound.density.max.target.beads = 1,
@@ -187,11 +187,11 @@ get.autospectral.param.minimal <- function()
       gate.bound.density.max.mad.factor.beads = 3.0,
 
       gate.region.density.bw.factor.beads = 6.0,
-      gate.region.density.grid.n.beads = 1000,
+      gate.region.density.grid.n.beads = 100,
       gate.region.density.neigh.size.beads = 2,
 
       gate.region.max.density.bw.factor.beads = 6.0,
-      gate.region.max.density.grid.n.beads = 1000,
+      gate.region.max.density.grid.n.beads = 100,
       gate.downsample.n.beads = 10000,
 
       ### refine spillover (unmixing) parameters
@@ -230,7 +230,7 @@ get.autospectral.param.minimal <- function()
       fix.unmix.figure.width = 12,
       fix.unmix.figure.height = 6,
       fix.unmix.bw.factor = 10,
-      fix.unmix.grid.n = 2000,
+      fix.unmix.grid.n = 1000,
 
       ### directory parameters
       unmixed.fcs.dir = "AutoSpectral_unmixed",

@@ -20,6 +20,15 @@
 
 create.control.file <- function( control.dir, asp ){
 
+  # check for existing control file and generate a new name if it exists
+  control.file.name.base <- "fcs_control_file"
+  control.file.name <- paste0( control.file.name.base, ".csv" )
+  file.count <- 1
+  while ( file.exists( control.file.name ) ) {
+    control.file.name <- paste0( control.file.name.base, "_", file.count, ".csv")
+    file.count <- file.count + 1
+  }
+
   data.path <- system.file( "extdata", "fluorophore_database.csv",
                             package = "AutoSpectral" )
   fluorophore.database <- read.csv( data.path )
@@ -107,7 +116,7 @@ create.control.file <- function( control.dir, asp ){
   control.def.file[ is.na( control.def.file ) ] <- ""
   control.def.file[ control.def.file == "NA" ] <- ""
 
-  write.csv( control.def.file, file = "fcs_control_file.csv", row.names = FALSE )
+  write.csv( control.def.file, file = control.file.name, row.names = FALSE )
 
   # check for duplicate fluorophores
   duplicate.fluorophores <- anyDuplicated( control.def.file$fluorophore )

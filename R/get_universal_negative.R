@@ -143,11 +143,14 @@ get.universal.negative <- function( clean.expr.data, samp,
     # warn if few events in negative
     if ( length( neg.population.idx ) < asp$min.cell.warning.n ){
       cat( paste( "\033[31m", "Warning! Fewer than",  asp$min.cell.warning.n,
-                  "scatter-matched negative events for", samp ),  "\033[0m", "\n"  )
+                  "scatter-matched negative events for", samp,  "\033[0m", "\n" )  )
     }
 
     # stop if fewer than minimum acceptable events, returning original negative
     if ( length( neg.population.idx ) < asp$min.cell.stop.n ){
+      cat( paste( "\033[31m", "Warning! Fewer than",  asp$min.cell.stop.n,
+                  "scatter-matched negative events for", samp, "\n",
+                  "Reverting to original negative. \n",  "\033[0m" )  )
 
       # downsample original negative
       if ( nrow( neg.control.expr ) > negative.n ) {
