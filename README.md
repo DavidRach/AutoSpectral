@@ -20,6 +20,17 @@ cell-based controls as easy as compensation beads. This should give you
 better accuracy and precision in your spectral definition and thus in
 your unmixing.
 
+At the moment, the following cytometers are supported: -Cytek
+Aurora/Northern Lights (“aurora”) -Sony ID7000 (“id7000”) -BD
+FACSDiscoverS8 (“s8”) -BD FACSDiscoverA8 (“a8”) -Agilent NovoCyte Opteon
+(“opteon”)
+
+There will likely be some unresolved issues with plotting data from
+certain configurations of the ID7000 and Aurora.
+
+If you want to use data from another cytometer and are wiling to provide
+files for establishing the workflow, contact the author/maintainer.
+
 ## Installation
 
 You can install the development version of AutoSpectral from
@@ -47,6 +58,7 @@ library( AutoSpectral )
 control.dir <- "./Cell controls"
 
 # get the parameters for your cytometer
+# supported cytometers include "aurora", "id7000", "a8", "s8" and "opteon"
 asp <- get.autospectral.param( cytometer = "id7000", figures = TRUE )
 
 # optionally, create a control file
