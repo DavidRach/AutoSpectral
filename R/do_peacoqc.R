@@ -62,7 +62,7 @@ do.peacoQC <- function( dirty.expr, sample.name, spectral.channel,
 
   peacoQC.result$FinalFF <- transform( peacoQC.result$FinalFF, transform.list )
 
-  clean.expr <- exprs( peacoQC.result$FinalFF )[ , all.channels ]
+  clean.expr <- flowCore::exprs( peacoQC.result$FinalFF )[ , all.channels ]
 
   clean.expr
 

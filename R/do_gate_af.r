@@ -39,11 +39,10 @@ do.gate.af <- function( gate.data, samp, asp ) {
   gate.data.y.min <- min( gate.data[ , 2 ] )
   gate.data.y.max <- max( gate.data[ , 2 ] )
 
-  bandwidth.x <- asp$af.gate.density.bw.factor * dpik( gate.data[ , 1 ] )
-  bandwidth.y <- asp$af.gate.density.bw.factor * dpik( gate.data[ , 2 ] )
+  bandwidth.x <- suppressWarnings( asp$af.gate.density.bw.factor * dpik( gate.data[ , 1 ] ) )
+  bandwidth.y <- suppressWarnings( asp$af.gate.density.bw.factor * dpik( gate.data[ , 2 ] ) )
 
   grid.n <- asp$af.gate.bound.density.grid.n
-
   density.grid <- c( grid.n, grid.n )
 
   gate.bound.density <- suppressWarnings(
@@ -134,10 +133,10 @@ do.gate.af <- function( gate.data, samp, asp ) {
   gate.region.y.high <- max( gate.region.data[ , 2 ] )
 
   # get density maxima in region
-  bandwidth.x <- asp$af.gate.density.bw.factor *
-    dpik( gate.data[ gate.region.data.idx, 1 ] )
-  bandwidth.y <- asp$af.gate.density.bw.factor *
-    dpik( gate.data[ gate.region.data.idx, 2 ] )
+  bandwidth.x <- suppressWarnings( asp$af.gate.density.bw.factor *
+    dpik( gate.data[ gate.region.data.idx, 1 ] ) )
+  bandwidth.y <- suppressWarnings( asp$af.gate.density.bw.factor *
+    dpik( gate.data[ gate.region.data.idx, 2 ] ) )
 
   gate.region.density <- suppressWarnings(
     bkde2D( gate.data[ gate.region.data.idx, ],
@@ -215,10 +214,10 @@ do.gate.af <- function( gate.data, samp, asp ) {
   )
 
   # threshold data in region around target maximum
-  bandwidth.x <- asp$af.gate.density.bw.factor *
-    dpik( gate.data[ gate.region.density.max.data.idx, 1 ] )
-  bandwidth.y <- asp$af.gate.density.bw.factor *
-    dpik( gate.data[ gate.region.density.max.data.idx, 2 ] )
+  bandwidth.x <- suppressWarnings( asp$af.gate.density.bw.factor *
+    dpik( gate.data[ gate.region.density.max.data.idx, 1 ] ) )
+  bandwidth.y <- suppressWarnings( asp$af.gate.density.bw.factor *
+    dpik( gate.data[ gate.region.density.max.data.idx, 2 ] ) )
 
   gate.region.max.density <- suppressWarnings(
     bkde2D( gate.data[ gate.region.density.max.data.idx, ],
@@ -252,7 +251,6 @@ do.gate.af <- function( gate.data, samp, asp ) {
   gate.population <- list( boundary = gate.population.boundary )
 
   if ( ! is.null( asp$figure.clean.control.dir ) )
-
     plot.gate.af( samp, gate.data, gate.bound, gate.region,
                   gate.population, asp )
 

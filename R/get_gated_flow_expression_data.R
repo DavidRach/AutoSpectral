@@ -41,7 +41,7 @@ get.gated.flow.expression.data <- function( samp, file.name, control.dir,
                                           emptyValue = FALSE ) )
 
   # read exprs for scatter and spectral channels only
-  expr.data <- exprs( fcs.data )[ , scatter.and.spectral.channel ]
+  expr.data <- flowCore::exprs( fcs.data )[ , scatter.and.spectral.channel ]
 
   rm( fcs.data )
 

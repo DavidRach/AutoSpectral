@@ -62,7 +62,7 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control, method = "ols",
     file.name <- sub( ".fcs", paste0( " ", file.suffix, ".fcs" ), file.name )
 
   # extract exprs
-  fcs.exprs <- exprs( fcs.data )
+  fcs.exprs <- flowCore::exprs( fcs.data )
   rm( fcs.data )
   spectral.exprs <- fcs.exprs[ , flow.control$spectral.channel, drop = FALSE ]
 
@@ -110,6 +110,14 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control, method = "ols",
   params$desc[ !is.na( other.match.idx ) ] <- NA
 
   parameters( flow.frame ) <- AnnotatedDataFrame( params )
+
+  keyword( flow.frame ) <- fcs.keywords
+  keyword( flow.frame )[[ "$FIL" ]] <- file.name
+
+  for (i in seq_along(colnames(unmixed.data))) {
+    keyword(flow.frame)[[paste0("$P", i, "N")]] <- colnames(unmixed.data)[i]
+    keyword(flow.frame)[[paste0("$P", i, "S")]] <- colnames(unmixed.data)[i]
+  }
 
   write.FCS( flow.frame, filename = file.path( output.dir, file.name ) )
 

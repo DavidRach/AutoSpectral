@@ -19,7 +19,7 @@ sample.fcs.file <- function( file.name, control.dir, downsample.n, asp ) {
                   truncate_max_range = FALSE,
                   emptyValue = FALSE ) )
 
-  ff <- exprs( ff )[ , asp$default.scatter.parameter ]
+  ff <- flowCore::exprs( ff )[ , asp$default.scatter.parameter ]
 
   event.n <- nrow( ff )
 

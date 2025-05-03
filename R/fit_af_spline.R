@@ -58,11 +58,13 @@ fit.af.spline <- function( af.data, af.gate.idx, asp ){
         af[ , 1 ] > x.bound.low & af[ , 1 ] < x.bound.high &
         af[ , 2 ] > y.bound.low & af[ , 2 ] < y.bound.high , ] )
 
+    if ( nrow( model.data ) < 10 )
+      return( 0 )
+
     rlm.fit <- rlm( PC2 ~ PC1, data = model.data, maxit = asp$af.spline.maxit )
 
-    if ( !rlm.fit$converged ) {
+    if ( !rlm.fit$converged )
       warning( "The IRLS algorithm employed in 'rlm' did not converge." )
-    }
 
     # define events within n standard deviations of the spline
     predicted <- predict( rlm.fit, newdata = model.data )
@@ -81,9 +83,20 @@ fit.af.spline <- function( af.data, af.gate.idx, asp ){
 
   # re-convert lower y to negative values
   names( af.remove.bounds ) <- c( "lower", "upper" )
+  print( af.remove.bounds )
+  if ( length( af.remove.bounds$lower ) != 1 ) {
+    af.remove.bounds$lower$y <- af.remove.bounds$lower$y * -1
+  } else {
+    af.remove.bounds$lower <- af.remove.bounds$upper
+  }
 
-  af.remove.bounds$lower$y <- af.remove.bounds$lower$y * -1
+  if ( length( af.remove.bounds$upper ) == 1 )
+    af.remove.bounds$upper <- af.remove.bounds$lower
+
+  print( af.remove.bounds )
+
+  if ( length( af.remove.bounds$upper ) == 1 & length( af.remove.bounds$lower ) == 1 )
+    stop( "Failed to identify autofluorescence" )
 
   return( af.remove.bounds )
-
 }

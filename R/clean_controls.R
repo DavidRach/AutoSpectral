@@ -145,16 +145,19 @@ clean.controls <- function( flow.control, asp,
     univ.neg <- univ.neg[ univ.neg != FALSE ]
 
     check.critical( length( univ.neg ) > 0,
-                    "Error: no cell-based universal negative samples could be identified.
+                    "No cell-based universal negative samples could be identified.
                     To perform autofluorescence removal, you must specify a universal negative in the fcs_control_file." )
 
 
     univ.neg.sample <- flow.control$fluorophore[ flow.control.type == "cells" &
-                                                 flow.sample %in% univ.neg ]
+                                                   flow.sample %in% univ.neg &
+                                                   flow.control$fluorophore != "AF" ]
 
     check.critical( length( univ.neg.sample ) > 0,
-                    "Error: no cell-based universal negative samples could be identified.
-                    To perform autofluorescence removal, you must specify a universal negative in the fcs_control_file." )
+                    "No cell-based universal negative samples could be identified.
+                    To perform autofluorescence removal, you must specify a
+                    universal negative in the fcs_control_file,
+                    and you must have single-stained cell controls." )
 
 
     # select cell-based single-stained samples to be used
@@ -171,8 +174,7 @@ clean.controls <- function( flow.control, asp,
 
     # get af artefacts for each negative control
     univ.neg.af.artefacts <- run.af.artefact.id( clean.expr, univ.neg,
-                                                 spectral.channel,
-                                                 asp )
+                                                 spectral.channel, asp )
 
     # remove identified AF from single-color controls
     af.removed.expr <- run.af.removal( clean.expr, af.removal.sample,

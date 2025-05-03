@@ -31,8 +31,8 @@ plot.gate.af.sample <- function( samp, af.data,
                                  af.boundary.lower, af.boundary.upper,
                                  asp ) {
 
-  bandwidth.x <- asp$af.plot.bw.factor * dpik( af.data[ , 1 ] )
-  bandwidth.y <- asp$af.plot.bw.factor * dpik( af.data[ , 2 ] )
+  bandwidth.x <- suppressWarnings( asp$af.plot.bw.factor * dpik( af.data[ , 1 ] ) )
+  bandwidth.y <- suppressWarnings( asp$af.plot.bw.factor * dpik( af.data[ , 2 ] ) )
 
 
   af.bound.density <- suppressWarnings(
