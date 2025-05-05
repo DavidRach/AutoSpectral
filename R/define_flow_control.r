@@ -104,27 +104,31 @@ define.flow.control <- function( control.dir, control.def.file, asp,
     control.table$is.viability[ is.na( control.table$is.viability )] <- FALSE
     control.table$large.gate[ is.na( control.table$large.gate )] <- FALSE
 
+    # this needs to be done only for cases where a universal negative is desired
     negative.types <- data.frame( negative = control.table$universal.negative,
                                   large.gate = control.table$large.gate,
                                   viability = control.table$is.viability )
 
     unique.neg <- unique( negative.types )
+    unique.neg <- unique.neg[ unique.neg$negative == TRUE, , drop = FALSE ]
 
-    # match samples with corresponding negative by matching gates
-    for ( i in 1 : nrow( unique.neg ) ) {
-      match.found <- any( control.table$filename == unique.neg$negative[ i ] &
-                            control.table$large.gate == unique.neg$large.gate[ i ] &
-                            control.table$is.viability == unique.neg$viability[ i ] )
+    if ( nrow( unique.neg != 0 ) ) {
+      # match samples with corresponding negative by matching gates
+      for ( i in 1 : nrow( unique.neg ) ) {
+        match.found <- any( control.table$filename == unique.neg$negative[ i ] &
+                              control.table$large.gate == unique.neg$large.gate[ i ] &
+                              control.table$is.viability == unique.neg$viability[ i ] )
 
-      if ( !match.found ) {
-        matching.row <- control.table[ control.table$filename == unique.neg$negative[ i ], ]
-        new.row <- matching.row[ 1, ]
-        new.row$large.gate <- unique.neg$large.gate[ i ]
-        new.row$is.viability <- unique.neg$viability[ i ]
-        new.row$fluorophore <- "Negative"
-        new.row$universal.negative <- FALSE
-        new.row$sample <- paste( new.row$control.type, "Negative", i )
-        control.table <- rbind( control.table, new.row )
+        if ( !match.found ) {
+          matching.row <- control.table[ control.table$filename == unique.neg$negative[ i ], ]
+          new.row <- matching.row[ 1, ]
+          new.row$large.gate <- unique.neg$large.gate[ i ]
+          new.row$is.viability <- unique.neg$viability[ i ]
+          new.row$fluorophore <- "Negative"
+          new.row$universal.negative <- FALSE
+          new.row$sample <- paste( new.row$control.type, "Negative", i )
+          control.table <- rbind( control.table, new.row )
+        }
       }
     }
 
@@ -146,7 +150,7 @@ define.flow.control <- function( control.dir, control.def.file, asp,
     gate.type <- unique( sample.matches )
 
     control.table$universal.negative <- sapply( 1:nrow( control.table ), function( i ) {
-      if ( control.table$universal.negative[ i ] != "FALSE") {
+      if ( control.table$universal.negative[ i ] != "FALSE" ) {
         match.row <- control.table[ control.table$filename ==
                                       control.table$universal.negative[ i ] &
                                       control.table$gate == control.table$gate[ i ], ]
@@ -180,7 +184,6 @@ define.flow.control <- function( control.dir, control.def.file, asp,
     flow.antigen[ is.na( flow.antigen ) ] <- "other"
     if ( is.na( flow.channel[ flow.fluorophore == "AF" ] ) )
         flow.channel[ flow.fluorophore == "AF" ] <- asp$af.channel
-    # note: currently leaves NA for duplicated universal negatives
 
     flow.channel[ is.na( flow.channel ) ] <- "other"
 

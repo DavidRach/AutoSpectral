@@ -20,7 +20,7 @@
 
 
 refine.unmixing <- function( spectra.initial, flow.control, asp,
-                                  clean.expr = FALSE, plot.prefix = "Refined" )
+                             clean.expr = FALSE, plot.prefix = "Refined" )
 {
 
   if ( !is.null( plot.prefix ) ) {
