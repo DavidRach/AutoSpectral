@@ -22,6 +22,20 @@
 refine.unmixing <- function( spectra.initial, flow.control, asp,
                              clean.expr = FALSE, plot.prefix = "Refined" )
 {
+  if ( !dir.exists( asp$figure.slope.error.dir ) )
+    dir.create( asp$figure.slope.error.dir )
+  if ( !dir.exists( asp$table.slope.error.dir ) )
+    dir.create( asp$table.slope.error.dir )
+
+  if ( !dir.exists( asp$figure.skewness.dir ) )
+    dir.create( asp$figure.skewness.dir )
+  if ( !dir.exists( asp$table.skewness.dir ) )
+    dir.create( asp$table.skewness.dir )
+
+  if ( !dir.exists( asp$figure.convergence.dir ) )
+    dir.create( asp$figure.convergence.dir )
+  if ( !dir.exists( asp$table.convergence.dir ) )
+    dir.create( asp$table.convergence.dir )
 
   if ( !is.null( plot.prefix ) ) {
     plot.title <- paste( plot.prefix, asp$spectra.file.name )

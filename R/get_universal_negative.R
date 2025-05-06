@@ -173,12 +173,9 @@ get.universal.negative <- function( clean.expr.data, samp,
   }
 
 
-  if ( !is.null( asp$figure.spectral.ribbon.dir ) ){
+  if ( asp$figures ){
     spectral.ribbon.plot( pos.selected.expr, neg.scatter.matched,
                                spectral.channel, asp, samp )
-  }
-
-  if ( !is.null( asp$figure.scatter.dir.base ) ){
     scatter.match.plot( pos.selected.expr, neg.scatter.matched, samp,
                         scatter.param, asp )
   }

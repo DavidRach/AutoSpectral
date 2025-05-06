@@ -52,7 +52,7 @@ do.peacoQC <- function( dirty.expr, sample.name, spectral.channel,
     report = FALSE, time_channel_parameter = time.param
     ) )
 
-  if ( !is.null( asp$figure.peacoqc.dir ) ){
+  if ( asp$figures ){
     PlotPeacoQC( dirty.ff, spectral.channel, output.dir,
                  display_peaks = peacoQC.result )
 

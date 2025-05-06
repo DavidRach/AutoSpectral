@@ -15,7 +15,6 @@
 get.autospectral.param.id7000 <- function( autosp.param )
 {
   # add cytometer-specific parameters
-
   autosp.param$cytometer <- "ID7000"
 
   autosp.param$scatter.data.min.x <- 0
@@ -63,11 +62,18 @@ get.autospectral.param.id7000 <- function( autosp.param )
 
   autosp.param$af.gate.bound.density.neigh.size <- 3
 
-  autosp.param$af.gate.bound.density.grid.n <- 100
+  autosp.param$af.gate.bound.density.grid.n <- 200
 
   autosp.param$af.lower.quantile <- c( 0.01, 0.15 )
   autosp.param$af.upper.quantile <- c( 0.85, 0.99 )
   autosp.param$af.bound.margin <- 2
+
+  # autosp.param$gate.bound.density.grid.n.cells <- 200
+  # autosp.param$gate.region.density.grid.n.cells <- 200
+  # autosp.param$gate.region.max.density.grid.n.cells <- 200
+  # autosp.param$gate.bound.density.grid.n.beads <- 200
+  # autosp.param$gate.region.density.grid.n.beads <- 200
+  # autosp.param$gate.region.max.density.grid.n.beads <- 200
 
   autosp.param
 

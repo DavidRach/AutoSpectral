@@ -38,7 +38,7 @@ plot.similarity.matrix <- function( spectra, asp, plot.prefix = NULL ){
   similarity.df <- similarity.df %>%
     mutate( Fluor1 = factor( rownames( similarity.df ),
                              levels = rownames( similarity.df ) ) ) %>%
-    pivot_longer( cols = -Fluor1, names_to = "Fluor2", values_to = "value" ) %>%
+    tidyr::pivot_longer( cols = -Fluor1, names_to = "Fluor2", values_to = "value" ) %>%
     mutate( Fluor2 = factor( Fluor2, levels = rev( colnames( similarity.matrix ) ) ) )
 
   similarity.heatmap <- ggplot( similarity.df, aes( Fluor1, Fluor2, fill = value ) ) +

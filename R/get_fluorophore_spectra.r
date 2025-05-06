@@ -163,7 +163,7 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
   }
 
   # plot spectra
-  if ( !is.null( asp$figure.spectra.dir ) ) {
+  if ( asp$figures ) {
     fluorophore.spectra.plot <- marker.spectra
 
     if ( !is.null( af.spectra ) ) {
@@ -181,7 +181,7 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
   }
 
   # cosine similarity QC for controls
-  if ( !is.null( asp$figure.similarity.heatmap.dir ) )
+  if ( asp$figures )
     plot.similarity.matrix( fluorophore.spectra.plot, asp, plot.prefix )
 
   similarity.matrix <- cosine.similarity( t( fluorophore.spectra.plot ) )

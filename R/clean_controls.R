@@ -94,6 +94,8 @@ clean.controls <- function( flow.control, asp,
   # this can be slow and may not show much effect
 
   if ( time.clean ) {
+    if ( !dir.exists( asp$figure.peacoqc.dir ) )
+      dir.create( asp$figure.peacoqc.dir )
 
     clean.expr <- run.peacoQC( clean.expr, spectral.channel,
                                          all.channels, asp )
@@ -137,6 +139,12 @@ clean.controls <- function( flow.control, asp,
   # can be done on a per control basis by specifying clean = TRUE in the fcs_control_file
 
   if ( af.remove ) {
+    if ( !dir.exists( asp$figure.clean.control.dir ) )
+      dir.create( asp$figure.clean.control.dir )
+    if ( !dir.exists( asp$figure.spectral.ribbon.dir ) )
+      dir.create( asp$figure.spectral.ribbon.dir )
+    if ( !dir.exists( asp$figure.af.dir ) )
+      dir.create( asp$figure.af.dir )
 
     # identify universal negative cell samples
     univ.neg <- unique( flow.negative )
@@ -211,6 +219,10 @@ clean.controls <- function( flow.control, asp,
   # recommended whenever you have an appropriate universal negative
 
   if ( universal.negative ) {
+    if ( !dir.exists( asp$figure.scatter.dir.base ) )
+      dir.create( asp$figure.scatter.dir.base )
+    if ( !dir.exists( asp$figure.spectral.ribbon.dir ) )
+      dir.create( asp$figure.spectral.ribbon.dir )
 
     # use AF-removed universal negative samples if available
     if ( !is.null( clean.universal.negative ) ) {
@@ -222,7 +234,10 @@ clean.controls <- function( flow.control, asp,
     # select fluorophore samples to be used
     univ.sample <- flow.control$fluorophore[ ! grepl( "negative",
                                                       flow.control$fluorophore,
-                                                      ignore.case = TRUE ) ]
+                                                      ignore.case = TRUE ) &
+                                               flow.negative != FALSE ]
+    # probably exclude AF
+    univ.sample <- univ.sample[ univ.sample != "AF" ]
 
     univ.peak.channels <- flow.control$channel[ flow.control$fluorophore
                                                 %in% univ.sample ]
@@ -242,6 +257,10 @@ clean.controls <- function( flow.control, asp,
   }
 
   if ( !universal.negative & downsample ) {
+    if ( !dir.exists( asp$figure.scatter.dir.base ) )
+      dir.create( asp$figure.scatter.dir.base )
+    if ( !dir.exists( asp$figure.spectral.ribbon.dir ) )
+      dir.create( asp$figure.spectral.ribbon.dir )
 
     # select fluorophore samples to be used
     downsample.sample <- flow.control$fluorophore[ ! grepl( "AF|negative",

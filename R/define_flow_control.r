@@ -149,6 +149,8 @@ define.flow.control <- function( control.dir, control.def.file, asp,
     flow.gate <- sample.matches
     gate.type <- unique( sample.matches )
 
+    # matching universal negatives by desired sample and gating
+    # with an exception for viability gating mismatch
     control.table$universal.negative <- sapply( 1:nrow( control.table ), function( i ) {
       if ( control.table$universal.negative[ i ] != "FALSE" ) {
         match.row <- control.table[ control.table$filename ==
@@ -156,6 +158,12 @@ define.flow.control <- function( control.dir, control.def.file, asp,
                                       control.table$gate == control.table$gate[ i ], ]
         if ( nrow( match.row ) > 0 ) {
           return( match.row$sample )
+        } else {
+          match.row <- control.table[ control.table$filename ==
+                                        control.table$universal.negative[ i ], ]
+          if ( nrow( match.row ) > 0 ) {
+            return( match.row$sample )
+          }
         }
       }
       return( control.table$universal.negative[ i ] )

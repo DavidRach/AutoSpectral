@@ -23,6 +23,7 @@ get.autospectral.param.minimal <- function()
       ### cytometer parameters
       # these may be updated by calling a specific cytometer
       cytometer = NULL,
+      figures = FALSE,
 
       scatter.data.min.x = NULL,
       scatter.data.max.x = NULL,
@@ -53,7 +54,7 @@ get.autospectral.param.minimal <- function()
 
       parallel = FALSE,
 
-      worker.process.n = availableCores() - 1,
+      worker.process.n = parallelly::availableCores() - 1,
 
       max.memory.n = 2 * 1024^3,
 

@@ -53,7 +53,7 @@ plot.spectra <- function( spectral.matrix, flow.control, asp,
   plot.width <- ( ncol( fluor.spectra.plotting ) - 1 ) / 64 * 12
   plot.height <- 5 + round( nrow( fluor.spectra.plotting ) / 8, 0 )
 
-  fluor.spectra.long <- pivot_longer( fluor.spectra.plotting, -c( Fluorophore, Laser ),
+  fluor.spectra.long <- tidyr::pivot_longer( fluor.spectra.plotting, -c( Fluorophore, Laser ),
                                       names_to = "Detector",
                                       values_to = "Intensity" )
 

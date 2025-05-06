@@ -67,7 +67,7 @@ remove.af <- function( clean.expr.data, samp, af.artefact, spectral.channel,
   }
 
 
-  if ( !is.null( asp$figure.clean.control.dir ) ) {
+  if ( asp$figures ) {
 
     if ( length( af.boundaries ) == 2 ){
 
@@ -83,15 +83,12 @@ remove.af <- function( clean.expr.data, samp, af.artefact, spectral.channel,
                            asp )
     }
 
-  }
-
-  if ( !is.null( asp$figure.spectral.ribbon.dir ) ) {
-
     spectral.ribbon.plot( expr.data, expr.data[ gate.population.idx, ],
                           spectral.channel, asp, samp,
                           plot.prefix = asp$af.plot.filename,
                           af = TRUE,
                           removed.data = expr.data[ -gate.population.idx, ] )
+
   }
 
   return( clean.expr.data[[ samp ]][ gate.population.idx, ] )

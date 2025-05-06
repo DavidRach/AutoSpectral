@@ -21,8 +21,9 @@ get.autospectral.param <- function( cytometer = "aurora", figures = TRUE )
 
   if ( figures ){
 
-    # directory parameters
+    autosp.param$figures <- TRUE
 
+    # directory parameters
     autosp.param$figure.scatter.dir.base <- "figure_scatter"
 
     autosp.param$figure.gate.dir <- "figure_gate"
@@ -44,7 +45,6 @@ get.autospectral.param <- function( cytometer = "aurora", figures = TRUE )
   }
 
   # cytometer-specific parameters
-
   get.param.function <- get0( sprintf( "get.autospectral.param.%s", cytometer ) )
 
   check.critical( ! is.null( get.param.function ), "unsupported cytometer" )
