@@ -56,10 +56,10 @@ plot.unmix.fix <- function( original.data, compensated.data, plot.idx,
 
   # get density for color scheme
   combined.data.density <- combined.data[ , c( x.var, y.var ) ]
-  bandwidth.x <- suppressWarnings( asp$fix.unmix.bw.factor * dpik( density.data[ , 1 ],
+  bandwidth.x <- suppressWarnings( asp$fix.unmix.bw.factor * dpik( combined.data.density[ , 1 ],
                                                                 gridsize = asp$fix.unmix.grid.n )
   )
-  bandwidth.y <- suppressWarnings( asp$fix.unmix.bw.factor * dpik( density.data[ , 2 ],
+  bandwidth.y <- suppressWarnings( asp$fix.unmix.bw.factor * dpik( combined.data.density[ , 2 ],
                                                                 gridsize = asp$fix.unmix.grid.n )
   )
 

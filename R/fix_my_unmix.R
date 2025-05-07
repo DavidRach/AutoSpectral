@@ -264,7 +264,7 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
   }
 
   # heatmap of coefficients
-  plot.heatmap( spillover.curr, asp, TRUE, asp$fix.unmixing.heatmap,
+  plot.heatmap( spillover.curr, asp, FALSE, asp$fix.unmixing.heatmap,
                 legend.label = "Spillover", TRUE, output.dir = asp$fix.unmixing.dir )
 
   # plot example of fixing on marker pair with biggest error
