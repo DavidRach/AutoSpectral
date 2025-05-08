@@ -221,7 +221,7 @@ get.autospectral.param.minimal <- function()
       ### fix my unmix parameters
       fix.unmixing.dir = "./Fix_my_unmix",
       fix.unmixing.plot = "Fixing_unmixing_plot.jpg",
-      fix.unmixing.heatmap = "Fixing_unmixing_heatmap",
+      fix.unmixing.heatmap = "Fixing_unmixing",
       fix.spectra.filename = "Fixed_spectra.csv",
       fix.spillover.filename = "Fixed_spillover.csv",
       fix.compensation.filename = "Fixed_compensation.csv",

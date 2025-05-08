@@ -59,7 +59,7 @@ plot.heatmap <- function( matrix, asp, number.labels, plot.prefix = NULL,
 
   if ( triangular ){
     heatmap.long <- heatmap.long %>%
-      filter( as.integer( Fluor1 ) >= as.integer( Fluor2 ) ) %>%
+      dplyr::filter( as.integer( Fluor1 ) >= as.integer( Fluor2 ) ) %>%
       mutate( Fluor1 = factor( Fluor1, levels = rev( row.levels ) ) )
   } else {
     heatmap.long <- heatmap.long %>%

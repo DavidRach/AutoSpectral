@@ -130,10 +130,10 @@ do.gate <- function( gate.data, viability.gate, large.gate,
     bandwidth.x <- gate.bound.density.bw.factor * dpik( gate.data[ gate.bound.data.idx, 1 ] )
     bandwidth.y <- gate.bound.density.bw.factor * dpik( gate.data[ gate.bound.data.idx, 2 ] )
 
-    gate.bound.density <- bkde2D(
+    gate.bound.density <- suppressMessages( suppressWarnings( bkde2D(
         gate.data[ gate.bound.data.idx, ],
         bandwidth = c( bandwidth.x, bandwidth.y ),
-        gridsize = c( gate.bound.density.grid.n, gate.bound.density.grid.n ) )
+        gridsize = c( gate.bound.density.grid.n, gate.bound.density.grid.n ) ) ) )
 
     names( gate.bound.density ) <- c( "x", "y", "z" )
 
@@ -348,10 +348,10 @@ do.gate <- function( gate.data, viability.gate, large.gate,
       bandwidth.x <- gate.bound.density.bw.factor * dpik( gate.data[ gate.region.data.idx, 1 ] )
       bandwidth.y <- gate.bound.density.bw.factor * dpik( gate.data[ gate.region.data.idx, 2 ] )
 
-      gate.region.density <- bkde2D(
-        gate.data[ gate.region.data.idx, ],
+      gate.region.density <- suppressMessages( suppressWarnings(
+        bkde2D( gate.data[ gate.region.data.idx, ],
         bandwidth = c( bandwidth.x, bandwidth.y ),
-        gridsize = c( gate.region.density.grid.n, gate.region.density.grid.n ) )
+        gridsize = c( gate.region.density.grid.n, gate.region.density.grid.n ) ) ) )
 
       names( gate.region.density ) <- c( "x", "y", "z" )
 
@@ -434,10 +434,10 @@ do.gate <- function( gate.data, viability.gate, large.gate,
       bandwidth.x <- gate.bound.density.bw.factor * dpik( gate.data[ gate.region.density.max.data.idx, 1 ] )
       bandwidth.y <- gate.bound.density.bw.factor * dpik( gate.data[ gate.region.density.max.data.idx, 2 ] )
 
-      gate.region.max.density <- bkde2D(
-        gate.data[ gate.region.density.max.data.idx, ],
+      gate.region.max.density <- suppressMessages( suppressWarnings(
+        bkde2D( gate.data[ gate.region.density.max.data.idx, ],
         bandwidth = c( bandwidth.x, bandwidth.y ),
-        gridsize = c( gate.region.max.density.grid.n, gate.region.max.density.grid.n ) )
+        gridsize = c( gate.region.max.density.grid.n, gate.region.max.density.grid.n ) ) ) )
 
       names( gate.region.max.density ) <- c( "x", "y", "z" )
 

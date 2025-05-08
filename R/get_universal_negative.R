@@ -105,11 +105,11 @@ get.universal.negative <- function( clean.expr.data, samp,
     bdw.x <- asp$gate.bound.density.bw.factor.cells * dpik( pos.scatter.coord[ , 1 ] )
     bdw.y <- asp$gate.bound.density.bw.factor.cells * dpik( pos.scatter.coord[ , 2 ] )
 
-    pos.bound.density <- suppressWarnings(
+    pos.bound.density <- suppressMessages( suppressWarnings(
       bkde2D( pos.scatter.coord,
               bandwidth = c( bdw.x, bdw.y ),
               gridsize = c( asp$gate.bound.density.grid.n.cells,
-                            asp$gate.bound.density.grid.n.cells ) ) )
+                            asp$gate.bound.density.grid.n.cells ) ) ) )
 
     names( pos.bound.density ) <- c( "x", "y", "z" )
 

@@ -15,7 +15,7 @@ fix.my.unmix(
   downsample = 20000,
   unstained.threshold = 0.99,
   unstained.margin = 1.3,
-  convergence.threshold = 0.01
+  convergence.threshold = 0.03
 )
 }
 \arguments{

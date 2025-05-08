@@ -35,7 +35,7 @@ reload.flow.control <- function( control.def.file, control.dir, asp ) {
   control.table <- read.csv( control.def.file, na.strings = "",
                              stringsAsFactors = FALSE )
 
-  control.table <- filter( control.table, filename != "" )
+  control.table <- dplyr::filter( control.table, filename != "" )
 
   flow.fluorophore <- control.table$fluorophore
   flow.fluorophore[ is.na( flow.fluorophore ) ] <- "Negative"

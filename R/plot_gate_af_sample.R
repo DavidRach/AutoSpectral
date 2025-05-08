@@ -35,10 +35,10 @@ plot.gate.af.sample <- function( samp, af.data,
   bandwidth.y <- suppressWarnings( asp$af.plot.bw.factor * dpik( af.data[ , 2 ] ) )
 
 
-  af.bound.density <- suppressWarnings(
+  af.bound.density <- suppressMessages( suppressWarnings(
     bkde2D( af.data, bandwidth = c( bandwidth.x, bandwidth.y ),
       gridsize = c( asp$af.plot.density.grid.n, asp$af.plot.density.grid.n ) )
-  )
+  ) )
 
   names( af.bound.density ) <- c( "x", "y", "z" )
 

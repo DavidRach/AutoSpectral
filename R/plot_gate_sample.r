@@ -46,10 +46,9 @@ plot.gate.sample <- function( samp, gate.data, gate.marker, gate.boundary,
   bandwidth.x <- gate.bound.density.bw.factor * dpik( gate.data[ , 1 ] )
   bandwidth.y <- gate.bound.density.bw.factor * dpik( gate.data[ , 2 ] )
 
-  gate.bound.density <- bkde2D(
-    gate.data,
-    bandwidth = c( bandwidth.x, bandwidth.y ),
-    gridsize = c( gate.bound.density.grid.n, gate.bound.density.grid.n ) )
+  gate.bound.density <- suppressMessages( suppressWarnings(
+    bkde2D( gate.data, bandwidth = c( bandwidth.x, bandwidth.y ),
+    gridsize = c( gate.bound.density.grid.n, gate.bound.density.grid.n ) ) ) )
 
   names( gate.bound.density ) <- c( "x", "y", "z" )
 

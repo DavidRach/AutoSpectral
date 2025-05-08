@@ -37,11 +37,10 @@ scatter.match.plot <- function( pos.expr.data, neg.expr.data, fluor.name,
   bandwidth.x <- asp$gate.bound.density.bw.factor.cells * dpik( scatter.plot.data[ , 1 ] )
   bandwidth.y <- asp$gate.bound.density.bw.factor.cells * dpik( scatter.plot.data[ , 2 ] )
 
-  scatter.density <- bkde2D(
-    scatter.plot.data,
-    bandwidth = c( bandwidth.x, bandwidth.y ),
+  scatter.density <- suppressMessages( suppressWarnings(
+    bkde2D( scatter.plot.data, bandwidth = c( bandwidth.x, bandwidth.y ),
     gridsize = c( asp$gate.bound.density.grid.n.cells,
-                  asp$gate.bound.density.grid.n.cells ) )
+                  asp$gate.bound.density.grid.n.cells ) ) ) )
 
   names( scatter.density ) <- c( "x", "y", "z" )
 

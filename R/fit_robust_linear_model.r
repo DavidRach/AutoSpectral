@@ -19,31 +19,37 @@
 #' @param y.name The name of the response variable.
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
 #'     A list of essential parameters.
+#' @param fix.unmix Logical, default is FALSE. If TRUE, sets coefficient to zero
+#'     in case of failed convergence. Used for fix.my.unmix.
 #' @return A matrix with the intercept and p-value, and coefficient and p-value.
 #' @export
 
 
 
-fit.robust.linear.model <-  function( x.data, y.data, x.name, y.name, asp )
+fit.robust.linear.model <-  function( x.data, y.data, x.name, y.name, asp,
+                                      fix.unmix = FALSE )
 {
   X.data.int <- cbind( 1, x.data )
   xy.model <- rlm( X.data.int, y.data, maxit = asp$rlm.iter.max )
 
-    if ( xy.model$converged )
-  {
-    xy.coef <- xy.model$coefficients
-  }
-  else
-  {
-    cat( sprintf( "WARNING: rlm of %s ~ %s did not converge - using ols instead\n",
-                  y.name, x.name ), file = stderr() )
+    if ( xy.model$converged ) {
 
-    xy.data <- data.frame( x = x.data, y = y.data )
+      xy.coef <- xy.model$coefficients
 
-    xy.model <- lm( y ~ x, xy.data )
+    } else if ( ! xy.model$converged & fix.unmix ) {
 
-    xy.coef <- xy.model$coefficients
-  }
+      xy.coef <- 0
+
+    } else {
+      cat( sprintf( "WARNING: rlm of %s ~ %s did not converge - using ols instead\n",
+                    y.name, x.name ), file = stderr() )
+
+      xy.data <- data.frame( x = x.data, y = y.data )
+
+      xy.model <- lm( y ~ x, xy.data )
+
+      xy.coef <- xy.model$coefficients
+    }
 
   dimnames( xy.coef ) <- NULL
   xy.coef

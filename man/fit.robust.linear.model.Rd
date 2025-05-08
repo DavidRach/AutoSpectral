@@ -4,7 +4,7 @@
 \alias{fit.robust.linear.model}
 \title{Fit Robust Linear Model}
 \usage{
-fit.robust.linear.model(x.data, y.data, x.name, y.name, asp)
+fit.robust.linear.model(x.data, y.data, x.name, y.name, asp, fix.unmix = FALSE)
 }
 \arguments{
 \item{x.data}{A vector containing the predictor variable data.}
@@ -17,6 +17,9 @@ fit.robust.linear.model(x.data, y.data, x.name, y.name, asp)
 
 \item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.
 A list of essential parameters.}
+
+\item{fix.unmix}{Logical, default is FALSE. If TRUE, sets coefficient to zero
+in case of failed convergence. Used for fix.my.unmix.}
 }
 \value{
 A matrix with the intercept and p-value, and coefficient and p-value.

@@ -46,7 +46,7 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
                           flow.control, asp, large.gate = TRUE,
                           max.iter = 20, downsample = 20000,
                           unstained.threshold = 0.99, unstained.margin = 1.3,
-                          convergence.threshold = 0.01 ) {
+                          convergence.threshold = 0.03 ) {
 
   if ( ! dir.exists( asp$fix.unmixing.dir ) )
     dir.create( asp$fix.unmixing.dir )
@@ -126,7 +126,6 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
   rs.iter.width <- floor( log10( max.iter ) ) + 1
 
   rs.delta <- -1.0
-  rs.delta.threshold <- convergence.threshold
   rs.delta.history <- rep( -1, asp$rs.delta.history.n )
 
   rs.convergence.log <- data.frame(
@@ -184,7 +183,7 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
 
           # fit robust linear model
           spectra.model.result <- fit.robust.linear.model(
-            peak.channel.data, channel.expr, fl, channel, asp )
+            peak.channel.data, channel.expr, fl, channel, asp, fix.unmix = TRUE )
 
           fluor.spectra.coef[ channel ] <- spectra.model.result[ 2 ]
         }
@@ -239,14 +238,14 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
     }
 
     # detect convergence
-    rs.convergence.now <- ( rs.delta.max < rs.delta.threshold )
+    rs.convergence.now <- ( rs.delta.max < convergence.threshold )
     rs.stalled <- ( rs.delta.change > -asp$rs.delta.threshold.change )
 
     # determine if exit conditions have been met
     if ( rs.convergence.now && rs.convergence ) {
       rs.exit <- TRUE
       cat( "\033[34mConverged \033[0m \n" )
-    } else if ( rs.iter >= asp$rs.iter.max ) {
+    } else if ( rs.iter >= max.iter ) {
       rs.exit <- TRUE
       cat( "\033[33m Reached iteration limit \033[0m \n" )
     } else if ( rs.stalled ) {
@@ -264,8 +263,10 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
   }
 
   # heatmap of coefficients
-  plot.heatmap( spillover.curr, asp, FALSE, asp$fix.unmixing.heatmap,
-                legend.label = "Spillover", TRUE, output.dir = asp$fix.unmixing.dir )
+  plot.heatmap( spillover.curr, asp, number.labels = FALSE,
+                plot.prefix = asp$fix.unmixing.heatmap,
+                legend.label = "Spillover", triangular = TRUE,
+                output.dir = asp$fix.unmixing.dir )
 
   # plot example of fixing on marker pair with biggest error
   plot.unmix.fix( fully.stained.downsampled, unmixed.comp, plot.idx, asp,
@@ -275,7 +276,6 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
   # write spillover as csv
   write.csv( spillover.curr, file = file.path( asp$fix.unmixing.dir,
                                                asp$fix.spillover.filename ) )
-
 
   # write compensation as csv
   compensation.matrix <- solve( spillover.curr )
@@ -293,6 +293,13 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
                                        1, function( x ) x/max( x ) ) )
   write.csv( spectra.update.reverted, file = file.path( asp$fix.unmixing.dir,
                                                     asp$fix.spectra.filename ) )
+
+  # plot original spectra and adjusted spectra
+  plot.spectra( spectra, flow.control, asp, plot.title = "Original spectra",
+                plot.dir = asp$fix.unmixing.dir, split.lasers = TRUE )
+  plot.spectra( spectra.update.reverted, flow.control, asp,
+                plot.title = "Adjusted spectra",
+                plot.dir = asp$fix.unmixing.dir, split.lasers = TRUE )
 
   # return updated spectra, spillover & compensation
   return( list(

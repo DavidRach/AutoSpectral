@@ -45,10 +45,10 @@ do.gate.af <- function( gate.data, samp, asp ) {
   grid.n <- asp$af.gate.bound.density.grid.n
   density.grid <- c( grid.n, grid.n )
 
-  gate.bound.density <- suppressWarnings(
+  gate.bound.density <- suppressMessages( suppressWarnings(
     bkde2D( gate.data,
     bandwidth = c( bandwidth.x, bandwidth.y ),
-    gridsize = density.grid ) )
+    gridsize = density.grid ) ) )
 
   names( gate.bound.density ) <- c( "x", "y", "z" )
 
@@ -138,10 +138,10 @@ do.gate.af <- function( gate.data, samp, asp ) {
   bandwidth.y <- suppressWarnings( asp$af.gate.density.bw.factor *
     dpik( gate.data[ gate.region.data.idx, 2 ] ) )
 
-  gate.region.density <- suppressWarnings(
+  gate.region.density <- suppressMessages( suppressWarnings(
     bkde2D( gate.data[ gate.region.data.idx, ],
             bandwidth = c( bandwidth.x, bandwidth.y ),
-            gridsize = density.grid ) )
+            gridsize = density.grid ) ) )
 
   names( gate.region.density ) <- c( "x", "y", "z" )
 
@@ -219,10 +219,10 @@ do.gate.af <- function( gate.data, samp, asp ) {
   bandwidth.y <- suppressWarnings( asp$af.gate.density.bw.factor *
     dpik( gate.data[ gate.region.density.max.data.idx, 2 ] ) )
 
-  gate.region.max.density <- suppressWarnings(
+  gate.region.max.density <- suppressMessages( suppressWarnings(
     bkde2D( gate.data[ gate.region.density.max.data.idx, ],
             bandwidth = c( bandwidth.x, bandwidth.y ),
-            gridsize = density.grid ) )
+            gridsize = density.grid ) ) )
 
   names( gate.region.max.density ) <- c( "x", "y", "z" )
 

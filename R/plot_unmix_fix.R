@@ -63,11 +63,11 @@ plot.unmix.fix <- function( original.data, compensated.data, plot.idx,
                                                                 gridsize = asp$fix.unmix.grid.n )
   )
 
-  data.density <- suppressWarnings( bkde2D(
+  data.density <- suppressMessages( suppressWarnings( bkde2D(
     combined.data.density,
     bandwidth = c( bandwidth.x, bandwidth.y ),
     gridsize = c( asp$fix.unmix.grid.n,
-                  asp$fix.unmix.grid.n ) ) )
+                  asp$fix.unmix.grid.n ) ) ) )
 
   names( data.density ) <- c( "x", "y", "z" )
 
