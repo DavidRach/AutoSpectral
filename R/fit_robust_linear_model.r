@@ -38,7 +38,7 @@ fit.robust.linear.model <-  function( x.data, y.data, x.name, y.name, asp,
 
     } else if ( ! xy.model$converged & fix.unmix ) {
 
-      xy.coef <- 0
+      xy.coef <- c( 0, 0 )
 
     } else {
       cat( sprintf( "WARNING: rlm of %s ~ %s did not converge - using ols instead\n",
