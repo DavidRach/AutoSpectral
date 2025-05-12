@@ -15,7 +15,8 @@ fix.my.unmix(
   downsample = 20000,
   unstained.threshold = 0.99,
   unstained.margin = 1.3,
-  convergence.threshold = 0.03
+  convergence.threshold = 0.03,
+  biexp = TRUE
 )
 }
 \arguments{
@@ -54,6 +55,9 @@ unstained.threshold.}
 
 \item{convergence.threshold}{Numeric, default 0.01. If the algorithm reaches
 this minimal level of spillover error, it will stop.}
+
+\item{biexp}{Logical indicating whether to apply biexponential transformation
+(default is TRUE).}
 }
 \value{
 A list containing the corrected spillover matrix (fluorophores x fluorophores),

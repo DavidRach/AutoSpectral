@@ -67,9 +67,8 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
     expr.data <- flow.control$expr.data[ flow.control$event.sample %in%
                                            fluorophore.event.samples, ]
 
-    if ( biexp ) {
+    if ( biexp )
       expr.data <- apply( expr.data, 2, biexp.transform )
-    }
 
     marker.spectra <- lapply( fluorophore.samples, function( samp ) {
 

@@ -8,6 +8,7 @@
 #' @importFrom flowCore read.FCS
 #' @importFrom sp point.in.polygon
 #' @importFrom utils write.csv
+#' @importFrom flowWorkspace flowjo_biexp
 #'
 #' @param spectra The spectral matrix, fluorophores x detectors. In this case,
 #'     it does not need to be a perfect match for the fluorophores in the fully
@@ -34,6 +35,8 @@
 #'     unstained.threshold.
 #' @param convergence.threshold Numeric, default 0.01. If the algorithm reaches
 #'     this minimal level of spillover error, it will stop.
+#' @param biexp Logical indicating whether to apply biexponential transformation
+#'     (default is TRUE).
 #'
 #' @return A list containing the corrected spillover matrix (fluorophores x fluorophores),
 #'     the corrected compensation matrix and the corrected spectra for unmixing
@@ -46,10 +49,21 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
                           flow.control, asp, large.gate = TRUE,
                           max.iter = 20, downsample = 20000,
                           unstained.threshold = 0.99, unstained.margin = 1.3,
-                          convergence.threshold = 0.03 ) {
+                          convergence.threshold = 0.03, biexp = TRUE ) {
 
   if ( ! dir.exists( asp$fix.unmixing.dir ) )
     dir.create( asp$fix.unmixing.dir )
+
+  if ( biexp ) {
+    biexp.transform <- flowjo_biexp(
+      channelRange = asp$default.transformation.param$length,
+      maxValue = asp$default.transformation.param$max.range,
+      pos = asp$default.transformation.param$pos,
+      neg = asp$default.transformation.param$neg,
+      widthBasis = asp$default.transformation.param$width,
+      inverse = FALSE
+    )
+  }
 
   fluorophores <- rownames( spectra )
   fluorophore.n <- length( fluorophores )
@@ -59,7 +73,7 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
   # calculate similarity matrix
   similarity.matrix <- cosine.similarity( t( spectra ) )
 
-  # calculate unmxing matrix
+  # calculate unmixing matrix
   unmixing.matrix <- solve( spectra %*% t( spectra ) ) %*% spectra
 
   # estimate spread matrix
@@ -91,6 +105,9 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
   cat( "\033[32mUnmixing unstained sample.\033[0m \n" )
   unstained.unmixed <- unmix.ols( unstained.raw, spectra )
 
+  if ( biexp )
+    unstained.unmixed <- apply( unstained.unmixed, 2, biexp.transform )
+
   # calculate nth percentiles across all channels
   unstained.thresholds <- apply( unstained.unmixed, 2, function( col )
     quantile( col , probs = unstained.threshold ) )
@@ -118,6 +135,9 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
 
   downsample.idx <- sample( 1:nrow( fully.stained.unmixed ), downsample )
   fully.stained.downsampled <- fully.stained.unmixed[ downsample.idx, ]
+
+  if ( biexp )
+    fully.stained.downsampled <- apply( fully.stained.downsampled, 2, biexp.transform )
 
   # set initial values for iteration variables
   rs.convergence <- FALSE
@@ -202,7 +222,7 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
     ratioed.coefficients <- marker.spillover * similarity.matrix
 
     # select worst pair for plotting on first run
-    if ( rs.iter == 1 ) {
+    if ( rs.iter == 0 ) {
       plot.select <- ratioed.coefficients
       diag( plot.select ) <- 0
       plot.select <- abs( plot.select )
@@ -257,7 +277,7 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
     rs.convergence <- rs.convergence.now
 
     # update spillover matrix
-    spillover.update <- slope.error %*% spillover.curr
+    spillover.update <- slope.error %*% spillover.curr * 0.1
 
     rs.iter <- rs.iter + 1
   }
@@ -267,11 +287,6 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
                 plot.prefix = asp$fix.unmixing.heatmap,
                 legend.label = "Spillover", triangular = TRUE,
                 output.dir = asp$fix.unmixing.dir )
-
-  # plot example of fixing on marker pair with biggest error
-  plot.unmix.fix( fully.stained.downsampled, unmixed.comp, plot.idx, asp,
-                  unstained.thresholds, unstained.margin,
-                  spread.estimate, output.dir = asp$fix.unmixing.dir )
 
   # write spillover as csv
   write.csv( spillover.curr, file = file.path( asp$fix.unmixing.dir,
@@ -285,6 +300,28 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
   # write compensation as flowjo.mtx
   write.flowjo.mtx( spillover.curr,
                     file.path( asp$fix.unmixing.dir, asp$fix.compensation.flowjo ) )
+
+  if ( biexp ) {
+    inverse.transform <- flowjo_biexp(
+      channelRange = asp$default.transformation.param$length,
+      maxValue = asp$default.transformation.param$max.range,
+      pos = asp$default.transformation.param$pos,
+      neg = asp$default.transformation.param$neg,
+      widthBasis = asp$default.transformation.param$width,
+      inverse = TRUE
+    )
+
+    fully.stained.downsampled <- apply( fully.stained.downsampled, 2, inverse.transform )
+    unmixed.comp <- fully.stained.downsampled %*% compensation.matrix
+    unstained.unmixed <- apply( unstained.unmixed, 2, inverse.transform )
+    unstained.thresholds <- apply( unstained.unmixed, 2, function( col )
+      quantile( col , probs = unstained.threshold ) )
+  }
+
+  # plot example of fixing on marker pair with biggest error
+  plot.unmix.fix( fully.stained.downsampled, unmixed.comp, plot.idx, asp,
+                  unstained.thresholds, unstained.margin,
+                  spread.estimate, output.dir = asp$fix.unmixing.dir )
 
   # back convert to unmixing spectra
   spectra.update.reverted <- spillover.curr %*% spectra

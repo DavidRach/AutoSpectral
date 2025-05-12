@@ -5,8 +5,6 @@
 #' @description This function performs unmixing of raw data using weighted least
 #'    squares (WLS) based on the provided spectra. Weighting is by channel power.
 #'
-#' @importFrom stats sd
-#'
 #' @param raw.data Expression data from raw fcs files. Cells in rows and detectors
 #'     (raw channels) in columns. Columns should be fluorescent data only and must
 #'     match the columns in spectra.
@@ -20,9 +18,9 @@ unmix.wls <- function( raw.data, spectra ) {
 
   spectra <- t( spectra )
 
-  channel.var <- apply( raw.data, 2, sd )
+  channel.var <- colMeans( raw.data )
 
-  # weights are inverse of channel variances
+  # weights are inverse of channel variances (mean if Poisson)
   channel.weights <- 1 / ( channel.var + 1e-6 )
 
   W <- diag( channel.weights )
