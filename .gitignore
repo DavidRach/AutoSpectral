@@ -8,3 +8,6 @@
 .quarto
 .Rbuildignore
 .tar.gz
+src/*.o
+src/*.so
+src/*.dll
