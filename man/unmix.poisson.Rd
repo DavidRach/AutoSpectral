@@ -4,7 +4,7 @@
 \alias{unmix.poisson}
 \title{Unmix Using Poisson Regression}
 \usage{
-unmix.poisson(raw.data, spectra, asp, allow.negative = TRUE)
+unmix.poisson(raw.data, spectra, asp)
 }
 \arguments{
 \item{raw.data}{Matrix containing raw data to be unmixed.}
@@ -12,8 +12,6 @@ unmix.poisson(raw.data, spectra, asp, allow.negative = TRUE)
 \item{spectra}{Matrix containing spectra information.}
 
 \item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
-
-\item{allow.negative}{Logical indicating whether to allow negative coefficients.}
 }
 \value{
 A matrix containing the unmixed data.

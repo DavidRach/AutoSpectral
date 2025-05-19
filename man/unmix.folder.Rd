@@ -9,12 +9,11 @@ unmix.folder(
   spectra,
   asp,
   flow.control,
-  method = "ols",
+  method = "OLS",
   output.dir = NULL,
   file.suffix = NULL,
   include.raw = FALSE,
-  include.imaging = FALSE,
-  allow.negative = TRUE
+  include.imaging = FALSE
 )
 }
 \arguments{
@@ -26,7 +25,7 @@ unmix.folder(
 
 \item{flow.control}{A list containing flow cytometry control parameters.}
 
-\item{method}{Method to be used for unmixing (default is "ols").}
+\item{method}{Method to be used for unmixing (default is "OLS").}
 
 \item{output.dir}{Directory to save the unmixed FCS files (default is asp$unmixed.fcs.dir).}
 
@@ -38,9 +37,6 @@ Default is FALSE.}
 
 \item{include.imaging}{Logical indicating whether to include imaging data in the output.
 Default is FALSE.}
-
-\item{allow.negative}{Logical indicating whether to allow negative coefficients.
-Default is TRUE.}
 }
 \value{
 None. Saves the unmixed FCS files to the specified output directory.

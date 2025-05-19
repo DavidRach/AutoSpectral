@@ -9,12 +9,12 @@ unmix.fcs(
   spectra,
   asp,
   flow.control,
-  method = "ols",
+  method = "OLS",
+  weights = NULL,
   output.dir = NULL,
   file.suffix = NULL,
   include.raw = FALSE,
-  include.imaging = FALSE,
-  allow.negative = TRUE
+  include.imaging = FALSE
 )
 }
 \arguments{
@@ -27,7 +27,11 @@ unmix.fcs(
 \item{flow.control}{A list containing flow cytometry control parameters.}
 
 \item{method}{A character string specifying the unmixing method to use.
-Options are "ols", "wls", and "poisson". Default is "ols".}
+Options are "OLS", "WLS", and "Poisson". Default is "OLS".}
+
+\item{weights}{Optional numeric vector of weights (one per fluorescent detector).
+Default is NULL, in which case weighting will be done by channel means.
+Only used for WLS}
 
 \item{output.dir}{A character string specifying the directory to save the
 unmixed FCS file. Default is NULL.}
@@ -40,9 +44,6 @@ data in the output. Default is FALSE.}
 
 \item{include.imaging}{A logical value indicating whether to include imaging
 parameters in the output. Default is FALSE.}
-
-\item{allow.negative}{A logical value indicating whether to allow negative
-values in the unmixing process. Default is TRUE.}
 }
 \value{
 None. The function writes the unmixed FCS data to a file.

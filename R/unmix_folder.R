@@ -13,7 +13,7 @@
 #' @param spectra Matrix containing spectra information.
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
 #' @param flow.control A list containing flow cytometry control parameters.
-#' @param method Method to be used for unmixing (default is "ols").
+#' @param method Method to be used for unmixing (default is "OLS").
 #' @param output.dir Directory to save the unmixed FCS files (default is asp$unmixed.fcs.dir).
 #' @param file.suffix A character string to append to the output file name.
 #'     Default is NULL.
@@ -21,20 +21,17 @@
 #'     Default is FALSE.
 #' @param include.imaging Logical indicating whether to include imaging data in the output.
 #'     Default is FALSE.
-#' @param allow.negative Logical indicating whether to allow negative coefficients.
-#'     Default is TRUE.
 #'
 #' @return None. Saves the unmixed FCS files to the specified output directory.
 #' @export
 
 
 unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
-                          method = "ols",
+                          method = "OLS",
                           output.dir = NULL,
                           file.suffix = NULL,
                           include.raw = FALSE,
-                          include.imaging = FALSE,
-                          allow.negative = TRUE ){
+                          include.imaging = FALSE ){
 
   if ( is.null( output.dir ) ){
     output.dir <- asp$unmixed.fcs.dir
@@ -43,7 +40,7 @@ unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
   files.to.unmix <- list.files( fcs.dir, pattern = ".fcs", full.names = TRUE )
 
   # set up parallel processing
-  if ( asp$parallel ){
+  if ( asp$parallel & method != "Poisson" ){
     plan( multisession, workers = asp$worker.process.n )
     options( future.globals.maxSize = asp$max.memory.n )
     lapply.function <- future_lapply

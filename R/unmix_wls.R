@@ -10,20 +10,36 @@
 #'     match the columns in spectra.
 #' @param spectra Spectral signatures of fluorophores, normalized between 0 and 1,
 #'     with fluorophores in rows and detectors (channels) in columns.
+#' @param weights Optional numeric vector of weights (one per fluorescent detector).
+#'     Default is NULL, in which case weighting will be done by channel means.
 #' @return A matrix containing unnmixed data with cells in rows and fluorophores in columns.
 #' @export
 
 
-unmix.wls <- function( raw.data, spectra ) {
+unmix.wls <- function( raw.data, spectra, weights = NULL ) {
 
   spectra <- t( spectra )
 
-  channel.var <- colMeans( raw.data )
+  if ( is.null( weights ) ) {
+    channel.var <- colMeans( raw.data )
 
-  # weights are inverse of channel variances (mean if Poisson)
-  channel.weights <- 1 / ( channel.var + 1e-6 )
+    # weights are inverse of channel variances (mean if Poisson)
+    channel.weights <- 1 / ( channel.var + 1e-6 )
 
-  W <- diag( channel.weights )
+    W <- diag( channel.weights )
+  } else {
+    if ( !is.numeric( weights ) )
+      stop( "Weights must be a numeric vector." )
+
+    if ( length( weights ) != nrow( spectra ) )
+      stop( "Mismatch between supplied weights and detectors in spectra" )
+
+    if ( length( weights ) != ncol( raw.data ) )
+      stop( "Mismatch between supplied weights and detectors in raw.data" )
+
+    W <- diag( as.numeric( weights ) )
+  }
+
 
   # Weighted LS solution: (M^T W M)^{-1} M^T W
   unmixing.matrix <- solve( t( spectra ) %*% W %*% spectra ) %*%

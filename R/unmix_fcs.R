@@ -11,7 +11,10 @@
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
 #' @param flow.control A list containing flow cytometry control parameters.
 #' @param method A character string specifying the unmixing method to use.
-#'     Options are "ols", "wls", and "poisson". Default is "ols".
+#'     Options are "OLS", "WLS", and "Poisson". Default is "OLS".
+#' @param weights Optional numeric vector of weights (one per fluorescent detector).
+#'     Default is NULL, in which case weighting will be done by channel means.
+#'     Only used for WLS
 #' @param output.dir A character string specifying the directory to save the
 #'     unmixed FCS file. Default is NULL.
 #' @param file.suffix A character string to append to the output file name.
@@ -20,17 +23,16 @@
 #'     data in the output. Default is FALSE.
 #' @param include.imaging A logical value indicating whether to include imaging
 #'     parameters in the output. Default is FALSE.
-#' @param allow.negative A logical value indicating whether to allow negative
-#'     values in the unmixing process. Default is TRUE.
+#'
 #' @return None. The function writes the unmixed FCS data to a file.
 #' @export
 
 
-unmix.fcs <- function( fcs.file, spectra, asp, flow.control, method = "ols",
+unmix.fcs <- function( fcs.file, spectra, asp, flow.control, method = "OLS",
+                       weights = NULL,
                        output.dir = NULL, file.suffix = NULL,
                        include.raw = FALSE,
-                       include.imaging = FALSE,
-                       allow.negative = TRUE ){
+                       include.imaging = FALSE ){
 
   if ( is.null( output.dir ) ){
     output.dir <- asp$unmixed.fcs.dir
@@ -39,7 +41,7 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control, method = "ols",
   # import fcs, without warnings for fcs 3.2
   fcs.data <- suppressWarnings(
     read.FCS( fcs.file, transformation = FALSE,
-              truncate_max_range = FALSE )
+              truncate_max_range = FALSE, emptyValue = FALSE )
   )
 
   fcs.keywords <- keyword( fcs.data )
@@ -64,6 +66,7 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control, method = "ols",
   # extract exprs
   fcs.exprs <- flowCore::exprs( fcs.data )
   rm( fcs.data )
+
   spectral.exprs <- fcs.exprs[ , flow.control$spectral.channel, drop = FALSE ]
 
   other.channels <- setdiff( colnames( fcs.exprs ), flow.control$spectral.channel )
@@ -71,10 +74,9 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control, method = "ols",
 
   # apply unmixing using selected method
   unmixed.data <- switch( method,
-                         "ols" = unmix.ols( spectral.exprs, spectra ),
-                         "wls" = unmix.wls( spectral.exprs, spectra ),
-                         "poisson" = unmix.poisson( spectral.exprs, spectra,
-                                                    asp, allow.negative ),
+                         "OLS" = unmix.ols( spectral.exprs, spectra ),
+                         "WLS" = unmix.wls( spectral.exprs, spectra, weights ),
+                         "Poisson" = unmix.poisson( spectral.exprs, spectra, asp ),
                          stop( "Unknown method" )
   )
 
