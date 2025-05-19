@@ -196,7 +196,7 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
 
         if ( asp$verbose )
         {
-            cat( sprintf(
+          message( sprintf(
                 "iter %0*d, %s scale, lambda %.1f, delta %g, delta.max %g, delta.change %g\n",
                 rs.iter.width, rs.iter,
                 ifelse( rs.scale.untransformed, "linear", "bi-exp" ),

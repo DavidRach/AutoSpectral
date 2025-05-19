@@ -24,8 +24,8 @@ remove.af <- function( clean.expr.data, samp, af.artefact, spectral.channel,
                        universal.negative, asp ) {
 
   if ( asp$verbose )
-    cat( paste( "\033[34m", "Removing autofluorescence contamination in", samp,
-                "\033[0m", "\n" ) )
+    message( paste( "\033[34m", "Removing autofluorescence contamination in", samp,
+                "\033[0m" ) )
 
   # match universal negative
   matching.negative <- universal.negative[[ samp ]]

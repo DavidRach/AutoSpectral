@@ -31,8 +31,8 @@ identify.af.artefacts <- function( clean.expr, universal.neg,
                                    spectral.channel, asp ) {
 
   if ( asp$verbose )
-    cat( paste( "\033[34m", "Identifying autofluorescence contamination in",
-                universal.neg, "\033[0m", "\n" ) )
+    message( paste( "\033[34m", "Identifying autofluorescence contamination in",
+                universal.neg, "\033[0m" ) )
 
   expr.data.neg <- clean.expr[[ universal.neg ]][ , spectral.channel ]
 

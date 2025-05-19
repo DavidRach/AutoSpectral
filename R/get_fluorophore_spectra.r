@@ -72,7 +72,7 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
 
     marker.spectra <- lapply( fluorophore.samples, function( samp ) {
 
-      cat( paste( "\033[32m", "Processing", samp, "\033[0m", "\n" ) )
+      message( paste( "\033[32m", "Processing", samp, "\033[0m" ) )
 
       peak.channel <- fluorophore.channels[ fluorophore.samples == samp ]
 
@@ -123,7 +123,7 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
 
     marker.spectra <- lapply( fluorophore.samples, function( samp ) {
 
-      cat( paste("\033[32m", "Processing", samp, "\033[0m", "\n" ) )
+      message( paste("\033[32m", "Processing", samp, "\033[0m" ) )
 
       peak.channel <- fluorophore.channels[ fluorophore.samples == samp ]
 
@@ -202,7 +202,7 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
 
     print( similarity.qc )
 
-    cat( "\033[31m Similarity over 0.95 detected for one or more pairs of fluorophores.
+    message( "\033[31m Similarity over 0.95 detected for one or more pairs of fluorophores.
 
     Check the table below for problematic combinations.
     If both Fluor1 and Fluor2 are fluorophores,
@@ -212,7 +212,7 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
     If one of the pair is AF, the other likely has minimal signal.
     In this case, run clean.controls and set use.clean.expr to TRUE.
     If you have already done that, manually inspect the control for real signal.
-         \033[0m \n" )
+         \033[0m" )
   }
 
   marker.spectra

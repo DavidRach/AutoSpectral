@@ -86,7 +86,7 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
   )
   unstained.raw <- flowCore::exprs( unstained.raw )[ , flow.control$scatter.and.channel.spectral ]
 
-  cat( "\033[32mGating raw data.\033[0m \n" )
+  message( "\033[32mGating raw data.\033[0m" )
   gate.data <- unstained.raw[ , flow.control$scatter.parameter ]
 
   # define large gate
@@ -102,7 +102,7 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
   unstained.raw <- unstained.raw[ gate.population.idx, flow.control$spectral.channel ]
 
   # unmix
-  cat( "\033[32mUnmixing unstained sample.\033[0m \n" )
+  message( "\033[32mUnmixing unstained sample.\033[0m" )
   unstained.unmixed <- unmix.ols( unstained.raw, spectra )
 
   if ( biexp )
@@ -113,7 +113,7 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
     quantile( col , probs = unstained.threshold ) )
 
   # import fully stained sample
-  cat( "\033[32mReading fully stained raw data.\033[0m \n" )
+  message( "\033[32mReading fully stained raw data.\033[0m" )
   fully.stained.raw <- suppressWarnings(
     flowCore::read.FCS( fully.stained.sample, transformation = FALSE,
                         truncate_max_range = FALSE, emptyValue = FALSE )
@@ -128,7 +128,7 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
   fully.stained.raw <- fully.stained.raw[ gate.population.idx, flow.control$spectral.channel ]
 
   # unmix
-  cat( "\033[32mUnmixing fully stained sample.\033[0m \n" )
+  message( "\033[32mUnmixing fully stained sample.\033[0m" )
   fully.stained.unmixed <- unmix.ols( fully.stained.raw, spectra )
   # rm( fully.stained.raw )
   # rm( unstained.raw )
@@ -252,8 +252,7 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
 
     if ( asp$verbose )
     {
-      cat( sprintf(
-        "iter %0*d, delta %g, delta.max %g, delta.change %g\n",
+      message( sprintf( "iter %0*d, delta %g, delta.max %g, delta.change %g",
         rs.iter.width, rs.iter, rs.delta, rs.delta.max, rs.delta.change ) )
     }
 
@@ -264,13 +263,13 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
     # determine if exit conditions have been met
     if ( rs.convergence.now && rs.convergence ) {
       rs.exit <- TRUE
-      cat( "\033[34mConverged \033[0m \n" )
+      message( "\033[34mConverged \033[0m" )
     } else if ( rs.iter >= max.iter ) {
       rs.exit <- TRUE
-      cat( "\033[33m Reached iteration limit \033[0m \n" )
+      message( "\033[33m Reached iteration limit \033[0m" )
     } else if ( rs.stalled ) {
       rs.exit <- TRUE
-      cat( "\033[31m Refinement stalled, stopping \033[0m \n" )
+      message( "\033[31m Refinement stalled, stopping \033[0m" )
     }
 
     # save convergence state (allows one extra pass)
