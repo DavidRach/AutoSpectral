@@ -13,14 +13,19 @@
 #' @param spectra Matrix containing spectra information.
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
 #' @param flow.control A list containing flow cytometry control parameters.
-#' @param method Method to be used for unmixing (default is "OLS").
+#' @param method A character string specifying the unmixing method to use.
+#'     Options are "OLS", "WLS", "Poisson" and "FastPoisson". Default is "OLS".
+#'     "FastPoisson" requires installation of AutoSpectralRcpp.
+#' @param weights Optional numeric vector of weights (one per fluorescent detector).
+#'     Default is NULL, in which case weighting will be done by channel means.
+#'     Only used for WLS
 #' @param output.dir Directory to save the unmixed FCS files (default is asp$unmixed.fcs.dir).
 #' @param file.suffix A character string to append to the output file name.
 #'     Default is NULL.
 #' @param include.raw Logical indicating whether to include raw data in the output.
 #'     Default is FALSE.
-#' @param include.imaging Logical indicating whether to include imaging data in the output.
-#'     Default is FALSE.
+#' @param include.imaging Logical indicating whether to include imaging data in
+#'     the output (relevant for S8 and A8). Default is FALSE.
 #'
 #' @return None. Saves the unmixed FCS files to the specified output directory.
 #' @export
@@ -28,6 +33,7 @@
 
 unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
                           method = "OLS",
+                          weights = NULL,
                           output.dir = NULL,
                           file.suffix = NULL,
                           include.raw = FALSE,
@@ -49,7 +55,7 @@ unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
   }
 
   lapply.function( files.to.unmix, FUN = unmix.fcs, spectra, asp, flow.control,
-                   method, output.dir, file.suffix, include.raw,
-                   include.imaging, allow.negative )
+                   method, weights, output.dir, file.suffix, include.raw,
+                   include.imaging )
 
 }

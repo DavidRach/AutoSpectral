@@ -28,6 +28,6 @@ the spectra figure folder will be used.}
 Saves the heatmap plot as a JPEG file in the specified directory.
 }
 \description{
-This function plots a spectral matrix as a heatmap and saves it 
+This function plots a spectral matrix as a heatmap and saves it
     as a JPEG file.
 }

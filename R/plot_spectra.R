@@ -9,7 +9,7 @@
 #'     by excitation lasers, and saves the plots as JPEG files.
 #'
 #' @importFrom ggplot2 ggplot aes geom_path geom_point labs theme_minimal
-#' @importFrom ggplot2 element_text facet_wrap ggsave
+#' @importFrom ggplot2 element_text facet_wrap ggsave theme
 #' @importFrom tidyr pivot_longer
 #' @importFrom utils read.csv
 #' @importFrom stats setNames

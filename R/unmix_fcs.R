@@ -11,7 +11,8 @@
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
 #' @param flow.control A list containing flow cytometry control parameters.
 #' @param method A character string specifying the unmixing method to use.
-#'     Options are "OLS", "WLS", and "Poisson". Default is "OLS".
+#'     Options are "OLS", "WLS", "Poisson" and "FastPoisson". Default is "OLS".
+#'     "FastPoisson" requires installation of AutoSpectralRcpp.
 #' @param weights Optional numeric vector of weights (one per fluorescent detector).
 #'     Default is NULL, in which case weighting will be done by channel means.
 #'     Only used for WLS
@@ -28,9 +29,11 @@
 #' @export
 
 
-unmix.fcs <- function( fcs.file, spectra, asp, flow.control, method = "OLS",
+unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
+                       method = "OLS",
                        weights = NULL,
-                       output.dir = NULL, file.suffix = NULL,
+                       output.dir = NULL,
+                       file.suffix = NULL,
                        include.raw = FALSE,
                        include.imaging = FALSE ){
 
@@ -77,6 +80,25 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control, method = "OLS",
                          "OLS" = unmix.ols( spectral.exprs, spectra ),
                          "WLS" = unmix.wls( spectral.exprs, spectra, weights ),
                          "Poisson" = unmix.poisson( spectral.exprs, spectra, asp ),
+                         "FastPoisson" = {
+                           if ( requireNamespace("AutoSpectralRcpp", quietly = TRUE ) &&
+                               "unmix.poisson.fast" %in% ls( getNamespace( "AutoSpectralRcpp" ) ) ) {
+                             tryCatch(
+                               AutoSpectralRcpp::unmix.poisson.fast( spectral.exprs,
+                                                                     spectra,
+                                                                     maxit = asp$rlm.iter.max,
+                                                                     tol = 1e-6,
+                                                                     n_threads = asp$worker.process.n ),
+                               error = function( e ) {
+                                 warning( "FastPoisson failed, falling back to standard Poisson: ", e$message )
+                                 unmix.poisson( spectral.exprs, spectra, asp )
+                               }
+                             )
+                           } else {
+                             warning( "AutoSpectralRcpp not available, falling back to standard Poisson." )
+                             unmix.poisson( spectral.exprs, spectra, asp )
+                           }
+                         },
                          stop( "Unknown method" )
   )
 

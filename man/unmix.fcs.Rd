@@ -27,7 +27,8 @@ unmix.fcs(
 \item{flow.control}{A list containing flow cytometry control parameters.}
 
 \item{method}{A character string specifying the unmixing method to use.
-Options are "OLS", "WLS", and "Poisson". Default is "OLS".}
+Options are "OLS", "WLS", "Poisson" and "FastPoisson". Default is "OLS".
+"FastPoisson" requires installation of AutoSpectralRcpp.}
 
 \item{weights}{Optional numeric vector of weights (one per fluorescent detector).
 Default is NULL, in which case weighting will be done by channel means.

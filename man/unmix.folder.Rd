@@ -10,6 +10,7 @@ unmix.folder(
   asp,
   flow.control,
   method = "OLS",
+  weights = NULL,
   output.dir = NULL,
   file.suffix = NULL,
   include.raw = FALSE,
@@ -25,7 +26,13 @@ unmix.folder(
 
 \item{flow.control}{A list containing flow cytometry control parameters.}
 
-\item{method}{Method to be used for unmixing (default is "OLS").}
+\item{method}{A character string specifying the unmixing method to use.
+Options are "OLS", "WLS", "Poisson" and "FastPoisson". Default is "OLS".
+"FastPoisson" requires installation of AutoSpectralRcpp.}
+
+\item{weights}{Optional numeric vector of weights (one per fluorescent detector).
+Default is NULL, in which case weighting will be done by channel means.
+Only used for WLS}
 
 \item{output.dir}{Directory to save the unmixed FCS files (default is asp$unmixed.fcs.dir).}
 
@@ -35,8 +42,8 @@ Default is NULL.}
 \item{include.raw}{Logical indicating whether to include raw data in the output.
 Default is FALSE.}
 
-\item{include.imaging}{Logical indicating whether to include imaging data in the output.
-Default is FALSE.}
+\item{include.imaging}{Logical indicating whether to include imaging data in
+the output (relevant for S8 and A8). Default is FALSE.}
 }
 \value{
 None. Saves the unmixed FCS files to the specified output directory.

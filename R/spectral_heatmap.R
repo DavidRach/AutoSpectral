@@ -3,14 +3,14 @@
 
 #' @title Spectral Heatmap
 #'
-#' @description This function plots a spectral matrix as a heatmap and saves it 
+#' @description This function plots a spectral matrix as a heatmap and saves it
 #'     as a JPEG file.
 #'
-#' @importFrom ggplot2 ggplot aes geom_tile scale_fill_viridis_c theme_minimal
-#' @importFrom ggplot2 coord_fixed element_text labs ggsave
+#' @importFrom ggplot2 ggplot aes geom_tile scale_fill_viridis_c theme_classic
+#' @importFrom ggplot2 coord_fixed element_text labs ggsave theme
 #' @importFrom tidyr pivot_longer
 #' @importFrom dplyr mutate %>%
-#' 
+#'
 #' @param spectra Matrix or dataframe containing spectral data (fluorophores x detectors).
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
 #' @param plot.prefix Optional prefix for the plot filename.
@@ -28,32 +28,32 @@ spectral.heatmap <- function( spectra, asp, plot.prefix = NULL,
   } else {
     heatmap.filename <- "spectral_heatmap.jpg"
   }
-  
+
   if ( is.null( output.dir ) )
     output.dir <- asp$figure.spectra.dir
-  
+
   heatmap.df <- data.frame( spectra, check.names = FALSE )
-  
+
   plot.width <- ( ncol( heatmap.df ) - 1 ) / 64 * 12
   plot.height <- 5 + round( nrow( heatmap.df ) / 8, 0 )
-  
+
   row.levels <- rownames( heatmap.df )
   col.levels <- colnames( heatmap.df )
   heatmap.df$Fluorophore <- row.levels
-  
+
   heatmap.long <- heatmap.df %>%
     tidyr::pivot_longer( cols = -Fluorophore, names_to = "Detector", values_to = "value" ) %>%
     dplyr::mutate( Fluorophore = factor( Fluorophore, levels = rev( row.levels ) ),
             Detector = factor( Detector, levels = col.levels ) )
-  
+
   heatmap.plot <- ggplot( heatmap.long, aes( Detector, Fluorophore, fill = value ) ) +
     geom_tile() +
     theme_classic() +
-    coord_fixed( ratio = 1) +
+    coord_fixed( ratio = 1 ) +
     theme( axis.text.x = element_text( angle = 45, hjust = 1 ) ) +
     labs( x = NULL, y = NULL, fill = legend.label )+
     scale_fill_viridis_c()
-  
+
   ggsave( filename = file.path( output.dir, heatmap.filename ),
     plot = heatmap.plot,
     width = plot.width, height = plot.height )
