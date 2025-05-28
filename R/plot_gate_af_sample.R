@@ -27,7 +27,7 @@
 
 
 
-plot.gate.af.sample <- function( samp, af.data,
+gate.af.sample.plot <- function( samp, af.data,
                                  af.boundary.lower, af.boundary.upper,
                                  asp ) {
 

@@ -282,7 +282,7 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
   }
 
   # heatmap of coefficients
-  plot.heatmap( spillover.curr, asp, number.labels = FALSE,
+  create.heatmap( spillover.curr, asp, number.labels = FALSE,
                 plot.prefix = asp$fix.unmixing.heatmap,
                 legend.label = "Spillover", triangular = TRUE,
                 output.dir = asp$fix.unmixing.dir )
@@ -318,7 +318,7 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
   }
 
   # plot example of fixing on marker pair with biggest error
-  plot.unmix.fix( fully.stained.downsampled, unmixed.comp, plot.idx, asp,
+  unmix.fix.plot( fully.stained.downsampled, unmixed.comp, plot.idx, asp,
                   unstained.thresholds, unstained.margin,
                   spread.estimate, output.dir = asp$fix.unmixing.dir )
 
@@ -331,9 +331,9 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
                                                     asp$fix.spectra.filename ) )
 
   # plot original spectra and adjusted spectra
-  plot.spectra( spectra, flow.control, asp, plot.title = "Original spectra",
+  spectral.trace( spectra, flow.control, asp, plot.title = "Original spectra",
                 plot.dir = asp$fix.unmixing.dir, split.lasers = TRUE )
-  plot.spectra( spectra.update.reverted, flow.control, asp,
+  spectral.trace( spectra.update.reverted, flow.control, asp,
                 plot.title = "Adjusted spectra",
                 plot.dir = asp$fix.unmixing.dir, split.lasers = TRUE )
 

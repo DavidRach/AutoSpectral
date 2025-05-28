@@ -1,7 +1,7 @@
 # plot_heatmap.r
 
 
-#' @title Plot Heatmap
+#' @title Create Heatmap Plot
 #'
 #' @description This function plots a matrix as a heatmap and saves it as a
 #'     JPEG file.
@@ -31,7 +31,7 @@
 #'     in the specified directory.
 #' @export
 
-plot.heatmap <- function( matrix, asp, number.labels, plot.prefix = NULL,
+create.heatmap <- function( matrix, asp, number.labels, plot.prefix = NULL,
                           legend.label = "heatmap",
                           triangular = FALSE, output.dir = NULL,
                           fixed.scale = FALSE, scale.min = NULL, scale.max = NULL ) {

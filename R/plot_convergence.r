@@ -1,6 +1,6 @@
 # plot_convergence.r
 
-#' @title Plot Convergence
+#' @title Convergence Plot
 #' @description Plots convergence of iterative refinement of the spillover matrix.
 #'
 #' @importFrom ggplot2 ggplot aes labs geom_hline geom_point scale_x_continuous
@@ -11,7 +11,7 @@
 #' @return None. The function saves the generated convergence plot to a file.
 #' @export
 
-plot.convergence <- function( convergence.log, asp )
+convergence.plot <- function( convergence.log, asp )
 {
     convergence.ggdata <- convergence.log
     convergence.ggdata$delta.change <- abs( convergence.ggdata$delta.change )

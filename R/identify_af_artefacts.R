@@ -27,7 +27,7 @@
 
 
 
-identify.af.artefacts <- function( clean.expr, universal.neg,
+id.af.artefacts <- function( clean.expr, universal.neg,
                                    spectral.channel, asp ) {
 
   if ( asp$verbose )
@@ -97,11 +97,11 @@ identify.af.artefacts <- function( clean.expr, universal.neg,
   if ( asp$figures ) {
 
     if ( length( af.boundaries ) == 2 ){
-      plot.gate.af.sample( universal.neg, af.data = gate.data,
+      gate.af.sample.plot( universal.neg, af.data = gate.data,
                            af.boundaries$lower, af.boundaries$upper,
                            asp )
     } else {
-      plot.gate.af.sample( universal.neg, af.data = gate.data,
+      gate.af.sample.plot( universal.neg, af.data = gate.data,
                            af.boundary.lower = NULL,
                            af.boundary.upper = af.boundaries$upper,
                            asp )

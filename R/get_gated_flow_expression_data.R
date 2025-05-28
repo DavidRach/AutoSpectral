@@ -68,7 +68,7 @@ get.gated.flow.expression.data <- function( samp, file.name, control.dir,
   # plot gate applied to sample
   if ( ! is.null( asp$figure.gate.dir ) ) {
     suppressWarnings(
-      plot.gate.sample( samp, gate.data, scatter.param,
+      gate.sample.plot( samp, gate.data, scatter.param,
                              gate.population.boundary, scatter.and.channel.label,
                              "cells", asp )
     )

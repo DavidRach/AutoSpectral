@@ -1,6 +1,6 @@
 # plot_unmix_fix.r
 
-#' @title Plot Unmixing Fixing
+#' @title Unmixing Fixing Plot
 #'
 #' @description Plots the data before and after automated unmixing corrections.
 #'
@@ -34,7 +34,7 @@
 #'
 
 
-plot.unmix.fix <- function( original.data, compensated.data, plot.idx,
+unmix.fix.plot <- function( original.data, compensated.data, plot.idx,
                             asp, unstained.thresholds, unstained.margin,
                             spread.estimate, output.dir ) {
 

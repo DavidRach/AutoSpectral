@@ -267,7 +267,7 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
                                                ifelse( rs.iter.last, "",
                                                        sprintf( "_%0*d", rs.iter.width, rs.iter ) ) )
 
-      plot.density.log( slope.error, "unmixing error",
+      refine.unmixing.log.plot( slope.error, "unmixing error",
                         file.path( asp$figure.slope.error.dir,
                                    figure.slope.error.file.name ),
                         asp )
@@ -300,7 +300,7 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
                                             ifelse( rs.iter.last, "",
                                                     sprintf( "_%0*d", rs.iter.width, rs.iter ) ) )
 
-      plot.density.log( spillover.skewness, "spillover skewness",
+      refine.unmixing.log.plot( spillover.skewness, "spillover skewness",
                         file.path( asp$figure.skewness.dir,
                                    figure.skewness.file.name ),
                         asp )
@@ -316,7 +316,7 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
 
     if ( ! is.null( asp$figure.convergence.dir ) ){
 
-      plot.convergence( rs.convergence.log, asp )
+      convergence.plot( rs.convergence.log, asp )
     }
 
     # save spectral matrix
@@ -331,13 +331,13 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
 
     # plot spectra
     if ( ! is.null( asp$figure.similarity.heatmap.dir ) ){
-      plot.spectra( spectra.update.reverted, flow.control, asp, plot.title,
+      spectral.trace( spectra.update.reverted, flow.control, asp, plot.title,
                     asp$figure.spectra.dir )
     }
 
     # plot similarity matrix heatmap
     if ( ! is.null( asp$figure.spectra.dir ) ){
-      plot.similarity.matrix( spectra.update.reverted, asp, plot.prefix )
+      similarity.matrix.plot( spectra.update.reverted, asp, plot.prefix )
     }
 
     # check convergence

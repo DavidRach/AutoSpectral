@@ -21,7 +21,7 @@ run.af.artefact.id <- function( clean.expr, negative.sample,
 
   af.artefacts <- lapply( negative.sample, function( sample.name ){
 
-    identify.af.artefacts( clean.expr, sample.name, spectral.channel, asp )
+    id.af.artefacts( clean.expr, sample.name, spectral.channel, asp )
 
   } )
 

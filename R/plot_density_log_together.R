@@ -21,7 +21,7 @@
 #' @export
 
 
-plot.density.log.together <- function( x.table, x.label, plot.file.path, asp )
+refine.unmixing.log.plot.together <- function( x.table, x.label, plot.file.path, asp )
 {
 
   # get values avoiding matrix diagonal

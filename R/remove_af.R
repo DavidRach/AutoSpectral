@@ -71,13 +71,13 @@ remove.af <- function( clean.expr.data, samp, af.artefact, spectral.channel,
 
     if ( length( af.boundaries ) == 2 ){
 
-      plot.gate.af.sample( samp, af.data = gate.data,
+      gate.af.sample.plot( samp, af.data = gate.data,
                            af.boundaries$lower, af.boundaries$upper,
                            asp )
 
     } else {
 
-      plot.gate.af.sample( samp, af.data = gate.data,
+      gate.af.sample.plot( samp, af.data = gate.data,
                            af.boundary.lower = NULL,
                            af.boundary.upper = af.boundaries$upper,
                            asp )

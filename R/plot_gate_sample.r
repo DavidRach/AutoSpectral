@@ -27,7 +27,7 @@
 
 
 
-plot.gate.sample <- function( samp, gate.data, gate.marker, gate.boundary,
+gate.sample.plot <- function( samp, gate.data, gate.marker, gate.boundary,
                               scatter.and.channel.label, control.type, asp )
 {
 

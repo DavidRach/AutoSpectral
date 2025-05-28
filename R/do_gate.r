@@ -506,7 +506,7 @@ do.gate <- function( gate.data, viability.gate, large.gate,
 
     # prevent warnings about some gate.bound$density.max values being offscale
     suppressWarnings(
-      plot.gate.define( samp, gate.data, gate.marker, gate.bound,
+      gate.define.plot( samp, gate.data, gate.marker, gate.bound,
                              gate.region, gate.population, scatter.and.channel.label,
                              asp )
     )

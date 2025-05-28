@@ -1,7 +1,7 @@
 # plot_gate_define.r
 
 
-#' @title Plot Gate Define
+#' @title Gate Definition Plot
 #'
 #' @description This function plots the gate during the definition step,
 #'     including boundaries and regions.
@@ -28,7 +28,7 @@
 
 
 
-plot.gate.define <- function( samp, gate.data, gate.marker, gate.bound,
+gate.define.plot <- function( samp, gate.data, gate.marker, gate.bound,
     gate.region, gate.population, scatter.and.channel.label, asp )
 {
 

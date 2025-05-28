@@ -1,9 +1,4 @@
-# plotting function for spectra
-
-# needs ifelse for case spectra.n = 1
-
-
-#' @title Plot Fluorophore Spectra
+#' @title Plot Fluorophore Spectra Traces
 #'
 #' @description This function plots the fluorophore spectra, optionally splitting
 #'     by excitation lasers, and saves the plots as JPEG files.
@@ -27,7 +22,7 @@
 #' @export
 
 
-plot.spectra <- function( spectral.matrix, flow.control, asp,
+spectral.trace <- function( spectral.matrix, flow.control, asp,
                          plot.title = "Fluorophore Spectra",
                          plot.dir, split.lasers = TRUE ){
 

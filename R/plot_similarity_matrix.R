@@ -1,6 +1,6 @@
 # plot_similarity_matrix.r
 
-#' @title Plot Similarity Matrix
+#' @title Similarity Matrix Plot
 #'
 #' @description This function plots the similarity matrix as a heatmap and saves
 #'     it as a JPEG file. It also calculates and displays the complexity index.
@@ -17,7 +17,7 @@
 #' @return Saves the heatmap plot as a JPEG file in the specified directory.
 #' @export
 
-plot.similarity.matrix <- function( spectra, asp, plot.prefix = NULL ){
+similarity.matrix.plot <- function( spectra, asp, plot.prefix = NULL ){
 
   if ( !is.null( plot.prefix ) ){
     similarity.heatmap.filename <- paste0( plot.prefix, " ",

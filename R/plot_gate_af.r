@@ -1,8 +1,8 @@
 # plot_gate_af.r
 
-#' @title Plot Gate with Intermediate Steps
+#' @title Plot Autofluorescence Gate
 #'
-#' @description This function plots the gate, including intermediate steps,
+#' @description This function plots the AF gate, including intermediate steps,
 #'     using ggplot2 and other necessary packages.
 #'
 #' @importFrom ggplot2 ggplot aes scale_x_continuous scale_y_continuous
@@ -25,7 +25,7 @@
 
 
 
-plot.gate.af <- function( samp, gate.data, gate.bound, gate.region,
+gate.af.plot <- function( samp, gate.data, gate.bound, gate.region,
                           gate.population, asp )
 {
     gate.data.ggp <- data.frame(

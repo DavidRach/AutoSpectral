@@ -251,7 +251,7 @@ do.gate.af <- function( gate.data, samp, asp ) {
   gate.population <- list( boundary = gate.population.boundary )
 
   if ( ! is.null( asp$figure.clean.control.dir ) )
-    plot.gate.af( samp, gate.data, gate.bound, gate.region,
+    gate.af.plot( samp, gate.data, gate.bound, gate.region,
                   gate.population, asp )
 
   if ( asp$af.gate.bound.strict ) {

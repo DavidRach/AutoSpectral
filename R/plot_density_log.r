@@ -24,7 +24,7 @@
 
 
 
-plot.density.log <- function( x.data, x.label, plot.file.path, asp )
+refine.unmixing.log.plot <- function( x.data, x.label, plot.file.path, asp )
 {
     # get values avoiding matrix diagonal
     x.data.n <- nrow( x.data )
