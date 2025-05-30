@@ -16,7 +16,8 @@ fix.my.unmix(
   unstained.threshold = 0.99,
   unstained.margin = 1.3,
   convergence.threshold = 0.03,
-  biexp = TRUE
+  biexp = FALSE,
+  rs.lambda = 0.1
 )
 }
 \arguments{
@@ -53,11 +54,14 @@ on the unstained sample in that channel).}
 \item{unstained.margin}{Numeric, default 1.3. The fudge factor above the
 unstained.threshold.}
 
-\item{convergence.threshold}{Numeric, default 0.01. If the algorithm reaches
+\item{convergence.threshold}{Numeric, default 0.03. If the algorithm reaches
 this minimal level of spillover error, it will stop.}
 
 \item{biexp}{Logical indicating whether to apply biexponential transformation
-(default is TRUE).}
+(default is FALSE).}
+
+\item{rs.lambda}{Numeric, default 0.1. Controls how rapidly the spillover
+corrections are applied in order to reach convergence.}
 }
 \value{
 A list containing the corrected spillover matrix (fluorophores x fluorophores),

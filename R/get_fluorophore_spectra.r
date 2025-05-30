@@ -171,6 +171,8 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
 
     spectral.trace( fluorophore.spectra.plot, flow.control, asp, plot.title,
                  asp$figure.spectra.dir )
+    spectral.heatmap( fluorophore.spectra.plot, asp, plot.prefix,
+                      output.dir = asp$figure.spectra.dir )
   }
 
   if ( !is.null( asp$table.spectra.dir ) ) {

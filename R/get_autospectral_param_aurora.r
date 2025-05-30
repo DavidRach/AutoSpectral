@@ -49,6 +49,9 @@ get.autospectral.param.aurora <- function( autosp.param )
 
   autosp.param$data.step <- 5e5
 
+  autosp.param$large.gate.scaling.x <- 1.5
+  autosp.param$large.gate.scaling.y <- 4.5
+
   # spectral parameters
 
   autosp.param$plot.gate.factor <- 2

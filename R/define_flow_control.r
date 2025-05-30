@@ -104,13 +104,12 @@ define.flow.control <- function( control.dir, control.def.file, asp,
     control.table$is.viability[ is.na( control.table$is.viability )] <- FALSE
     control.table$large.gate[ is.na( control.table$large.gate )] <- FALSE
 
-    # this needs to be done only for cases where a universal negative is desired
     negative.types <- data.frame( negative = control.table$universal.negative,
                                   large.gate = control.table$large.gate,
                                   viability = control.table$is.viability )
 
     unique.neg <- unique( negative.types )
-    unique.neg <- unique.neg[ unique.neg$negative == TRUE, , drop = FALSE ]
+    #unique.neg <- unique.neg[ unique.neg$negative == TRUE, , drop = FALSE ]
 
     if ( nrow( unique.neg != 0 ) ) {
       # match samples with corresponding negative by matching gates
@@ -133,7 +132,7 @@ define.flow.control <- function( control.dir, control.def.file, asp,
     }
 
     # define gates needed
-    if (asp$verbose )
+    if ( asp$verbose )
       message( "\033[34m Determining the gates that will be needed \033[0m" )
 
     gate.types <- data.frame( type = control.table$control.type,
@@ -143,7 +142,7 @@ define.flow.control <- function( control.dir, control.def.file, asp,
     sample.matches <- apply( gate.types, 1, function( row ) {
       match( TRUE, apply( unique.gates, 1,
                           function( unique.row ) all( row == unique.row ) ) )
-    })
+    } )
 
     control.table$gate <- sample.matches
     flow.gate <- sample.matches

@@ -3,9 +3,12 @@
 #' @title Unmix FCS Data
 #' @description This function performs spectral unmixing on FCS data using
 #'     various methods.
+#'
 #' @importFrom flowCore read.FCS keyword exprs flowFrame parameters pData
 #' @importFrom flowCore write.FCS parameters<-
 #' @importFrom Biobase AnnotatedDataFrame
+#' @importFrom utils packageVersion
+#'
 #' @param fcs.file A character string specifying the path to the FCS file.
 #' @param spectra A matrix containing the spectral data.
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
@@ -24,6 +27,8 @@
 #'     data in the output. Default is FALSE.
 #' @param include.imaging A logical value indicating whether to include imaging
 #'     parameters in the output. Default is FALSE.
+#' @param divergence.threshold Numeric. Used for FastPoisson only. Threshold to
+#'     trigger reversion towards WLS unmixing when Poisson result diverge.
 #'
 #' @return None. The function writes the unmixed FCS data to a file.
 #' @export
@@ -35,7 +40,8 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
                        output.dir = NULL,
                        file.suffix = NULL,
                        include.raw = FALSE,
-                       include.imaging = FALSE ){
+                       include.imaging = FALSE,
+                       divergence.threshold = 1e4 ){
 
   if ( is.null( output.dir ) ){
     output.dir <- asp$unmixed.fcs.dir
@@ -88,7 +94,8 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
                                                                      spectra,
                                                                      maxit = asp$rlm.iter.max,
                                                                      tol = 1e-6,
-                                                                     n_threads = asp$worker.process.n ),
+                                                                     n_threads = asp$worker.process.n,
+                                                                     divergence.threshold = divergence.threshold ),
                                error = function( e ) {
                                  warning( "FastPoisson failed, falling back to standard Poisson: ", e$message )
                                  unmix.poisson( spectral.exprs, spectra, asp )
@@ -135,14 +142,21 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
 
   parameters( flow.frame ) <- AnnotatedDataFrame( params )
 
+  # update keywords
+  #fcs.keywords[[ "$FIL" ]] <- file.name
+  #fcs.keywords[[ "$UNMIXINGMETHOD" ]] <- method
+  #fcs.keywords[[ "$SPECTRA" ]] <- table( spectra )
+  #fcs.keywords[[ "$AUTOSPECTRAL" ]] <- packageVersion( "AutoSpectral" )
   keyword( flow.frame ) <- fcs.keywords
   keyword( flow.frame )[[ "$FIL" ]] <- file.name
+  keyword( flow.frame )[[ "$UNMIXINGMETHOD" ]] <- method
+  keyword( flow.frame )[[ "$AUTOSPECTRAL" ]] <- packageVersion( "AutoSpectral" )
 
   for (i in seq_along(colnames(unmixed.data))) {
     keyword(flow.frame)[[paste0("$P", i, "N")]] <- colnames(unmixed.data)[i]
     keyword(flow.frame)[[paste0("$P", i, "S")]] <- colnames(unmixed.data)[i]
   }
 
-  write.FCS( flow.frame, filename = file.path( output.dir, file.name ) )
+  suppressWarnings( write.FCS( flow.frame, filename = file.path( output.dir, file.name ) ) )
 
 }

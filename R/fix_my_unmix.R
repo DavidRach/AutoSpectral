@@ -33,10 +33,12 @@
 #'     on the unstained sample in that channel).
 #' @param unstained.margin Numeric, default 1.3. The fudge factor above the
 #'     unstained.threshold.
-#' @param convergence.threshold Numeric, default 0.01. If the algorithm reaches
+#' @param convergence.threshold Numeric, default 0.03. If the algorithm reaches
 #'     this minimal level of spillover error, it will stop.
 #' @param biexp Logical indicating whether to apply biexponential transformation
-#'     (default is TRUE).
+#'     (default is FALSE).
+#' @param rs.lambda Numeric, default 0.1. Controls how rapidly the spillover
+#'     corrections are applied in order to reach convergence.
 #'
 #' @return A list containing the corrected spillover matrix (fluorophores x fluorophores),
 #'     the corrected compensation matrix and the corrected spectra for unmixing
@@ -49,9 +51,10 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
                           flow.control, asp, large.gate = TRUE,
                           max.iter = 20, downsample = 20000,
                           unstained.threshold = 0.99, unstained.margin = 1.3,
-                          convergence.threshold = 0.03, biexp = TRUE ) {
+                          convergence.threshold = 0.03, biexp = FALSE,
+                          rs.lambda = 0.1 ) {
 
-  if ( ! dir.exists( asp$fix.unmixing.dir ) )
+  if ( !dir.exists( asp$fix.unmixing.dir ) )
     dir.create( asp$fix.unmixing.dir )
 
   if ( biexp ) {
@@ -110,7 +113,7 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
 
   # calculate nth percentiles across all channels
   unstained.thresholds <- apply( unstained.unmixed, 2, function( col )
-    quantile( col , probs = unstained.threshold ) )
+    quantile( col, probs = unstained.threshold ) )
 
   # import fully stained sample
   message( "\033[32mReading fully stained raw data.\033[0m" )
@@ -195,8 +198,7 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
           channel.thr <- unstained.thresholds[ fl ] * unstained.margin
           channel.spread <- spread.estimate[ channel, fl ]
 
-          channel.expr.idx <- which( channel.expr <
-                                       ( channel.thr + peak.channel.expr * channel.spread ) )
+          channel.expr.idx <- which( channel.expr < ( channel.thr + peak.channel.expr * channel.spread ) )
 
           channel.expr <- channel.expr[ channel.expr.idx ]
           peak.channel.data <- peak.channel.expr[ channel.expr.idx ]
@@ -239,19 +241,19 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
     rs.delta <- sd( slope.error )
     rs.delta.max <- max( abs( slope.error ) )
 
-    if ( rs.delta.prev >= 0 )
+    if ( rs.delta.prev >= 0 ) {
       rs.delta.history[ rs.iter %% asp$rs.delta.history.n + 1 ] <-
-      rs.delta - rs.delta.prev
-    else
+        rs.delta - rs.delta.prev
+    } else {
       rs.delta.history[ rs.iter %% asp$rs.delta.history.n + 1 ] <- -1
+    }
 
     rs.delta.change <- mean( rs.delta.history )
 
     rs.convergence.log[ rs.iter + 1, ] <- list( rs.iter, rs.delta, rs.delta.max,
                                                 rs.delta.change )
 
-    if ( asp$verbose )
-    {
+    if ( asp$verbose ) {
       message( sprintf( "iter %0*d, delta %g, delta.max %g, delta.change %g",
         rs.iter.width, rs.iter, rs.delta, rs.delta.max, rs.delta.change ) )
     }
@@ -276,7 +278,7 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
     rs.convergence <- rs.convergence.now
 
     # update spillover matrix
-    spillover.update <- slope.error %*% spillover.curr * 0.1
+    spillover.update <- slope.error %*% spillover.curr * rs.lambda
 
     rs.iter <- rs.iter + 1
   }
@@ -323,10 +325,22 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
                   spread.estimate, output.dir = asp$fix.unmixing.dir )
 
   # back convert to unmixing spectra
-  spectra.update.reverted <- spillover.curr %*% spectra
+  M <- t( spectra )
+  unmixing.matrix <- solve( t( M ) %*% M ) %*% t( M )
+
+  unmixing.error.pseudo.inv <- solve( t( spillover.curr )
+                                      %*% spillover.curr ) %*% t( spillover.curr )
+
+  unmixing.matrix.update <- t( t( unmixing.matrix ) %*% unmixing.error.pseudo.inv )
+
+  spectra.update.reverted <- solve( unmixing.matrix.update %*%
+                                      t( unmixing.matrix.update) ) %*% unmixing.matrix.update
+
+  # spectra.update.reverted <- spillover.curr %*% spectra
 
   spectra.update.reverted <- t( apply( spectra.update.reverted,
                                        1, function( x ) x/max( x ) ) )
+
   write.csv( spectra.update.reverted, file = file.path( asp$fix.unmixing.dir,
                                                     asp$fix.spectra.filename ) )
 

@@ -14,7 +14,8 @@ unmix.fcs(
   output.dir = NULL,
   file.suffix = NULL,
   include.raw = FALSE,
-  include.imaging = FALSE
+  include.imaging = FALSE,
+  divergence.threshold = 10000
 )
 }
 \arguments{
@@ -45,6 +46,9 @@ data in the output. Default is FALSE.}
 
 \item{include.imaging}{A logical value indicating whether to include imaging
 parameters in the output. Default is FALSE.}
+
+\item{divergence.threshold}{Numeric. Used for FastPoisson only. Threshold to
+trigger reversion towards WLS unmixing when Poisson result diverge.}
 }
 \value{
 None. The function writes the unmixed FCS data to a file.
