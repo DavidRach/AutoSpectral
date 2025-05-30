@@ -29,6 +29,12 @@
 #'     parameters in the output. Default is FALSE.
 #' @param divergence.threshold Numeric. Used for FastPoisson only. Threshold to
 #'     trigger reversion towards WLS unmixing when Poisson result diverge.
+#' @param divergence.handling String. How to handle divergent cells from Poisson
+#'     IRLS. Options are "NonNeg" (non-negativity will be enforced), "WLS" (revert
+#'     to WLS intial unmix) or "Balance" (WLS and NonNeg will be averaged).
+#'     Default is "Balance".
+#' @param balance.weight Numeric. Weighting to average non-convergent cells. Used
+#'     for "Balance" option under divergence.handling. Default is 0.5.
 #'
 #' @return None. The function writes the unmixed FCS data to a file.
 #' @export
@@ -41,7 +47,9 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
                        file.suffix = NULL,
                        include.raw = FALSE,
                        include.imaging = FALSE,
-                       divergence.threshold = 1e4 ){
+                       divergence.threshold = 1e4,
+                       divergence.handling = "Balance",
+                       balance.weight = 0.5 ){
 
   if ( is.null( output.dir ) ){
     output.dir <- asp$unmixed.fcs.dir
@@ -95,7 +103,9 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
                                                                      maxit = asp$rlm.iter.max,
                                                                      tol = 1e-6,
                                                                      n_threads = asp$worker.process.n,
-                                                                     divergence.threshold = divergence.threshold ),
+                                                                     divergence.threshold = divergence.threshold,
+                                                                     divergence.handling = divergence.handling,
+                                                                     balance.weight = balance.weight ),
                                error = function( e ) {
                                  warning( "FastPoisson failed, falling back to standard Poisson: ", e$message )
                                  unmix.poisson( spectral.exprs, spectra, asp )

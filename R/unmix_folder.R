@@ -26,6 +26,14 @@
 #'     Default is FALSE.
 #' @param include.imaging Logical indicating whether to include imaging data in
 #'     the output (relevant for S8 and A8). Default is FALSE.
+#' @param divergence.threshold Numeric. Used for FastPoisson only. Threshold to
+#'     trigger reversion towards WLS unmixing when Poisson result diverge.
+#' @param divergence.handling String. How to handle divergent cells from Poisson
+#'     IRLS. Options are "NonNeg" (non-negativity will be enforced), "WLS" (revert
+#'     to WLS intial unmix) or "Balance" (WLS and NonNeg will be averaged).
+#'     Default is "Balance".
+#' @param balance.weight Numeric. Weighting to average non-convergent cells. Used
+#'     for "Balance" option under divergence.handling. Default is 0.5.
 #'
 #' @return None. Saves the unmixed FCS files to the specified output directory.
 #' @export
@@ -37,7 +45,10 @@ unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
                           output.dir = NULL,
                           file.suffix = NULL,
                           include.raw = FALSE,
-                          include.imaging = FALSE ){
+                          include.imaging = FALSE,
+                          divergence.threshold = 1e4,
+                          divergence.handling = "Balance",
+                          balance.weight = 0.5 ){
 
   if ( is.null( output.dir ) ){
     output.dir <- asp$unmixed.fcs.dir
@@ -56,6 +67,7 @@ unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
 
   lapply.function( files.to.unmix, FUN = unmix.fcs, spectra, asp, flow.control,
                    method, weights, output.dir, file.suffix, include.raw,
-                   include.imaging )
+                   include.imaging, divergence.threshold, divergence.handling,
+                   balance.weight )
 
 }
