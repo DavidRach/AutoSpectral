@@ -4,6 +4,7 @@
 # AutoSpectral
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
 AutoSpectral is AutoSpill updated for the spectral flow era.
@@ -20,16 +21,27 @@ cell-based controls as easy as compensation beads. This should give you
 better accuracy and precision in your spectral definition and thus in
 your unmixing.
 
-At the moment, the following cytometers are supported: -Cytek
-Aurora/Northern Lights (“aurora”) -Sony ID7000 (“id7000”) -BD
-FACSDiscoverS8 (“s8”) -BD FACSDiscoverA8 (“a8”) -Agilent NovoCyte Opteon
-(“opteon”)
+At the moment, the following cytometers are supported:
+
+- Cytek Aurora/Northern Lights (“aurora”)
+- Sony ID7000 (“id7000”)
+- BD FACSDiscoverS8 (“s8”)
+- BD FACSDiscoverA8 (“a8”)
+- Agilent NovoCyte Opteon (“opteon”)
 
 There will likely be some unresolved issues with plotting data from
-certain configurations of the ID7000 and Aurora.
+certain configurations of the ID7000 and Aurora. Please note that FCS
+3.2 files from the S8 and A8 cytometers are not fully supported in
+flowCore. You will receive warnings, but things should still work.
 
 If you want to use data from another cytometer and are wiling to provide
 files for establishing the workflow, contact the author/maintainer.
+
+This work has received funding from the KU Leuven C1 program, the
+European Union’s Horizon 2020 research and innovation programme under
+grant agreement No 874707 (EXIMIOUS), Wellcome Investigator Award,
+222442/A/21/Z and UKRI Proactive Vaccinology Award, MR/Y004450/1
+(IMMPROVE).
 
 ## Installation
 
