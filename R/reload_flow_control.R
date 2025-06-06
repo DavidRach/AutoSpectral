@@ -3,17 +3,20 @@
 #' @title Reload Flow Control Information
 #'
 #' @description This function reloads essential information from control files
-#'     to permit rapid unmixing at a later date.
+#' to permit rapid unmixing at a later date.
 #'
 #' @importFrom utils read.csv
 #' @importFrom dplyr filter
 #'
 #' @param control.dir file path to the single stained control fcs files
-#' @param control.def.file csv file defining the single color control file names,
-#'     fluorophores they represent, marker names, peak channels and gating requirements.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param control.def.file csv file defining the single color control file
+#' names, fluorophores they represent, marker names, peak channels and
+#' gating requirements.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
 #'
 #' @return A list containing the reloaded flow control information.
+#'
 #' @export
 
 reload.flow.control <- function( control.dir, control.def.file, asp ) {

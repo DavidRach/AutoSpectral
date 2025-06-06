@@ -4,7 +4,7 @@
 #' @title Get Universal Negative Control
 #'
 #' @description This function identifies and processes the universal negative
-#'     control for a given sample, including scatter matching and plotting.
+#' control for a given sample, including scatter matching and plotting.
 #'
 #' @importFrom stats quantile median mad
 #' @importFrom KernSmooth bkde2D dpik
@@ -14,19 +14,22 @@
 #' @param clean.expr.data List containing cleaned expression data.
 #' @param samp Sample identifier.
 #' @param universal.negatives Named vector mapping samples to their universal
-#'     negatives.
+#' negatives.
 #' @param scatter.param Vector of scatter parameters.
 #' @param peak.channels Named vector mapping samples to their peak channels.
 #' @param downsample Logical indicating whether to downsample the data.
 #' @param negative.n Number of negative events to select.
 #' @param positive.n Number of positive events to select.
 #' @param spectral.channel Vector of spectral channel names.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
 #' @param control.type Named vector mapping samples to their control types.
 #' @param scatter.match Logical indicating whether to perform scatter matching.
+#' Default is `TRUE`.
 #'
 #' @return A data frame containing the selected positive and scatter-matched
-#'     negative events.
+#' negative events.
+#'
 #' @export
 
 

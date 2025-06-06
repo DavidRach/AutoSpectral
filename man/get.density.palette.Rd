@@ -9,7 +9,8 @@ get.density.palette(dens, asp)
 \arguments{
 \item{dens}{A numeric vector representing the density distribution.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 }
 \value{
 A vector of colors representing the density palette.

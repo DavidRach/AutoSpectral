@@ -6,11 +6,11 @@
 #' A quick and dirty method for writing a FlowJo-compatible compensation matrix
 #' file from the spillover matrix.
 #'
-#' @param spillover.matrix The spillover matrix (fluorophores x fluorophores).
+#' @param spillover.matrix The spillover matrix, fluorophores x fluorophores.
 #' @param flowjo.file.name The path and filename given to the generated FlowJo
-#'     compensation file.
+#' compensation file.
 #'
-#' @return No return. Write the xml .mtx file.
+#' @return No return. Writes the XML .mtx file.
 #'
 #' @export
 

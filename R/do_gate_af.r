@@ -3,13 +3,15 @@
 
 #' Perform Gating on Autofluorescence Parameters
 #'
-#' This function returns a vector with the indexes of events inside the initial gate on
-#'     autofluorescence parameters. It proceeds through several steps to define the gate boundaries
-#'     and identify density maxima using numerical search and Voronoi tessellations.
+#' This function returns a vector with the indexes of events inside the initial
+#' gate on autofluorescence parameters. It proceeds through several steps to
+#' define the gate boundaries and identify density maxima using numerical
+#' search and Voronoi tessellations.
 #'
 #' @title Perform Gating on Autofluorescence Parameters
+#'
 #' @description Returns a vector with the indexes of events inside the initial
-#'     gate on autofluorescence parameters.
+#' gate on autofluorescence parameters.
 #'
 #' @importFrom KernSmooth bkde2D
 #' @importFrom deldir deldir tile.list which.tile
@@ -18,9 +20,11 @@
 #'
 #' @param gate.data A data frame containing the gate data.
 #' @param samp A sample identifier.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
-#'     A list of essential parameters.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
+#'
 #' @return A vector with the indexes of events inside the initial gate.
+#'
 #' @export
 
 

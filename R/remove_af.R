@@ -3,8 +3,8 @@
 
 #' @title Remove Autofluorescence Contamination
 #'
-#' @description This function removes autofluorescence contamination from a sample,
-#'     using the specified parameters and settings.
+#' @description This function removes autofluorescence contamination from a
+#' sample, using the specified parameters and settings.
 #'
 #' @importFrom sp point.in.polygon
 #'
@@ -12,11 +12,14 @@
 #' @param samp Sample identifier.
 #' @param af.artefact List containing autofluorescence artefacts.
 #' @param spectral.channel Vector of spectral channel names.
-#' @param universal.negative Named vector mapping samples to their universal negatives.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param universal.negative Named vector mapping samples to their
+#' universal negatives.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
 #'
-#' @return A matrix containing the expression data with autofluorescence
-#'     removed for the sample.
+#' @return A matrix containing the expression data with autofluorescent events
+#' removed for the sample.
+#'
 #' @export
 
 

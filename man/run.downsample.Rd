@@ -24,12 +24,13 @@ run.downsample(
 
 \item{positive.n}{Number of positive events to select.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 }
 \value{
 A list containing the downsampled expression data for each sample.
 }
 \description{
-This function runs the downsampling process on a list of samples,
-    using the specified peak channels and parameters.
+This function runs the downsampling process on a list of
+samples, using the specified peak channels and parameters.
 }

@@ -22,15 +22,17 @@ remove.af(
 
 \item{spectral.channel}{Vector of spectral channel names.}
 
-\item{universal.negative}{Named vector mapping samples to their universal negatives.}
+\item{universal.negative}{Named vector mapping samples to their
+universal negatives.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 }
 \value{
-A matrix containing the expression data with autofluorescence
-    removed for the sample.
+A matrix containing the expression data with autofluorescent events
+removed for the sample.
 }
 \description{
-This function removes autofluorescence contamination from a sample,
-    using the specified parameters and settings.
+This function removes autofluorescence contamination from a
+sample, using the specified parameters and settings.
 }

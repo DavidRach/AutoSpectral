@@ -7,13 +7,13 @@
 write.flowjo.mtx(spillover.matrix, flowjo.file.name)
 }
 \arguments{
-\item{spillover.matrix}{The spillover matrix (fluorophores x fluorophores).}
+\item{spillover.matrix}{The spillover matrix, fluorophores x fluorophores.}
 
 \item{flowjo.file.name}{The path and filename given to the generated FlowJo
 compensation file.}
 }
 \value{
-No return. Write the xml .mtx file.
+No return. Writes the XML .mtx file.
 }
 \description{
 A quick and dirty method for writing a FlowJo-compatible compensation matrix

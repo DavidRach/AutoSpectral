@@ -1,14 +1,22 @@
 # sample_fcs_file.r
 
 #' @title Sample FCS File
-#' @description This function samples events from an FCS file based on specified
-#'     parameters and downsampling criteria.
+#'
+#' @description This function samples events from an FCS file based on
+#' specified parameters and downsampling criteria.
+#'
 #' @importFrom flowCore read.FCS exprs
+#'
 #' @param file.name A character string specifying the name of the FCS file.
-#' @param control.dir A character string specifying the directory containing the control FCS file.
-#' @param downsample.n A numeric value indicating the number of events to downsample.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param control.dir A character string specifying the directory containing
+#' the control FCS file.
+#' @param downsample.n A numeric value indicating the number of events to
+#' downsample.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
+#'
 #' @return A matrix containing the sampled events from the FCS file.
+#'
 #' @export
 
 

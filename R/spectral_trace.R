@@ -1,3 +1,5 @@
+# spectral_trace.r
+
 #' @title Plot Fluorophore Spectra Traces
 #'
 #' @description This function plots the fluorophore spectra, optionally splitting
@@ -26,7 +28,7 @@ spectral.trace <- function( spectral.matrix, flow.control, asp,
                          plot.title = "Fluorophore Spectra",
                          plot.dir, split.lasers = TRUE ){
 
-  colnames( spectral.matrix ) <- flow.control$spectral.channel
+  #colnames( spectral.matrix ) <- flow.control$spectral.channel
   fluor.spectra.plotting <- data.frame( spectral.matrix, check.names = FALSE )
   fluor.spectra.plotting$Fluorophore <- rownames( fluor.spectra.plotting )
 
@@ -35,6 +37,10 @@ spectral.trace <- function( spectral.matrix, flow.control, asp,
 
   data.path <- system.file( "extdata", "fluorophore_database.csv",
                             package = "AutoSpectral" )
+
+  if ( data.path == "" )
+    stop( "fluorophore_database.csv not found in extdata." )
+
   fluorophore.database <- read.csv( data.path )
   fluorophore.database[ fluorophore.database == "" ] <- NA
   lasers <- setNames( fluorophore.database$excitation.laser, fluorophore.database$fluorophore )

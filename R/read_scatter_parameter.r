@@ -3,13 +3,15 @@
 #' @title Read Scatter Parameters
 #'
 #' @description This function reads scatter parameters from a specified file or
-#'     uses default scatter parameters if the file is not available.
+#' uses default scatter parameters if the file is not available.
 #'
 #' @importFrom utils read.csv
 #'
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
 #'
 #' @return A vector of scatter parameters.
+#'
 #' @export
 
 read.scatter.parameter <- function( asp )

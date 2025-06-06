@@ -39,17 +39,19 @@ negatives.}
 
 \item{spectral.channel}{Vector of spectral channel names.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 
 \item{control.type}{Named vector mapping samples to their control types.}
 
-\item{scatter.match}{Logical indicating whether to perform scatter matching.}
+\item{scatter.match}{Logical indicating whether to perform scatter matching.
+Default is \code{TRUE}.}
 }
 \value{
 A data frame containing the selected positive and scatter-matched
-    negative events.
+negative events.
 }
 \description{
 This function identifies and processes the universal negative
-    control for a given sample, including scatter matching and plotting.
+control for a given sample, including scatter matching and plotting.
 }

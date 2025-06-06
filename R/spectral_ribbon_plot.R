@@ -1,8 +1,10 @@
 # spectral_ribbon_plot.r
 
-#' @title Generate Spectral Ribbon Plots
+#' @title Spectral Ribbon Plot
+#'
 #' @description This function generates spectral ribbon plots for positive and
-#'     negative expression data.
+#' negative expression data.
+#'
 #' @importFrom tidyr pivot_longer
 #' @importFrom ggplot2 ggplot aes scale_y_continuous geom_bin2d facet_wrap xlab
 #' @importFrom ggplot2 ylab scale_fill_gradientn theme_minimal theme element_text
@@ -15,12 +17,16 @@
 #' @param spectral.channel A character vector specifying the spectral channels.
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
 #' @param fluor.name A character string specifying the fluorophore name.
-#' @param plot.prefix A character string to prefix the plot file name. Default is NULL.
+#' @param plot.prefix A character string to prefix the plot file name.
+#' Default is `NULL`
 #' @param af A logical value indicating whether autofluorescence removal is
-#'     being performed. Default is FALSE.
+#' being performed. Default is `FALSE`
 #' @param removed.data A matrix containing the removed data, if applicable.
-#'     Default is NULL.
-#' @return None. The function saves the generated spectral ribbon plot to a file.
+#' Default is `NULL`.
+#'
+#' @return None. The function saves the generated spectral ribbon plot to
+#' a file.
+#'
 #' @export
 
 spectral.ribbon.plot <- function( pos.expr.data, neg.expr.data,

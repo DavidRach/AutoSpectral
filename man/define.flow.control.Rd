@@ -7,54 +7,54 @@
 define.flow.control(control.dir, control.def.file, asp, gate = TRUE)
 }
 \arguments{
-\item{control.dir}{file path to the single stained control fcs files}
+\item{control.dir}{File path to the single-stained control FCS files.}
 
-\item{control.def.file}{csv file defining the single color control file names,
-fluorophores they represent, marker names, peak channels and gating requirements.}
+\item{control.def.file}{CSV file defining the single-color control file names,
+fluorophores they represent, marker names, peak channels, and gating requirements.}
 
-\item{asp}{The AutoSpectral parameter list defined using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list defined
+using \code{get.autospectral.param}.}
 
-\item{gate}{Logical, default is TRUE. Not currently in use. To be implemented
+\item{gate}{Logical, default is \code{TRUE}. Not currently in use. To be implemented
 to allow pre-gated data to be read in without applying additional gating here.}
 }
 \value{
-flow.control
-    Returns the flow.control list with the following components:
-\describe{
-  \item{filename}{Names of the single color control files.}
-  \item{fluorophore}{Corresponding fluorophores used in the experiment.}
-  \item{antigen}{Corresponding markers used in the experiment.}
-  \item{control.type}{Type of control used (beads or cells).}
-  \item{universal.negative}{Corresponding universal negative for each control.}
-  \item{viability}{Logical factor; whether a control represents a viability marker.}
-  \item{large.gate}{Logical factor; large gate setting.}
-  \item{autof.channel.idx}{Index of the autofluorescence marker channel.}
-  \item{event.number.width}{Width of the event number.}
-  \item{expr.data.max}{Maximum expression data value.}
-  \item{expr.data.max.ceil}{Ceiling of the maximum expression data value.}
-  \item{expr.data.min}{Minimum expression data value.}
-  \item{channel}{Preliminary peak channels for the fluorophores.}
-  \item{channel.n}{Number of channels.}
-  \item{spectral.channel}{Spectral channel information.}
-  \item{spectral.channel.n}{Number of spectral channels.}
-  \item{sample}{Sample names (fluorophores).}
-  \item{scatter.and.channel}{FSC, SSC and peak channel information.}
-  \item{scatter.and.channel.label}{Labels for scatter and channel.}
-  \item{scatter.and.channel.spectral}{FSC, SSC and spectral channels.}
-  \item{scatter.parameter}{Scatter parameters used for gating.}
-  \item{event}{Event factor.}
-  \item{event.n}{Number of events.}
-  \item{event.sample}{Sample information for events. Links events to samples.}
-  \item{event.type}{Type of events.}
-  \item{expr.data}{Expression data. The data to be used for extracting spectra.}
+A list (\code{flow.control}) with the following components:
+\itemize{
+\item \code{filename}: Names of the single-color control files.
+\item \code{fluorophore}: Corresponding fluorophores used in the experiment.
+\item \code{antigen}: Corresponding markers used in the experiment.
+\item \code{control.type}: Type of control used (beads or cells).
+\item \code{universal.negative}: Corresponding universal negative for each control.
+\item \code{viability}: Logical factor; whether a control represents a viability marker.
+\item \code{large.gate}: Logical factor; large gate setting.
+\item \code{autof.channel.idx}: Index of the autofluorescence marker channel.
+\item \code{event.number.width}: Width of the event number.
+\item \code{expr.data.max}: Maximum expression data value.
+\item \code{expr.data.max.ceil}: Ceiling of the maximum expression data value.
+\item \code{expr.data.min}: Minimum expression data value.
+\item \code{channel}: Preliminary peak channels for the fluorophores.
+\item \code{channel.n}: Number of channels.
+\item \code{spectral.channel}: Spectral channel information.
+\item \code{spectral.channel.n}: Number of spectral channels.
+\item \code{sample}: Sample names (fluorophores).
+\item \code{scatter.and.channel}: FSC, SSC, and peak channel information.
+\item \code{scatter.and.channel.label}: Labels for scatter and channel.
+\item \code{scatter.and.channel.spectral}: FSC, SSC, and spectral channels.
+\item \code{scatter.parameter}: Scatter parameters used for gating.
+\item \code{event}: Event factor.
+\item \code{event.n}: Number of events.
+\item \code{event.sample}: Sample information for events. Links events to samples.
+\item \code{event.type}: Type of events.
+\item \code{expr.data}: Expression data used for extracting spectra.
 }
 }
 \description{
-A complex function designed to convert the single-stained control fcs files
-    and the metadata control.def.file into a data structure for AutoSpectral.
-    Reads the metadata file and locates the corresponding fcs files.
-    Determines the gates that will be needed based on varibles such as beads/cells,
-    large.gate and viability.gate, and then creates gates for each combination.
-    Imports and gates the data in the fcs files.
-    Assigns various factors to track the data.
+A complex function designed to convert the single-stained control FCS files
+and the metadata \code{control.def.file} into a data structure for AutoSpectral.
+It reads the metadata file, locates the corresponding FCS files, determines
+the gates needed based on variables such as beads or cells, \code{large.gate}, and
+\code{viability.gate}, and then creates gates for each combination. It imports
+and gates the data in the FCS files and assigns various factors to track
+the data.
 }

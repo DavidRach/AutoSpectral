@@ -4,19 +4,22 @@
 #' @title Spectral Heatmap
 #'
 #' @description This function plots a spectral matrix as a heatmap and saves it
-#'     as a JPEG file.
+#' as a JPEG file.
 #'
 #' @importFrom ggplot2 ggplot aes geom_tile scale_fill_viridis_c theme_classic
 #' @importFrom ggplot2 coord_fixed element_text labs ggsave theme
 #' @importFrom tidyr pivot_longer
 #' @importFrom dplyr mutate %>%
 #'
-#' @param spectra Matrix or dataframe containing spectral data (fluorophores x detectors).
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param spectra Matrix or dataframe containing spectral data
+#' format: fluorophores x detectors.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
 #' @param plot.prefix Optional prefix for the plot filename.
 #' @param legend.label Character string that will appear on the heatmap legend.
 #' @param output.dir Optional output directory. Default is NULL, in which case
-#'     the spectra figure folder will be used.
+#' the spectra figure folder will be used.
+#'
 #' @return Saves the heatmap plot as a JPEG file in the specified directory.
 #'
 #' @export

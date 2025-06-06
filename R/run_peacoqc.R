@@ -1,16 +1,22 @@
 # run_peacoqc.r
 
 #' @title Run PeacoQC
+#'
 #' @description This function runs PeacoQC to remove flow fluctuation errors
-#'     from expression data using parallel processing if specified.
+#' from expression data using parallel processing if specified.
+#'
 #' @importFrom future plan multisession
 #' @importFrom future.apply future_lapply
 #' @importFrom flowWorkspace flowjo_biexp
+#'
 #' @param expr.data A list containing the expression data for each sample.
 #' @param spectral.channel A character vector specifying the spectral channels.
 #' @param all.channels A character vector specifying all channels.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
+#'
 #' @return A list containing the cleaned expression data for each sample.
+#'
 #' @export
 
 

@@ -1,10 +1,10 @@
-# plot_gate_define.r
+# gate_define_plot.r
 
 
 #' @title Gate Definition Plot
 #'
 #' @description This function plots the gate during the definition step,
-#'     including boundaries and regions.
+#' including boundaries and regions.
 #'
 #' @importFrom ggplot2 ggplot aes scale_x_continuous scale_y_continuous
 #' @importFrom ggplot2 scale_color_gradientn theme_bw theme element_line
@@ -20,10 +20,13 @@
 #' @param gate.bound List containing gate boundary information.
 #' @param gate.region List containing gate region information.
 #' @param gate.population List containing gate population information.
-#' @param scatter.and.channel.label Named vector mapping scatter and channel labels.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param scatter.and.channel.label Named vector mapping scatter and
+#' channel labels.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
 #'
 #' @return Saves the plot as a JPEG file in the specified directory.
+#'
 #' @export
 
 

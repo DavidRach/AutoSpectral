@@ -14,7 +14,8 @@ downsample.control(
 )
 }
 \arguments{
-\item{clean.expr.data}{A list containing cleaned expression data for each sample.}
+\item{clean.expr.data}{A list containing cleaned expression data for each
+sample.}
 
 \item{samp}{The sample identifier.}
 
@@ -24,18 +25,19 @@ downsample.control(
 
 \item{positive.n}{The number of positive events to select.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.
-A list of essential parameters.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 }
 \value{
 A matrix with the selected expression data.
 }
 \description{
 Downsamples control data by selecting a specified number of
-    positive and negative events based on peak channel values.
+positive and negative events based on peak channel values.
 }
 \details{
 Downsample Control Data
 
-This function downsamples control data by selecting a specified number of positive and negative events based on peak channel values.
+This function downsamples control data by selecting a specified number of
+positive and negative events based on peak channel values.
 }

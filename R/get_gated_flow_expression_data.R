@@ -3,14 +3,17 @@
 
 #' Get Gated Flow Expression Data
 #'
-#' This function retrieves gated flow cytometry expression data for specified samples,
-#'     removing out-of-range events and applying gating boundaries.
+#' This function retrieves gated flow cytometry expression data for specified
+#' samples, removing out-of-range events and applying gating boundaries.
 #'
 #' @title Get Gated Flow Expression Data
-#' @description Retrieves gated flow cytometry expression data for specified samples,
-#'     removing out-of-range events and applying gating boundaries.
+#'
+#' @description Retrieves gated flow cytometry expression data for specified
+#' samples, removing out-of-range events and applying gating boundaries.
+#'
 #' @importFrom flowCore read.FCS exprs
 #' @importFrom sp point.in.polygon
+#'
 #' @param samp The sample identifier.
 #' @param file.name A vector of file names for the samples.
 #' @param control.dir The directory containing the control files.
@@ -21,8 +24,11 @@
 #' @param gate.list A list of gating boundaries.
 #' @param scatter.param A vector of scatter parameters.
 #' @param scatter.and.channel.label A label for scatter and channel.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
+#'
 #' @return A matrix with the gated expression data.
+#'
 #' @export
 
 

@@ -23,12 +23,12 @@ fix.my.unmix(
 \arguments{
 \item{spectra}{The spectral matrix, fluorophores x detectors. In this case,
 it does not need to be a perfect match for the fluorophores in the fully
-stained sample and may, for instance, be pulled from a database for the
-same specification of cytometer.}
+stained sample and may, for instance, be pulled from a database for the same
+specification of cytometer.}
 
-\item{unstained.sample}{File path and name for a raw unstained sample, ideally
-acquired the same day, and ideally matching the autofluorescence of the
-fully stained sample.}
+\item{unstained.sample}{File path and name for a raw unstained sample,
+ideally acquired the same day, and ideally matching the autofluorescence of
+the fully stained sample.}
 
 \item{fully.stained.sample}{File path and name for a raw fully stained sample.}
 
@@ -37,38 +37,39 @@ fully stained sample.}
 \item{asp}{The AutoSpectral parameter list.}
 
 \item{large.gate}{Logical, whether to use a large gate for identifying cells.
-Default is TRUE and will work best for any panels containing any non-
-lymphocyte markers.}
+Default is \code{TRUE} and will work best for any panels containing any
+non-lymphocyte markers.}
 
-\item{max.iter}{Numeric. Limits the number of iterations performed by the algorithm
-to avoid overfitting.}
+\item{max.iter}{Numeric. Limits the number of iterations performed by the
+algorithm to avoid overfitting.}
 
-\item{downsample}{Logical/numeric. Controls downsampling to speed up the algorithm.
-If FALSE, no downsampling will be performed. If a numeric, that number of
-cells will be used for downsampling. For rare markers, use larger numbers.}
+\item{downsample}{Logical/numeric. Controls downsampling to speed up the
+algorithm. If \code{FALSE}, no downsampling will be performed. If a numeric,
+that number of cells will be used for downsampling. For rare markers,
+use larger numbers.}
 
-\item{unstained.threshold}{Numeric between 0 and 1, default 0.99. The threshold
-used to determine positivity in the fully stained sample (the percentile
-on the unstained sample in that channel).}
+\item{unstained.threshold}{Numeric between 0 and 1, default \verb{0.99.} The
+threshold used to determine positivity in the fully stained sample
+(the percentile on the unstained sample in that channel).}
 
-\item{unstained.margin}{Numeric, default 1.3. The fudge factor above the
+\item{unstained.margin}{Numeric, default \code{1.3}. The fudge factor above the
 unstained.threshold.}
 
-\item{convergence.threshold}{Numeric, default 0.03. If the algorithm reaches
-this minimal level of spillover error, it will stop.}
+\item{convergence.threshold}{Numeric, default \code{0.03}. If the algorithm
+reaches this minimal level of spillover error, it will stop.}
 
-\item{biexp}{Logical indicating whether to apply biexponential transformation
-(default is FALSE).}
+\item{biexp}{Logical indicating whether to apply biexponential
+transformation, default is \code{FALSE}.}
 
-\item{rs.lambda}{Numeric, default 0.1. Controls how rapidly the spillover
+\item{rs.lambda}{Numeric, default \code{0.1}. Controls how rapidly the spillover
 corrections are applied in order to reach convergence.}
 }
 \value{
-A list containing the corrected spillover matrix (fluorophores x fluorophores),
-    the corrected compensation matrix and the corrected spectra for unmixing
-    (fluorophores x detectors).
+A list containing the corrected spillover matrix
+(fluorophores x fluorophores), the corrected compensation matrix and the
+corrected spectra for unmixing (fluorophores x detectors).
 }
 \description{
 Attempt to automatically fix unmixing errors in fully stained
-    unmixed samples.
+unmixed samples.
 }

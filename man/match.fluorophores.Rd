@@ -17,5 +17,5 @@ A named vector of matched fluorophores for each control filename.
 }
 \description{
 This function matches control filenames to fluorophores in the
-    fluorophore database, including synonyms, and returns the matched fluorophores.
+fluorophore database, including synonyms, and returns the matched fluorophores.
 }

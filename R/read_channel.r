@@ -4,7 +4,7 @@
 #' @title Read Channel Information
 #'
 #' @description This function reads channel information from control files and
-#'     corrects channel names based on specified forbidden characters.
+#' corrects channel names based on specified forbidden characters.
 #'
 #' @importFrom utils read.csv read.table write.table
 #' @importFrom flowCore read.FCS
@@ -12,9 +12,11 @@
 #'
 #' @param control.dir Directory containing control files.
 #' @param control.def.file File containing control definitions.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
 #'
 #' @return A data frame containing the original and corrected channel names.
+#'
 #' @export
 
 read.channel <- function( control.dir, control.def.file, asp )

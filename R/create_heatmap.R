@@ -1,10 +1,10 @@
-# plot_heatmap.r
+# create_heatmap.r
 
 
 #' @title Create Heatmap Plot
 #'
 #' @description This function plots a matrix as a heatmap and saves it as a
-#'     JPEG file.
+#' JPEG file.
 #'
 #' @importFrom ggplot2 ggplot aes geom_tile scale_fill_viridis_c theme_minimal
 #' @importFrom ggplot2 coord_fixed element_text labs ggsave
@@ -13,22 +13,29 @@
 #' @importFrom rlang .data
 #'
 #' @param matrix Matrix or dataframe containing spectral data.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
-#' @param number.labels Logical indicating whether to add number labels to the heatmap.
-#' @param plot.prefix Optional prefix for the plot filename.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
+#' @param number.labels Logical indicating whether to add number labels to
+#' the heatmap.
+#' @param plot.prefix Optional prefix for the plot filename. Default is `NULL`,
+#' in which case the file will just be called `heatmap.jpg`
 #' @param legend.label Character string that will appear on the heatmap legend.
+#' Default is `heatmap`
 #' @param triangular Logical. Plot the lower triangle of the matrix only,
-#'     diagonal included. Default is FALSE.
-#' @param output.dir Optional output directory. Default is NULL, in which case
-#'     the similarity heatmap folder will be used.
+#' diagonal included. Default is `FALSE`.
+#' @param output.dir Optional output directory. Default is `NULL`, in which case
+#' the similarity heatmap folder will be used.
 #' @param fixed.scale Logical, determines whether to use an externally supplied
-#'     fixed scale (min and max) for the heatmap color scale. Useful for putting
-#'     multiple plots on the same scale.
+#' fixed scale (min and max) for the heatmap color scale. Useful for putting
+#' multiple plots on the same scale. Default is `FALSE`
 #' @param scale.min Optional numeric. Minimum for the fixed color scale.
+#' Default is `NULL`, for no fixed scaling.
 #' @param scale.max Optional numeric. Maximum for the fixed color scale.
+#' Default is `NULL`, for no fixed scaling.
 #'
 #' @return Saves the heatmap plot as a JPEG file and the SSM data as a CSV file
-#'     in the specified directory.
+#' in the specified directory.
+#'
 #' @export
 
 create.heatmap <- function( matrix, asp, number.labels, plot.prefix = NULL,

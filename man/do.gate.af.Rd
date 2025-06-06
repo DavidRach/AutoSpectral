@@ -11,20 +11,21 @@ do.gate.af(gate.data, samp, asp)
 
 \item{samp}{A sample identifier.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.
-A list of essential parameters.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 }
 \value{
 A vector with the indexes of events inside the initial gate.
 }
 \description{
 Returns a vector with the indexes of events inside the initial
-    gate on autofluorescence parameters.
+gate on autofluorescence parameters.
 }
 \details{
 Perform Gating on Autofluorescence Parameters
 
-This function returns a vector with the indexes of events inside the initial gate on
-    autofluorescence parameters. It proceeds through several steps to define the gate boundaries
-    and identify density maxima using numerical search and Voronoi tessellations.
+This function returns a vector with the indexes of events inside the initial
+gate on autofluorescence parameters. It proceeds through several steps to
+define the gate boundaries and identify density maxima using numerical
+search and Voronoi tessellations.
 }

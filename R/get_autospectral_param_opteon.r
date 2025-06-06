@@ -3,13 +3,17 @@
 #' Get Autospectral Parameters for Opteon Cytometer
 #'
 #' This function returns parameters for running a calculation of unmixing with
-#'     autospectral, without creating any figures or tables.
+#' AutoSpectral, without creating any figures or tables.
 #'
 #' @title Get Autospectral Parameters for Opteon Cytometer
+#'
 #' @description Returns parameters for running a calculation of unmixing with
-#'     autospectral, without creating any figures or tables.
-#' @param autosp.param A list of initial autospectral parameters.
-#' @return A list of autospectral parameters specific to the Opteon cytometer.
+#' AutoSpectral, without creating any figures or tables.
+#'
+#' @param autosp.param A list of initial AutoSpectral parameters.
+#'
+#' @return A list of AutoSpectral parameters specific to the Opteon cytometer.
+#'
 #' @export
 
 get.autospectral.param.opteon <- function( autosp.param )

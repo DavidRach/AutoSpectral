@@ -21,12 +21,13 @@ scatter.match.plot(
 
 \item{scatter.param}{A character vector specifying the scatter parameters.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 }
 \value{
 None. The function saves the generated scatter plot to a file.
 }
 \description{
-This function generates scatter plots for matching positive and
-    negative expression data based on specified scatter parameters.
+This function generates scatter plots for matching positive
+and negative expression data based on specified scatter parameters.
 }

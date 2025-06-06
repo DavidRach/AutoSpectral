@@ -20,5 +20,5 @@ A matrix with the extreme events trimmed.
 }
 \description{
 This function trims extreme events from expression data based
-    on a specified peak channel and trim factor.
+on a specified peak channel and trim factor.
 }

@@ -16,30 +16,31 @@ get.fluorophore.spectra(
 \arguments{
 \item{flow.control}{A list containing flow cytometry control data.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 
-\item{use.clean.expr}{Logical indicating whether to use cleaned expression data
-(default is FALSE).}
+\item{use.clean.expr}{Logical indicating whether to use cleaned expression
+data, default is \code{FALSE}}
 
-\item{biexp}{Logical indicating whether to apply biexponential transformation
-(default is FALSE).}
+\item{biexp}{Logical indicating whether to apply biexponential
+transformation, default is \code{FALSE}}
 
 \item{af.spectra}{Optional autofluorescence spectra to include.}
 
-\item{plot.prefix}{Optional prefix for plot titles (default is "Initial").}
+\item{plot.prefix}{Optional prefix for plot titles, default is \code{Initial}.}
 }
 \value{
 A matrix with the fluorophore spectra.
 }
 \description{
 Retrieves the fluorophore spectra for flow cytometry data,
-    optionally using cleaned expression data and biexponential transformation.
+optionally using cleaned expression data and biexponential transformation.
 }
 \details{
 Get Fluorophore Spectra
 
 This function retrieves the fluorophore spectra for flow cytometry data,
-    optionally using cleaned expression data and biexponential transformation.
-    It also plots and saves the spectra, and performs cosine similarity QC for
-    controls.
+optionally using cleaned expression data and biexponential transformation.
+It also plots and saves the spectra, and performs cosine similarity QC for
+controls.
 }

@@ -3,13 +3,17 @@
 #' Get Autospectral Parameters for ID7000 Cytometer
 #'
 #' This function returns parameters for running a calculation of unmixing with
-#'     autospectral, without creating any figures or tables.
+#'     AutoSpectral, without creating any figures or tables.
 #'
 #' @title Get Autospectral Parameters for ID7000 Cytometer
+#'
 #' @description Returns parameters for running a calculation of unmixing with
-#'     autospectral, without creating any figures or tables.
-#' @param autosp.param A list of initial autospectral parameters.
-#' @return A list of autospectral parameters specific to the ID7000 cytometer.
+#' AutoSpectral, without creating any figures or tables.
+#'
+#' @param autosp.param A list of initial AutoSpectral parameters.
+#'
+#' @return A list of AutoSpectral parameters specific to the ID7000 cytometer.
+#'
 #' @export
 
 get.autospectral.param.id7000 <- function( autosp.param )

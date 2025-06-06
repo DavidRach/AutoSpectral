@@ -2,7 +2,7 @@
 % Please edit documentation in R/spectral_ribbon_plot.R
 \name{spectral.ribbon.plot}
 \alias{spectral.ribbon.plot}
-\title{Generate Spectral Ribbon Plots}
+\title{Spectral Ribbon Plot}
 \usage{
 spectral.ribbon.plot(
   pos.expr.data,
@@ -26,18 +26,20 @@ spectral.ribbon.plot(
 
 \item{fluor.name}{A character string specifying the fluorophore name.}
 
-\item{plot.prefix}{A character string to prefix the plot file name. Default is NULL.}
+\item{plot.prefix}{A character string to prefix the plot file name.
+Default is \code{NULL}}
 
 \item{af}{A logical value indicating whether autofluorescence removal is
-being performed. Default is FALSE.}
+being performed. Default is \code{FALSE}}
 
 \item{removed.data}{A matrix containing the removed data, if applicable.
-Default is NULL.}
+Default is \code{NULL}.}
 }
 \value{
-None. The function saves the generated spectral ribbon plot to a file.
+None. The function saves the generated spectral ribbon plot to
+a file.
 }
 \description{
 This function generates spectral ribbon plots for positive and
-    negative expression data.
+negative expression data.
 }

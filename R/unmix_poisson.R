@@ -2,9 +2,9 @@
 
 #' @title Unmix Using Poisson Regression
 #'
-#' @description This function performs unmixing of raw data using Poisson regression,
-#'     with iterative reweighted least squares (IRLS) and fallback methods for
-#'     cells that fail to converge.
+#' @description This function performs unmixing of raw data using Poisson
+#' regression, with iterative reweighted least squares, IRLS, and fallback
+#' methods for cells that fail to converge.
 #'
 #' @importFrom stats glm.fit glm.control poisson coef
 #' @importFrom future plan multisession
@@ -12,9 +12,11 @@
 #'
 #' @param raw.data Matrix containing raw data to be unmixed.
 #' @param spectra Matrix containing spectra information.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
 #'
 #' @return A matrix containing the unmixed data.
+#'
 #' @export
 
 

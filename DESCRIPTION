@@ -1,7 +1,7 @@
 Package: AutoSpectral
 Type: Package
 Title: Tools for Unmxing Spectral Flow Cytometry Data
-Version: 0.2.3
+Version: 0.2.4
 Authors@R: c(
     person(
       "Oliver", "Burton",
@@ -46,6 +46,7 @@ Imports:
     tidyr,
     tripack,
     utils
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 URL: https://github.com/DrCytometer/AutoSpectral
 BugReports: https://github.com/DrCytometer/AutoSpectral/issues

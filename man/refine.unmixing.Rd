@@ -17,7 +17,8 @@ refine.unmixing(
 
 \item{flow.control}{List containing flow control information.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 
 \item{clean.expr}{Logical indicating whether to clean expression data.}
 
@@ -28,5 +29,5 @@ The refined spectra matrix.
 }
 \description{
 This function refines the unmixing process for spectral data,
-    iteratively updating the spectra matrix and calculating unmixing errors.
+iteratively updating the spectra matrix and calculating unmixing errors.
 }

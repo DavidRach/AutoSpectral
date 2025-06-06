@@ -3,9 +3,9 @@
 
 #' @title Calculate Unmixing Error
 #'
-#' @description This function calculates the unmixing error for each fluorophore,
-#'     including intercept, coefficient, slope, and skewness, using robust
-#'     linear modeling.
+#' @description This function calculates the unmixing error for each
+#' fluorophore, including intercept, coefficient, slope, and skewness, using
+#' robust linear modeling.
 #'
 #' @importFrom moments skewness
 #' @importFrom future plan multisession
@@ -13,13 +13,16 @@
 #'
 #' @param expr.data.unmix Data frame containing unmixed expression data.
 #' @param fluorophores Vector of fluorophore names.
-#' @param scale.untransformed Logical indicating whether to scale untransformed data.
+#' @param scale.untransformed Logical indicating whether to scale untransformed
+#' data.
 #' @param transform.inv Function to apply the inverse transformation.
 #' @param flow.event.sample Vector indicating the sample for each flow event.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
 #'
 #' @return A list containing the unmixing correction matrices for intercept,
-#'     coefficient, slope, and skewness.
+#' coefficient, slope, and skewness.
+#'
 #' @export
 
 

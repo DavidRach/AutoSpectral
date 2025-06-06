@@ -4,7 +4,8 @@
 #'
 #' @description Creates figure and table directories.
 #'
-#' @param asp The AutoSpectral parameter list defined using get.autospectral.param.
+#' @param asp The AutoSpectral parameter list defined
+#' using `get.autospectral.param`
 #' @return No returns. Creates directories in the current working directory.
 #' @export
 

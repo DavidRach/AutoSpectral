@@ -8,7 +8,7 @@
 #'
 #' @importFrom stats runif
 #'
-#' @param spectra The spectral matrix (fluorophores x detectors)
+#' @param spectra The spectral matrix, dimensions fluorophores x detectors.
 #'
 #' @return The estimated spread matrix
 #'

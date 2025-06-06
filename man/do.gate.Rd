@@ -25,25 +25,25 @@ do.gate(
 
 \item{scatter.and.channel.label}{A label for scatter and channel.}
 
-\item{control.type}{The type of control used, beads or cells.}
+\item{control.type}{The type of control used, either "beads" or "cells".}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list, prepared using
+\code{get.autospectral.param}.}
 }
 \value{
 A vector with the indexes of events inside the initial gate.
 }
 \description{
-Perform gating on scatter parameters
-    Returns a vector with the indexes of events inside the initial gate on
-    scatter parameters.
+Performs gating on scatter parameters and returns a vector with the indexes
+of events inside the initial gate.
 
-    Proceeds in three steps:
+The gating proceeds in three steps:
 \itemize{
-  \item Defines bound by data trimming
-  \item Defines region around the target maximum found in bound
-  \item Defines gate around target maximum, only in region
+\item Defines bounds by data trimming
+\item Defines a region around the target maximum found within the bounds
+\item Defines a gate around the target maximum, only within that region
 }
 
-    Uses numerical search of maxima over estimated densities.
-    Uses Voronoi tessellations to improve density estimation around maxima.
+The method uses numerical search of maxima over estimated densities and
+Voronoi tessellations to improve density estimation around maxima.
 }

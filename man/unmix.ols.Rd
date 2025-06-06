@@ -7,12 +7,12 @@
 unmix.ols(raw.data, spectra)
 }
 \arguments{
-\item{raw.data}{Expression data from raw fcs files. Cells in rows and detectors
-(raw channels) in columns. Columns should be fluorescent data only and must
+\item{raw.data}{Expression data from raw fcs files. Cells in rows and
+detectors in columns. Columns should be fluorescent data only and must
 match the columns in spectra.}
 
-\item{spectra}{Spectral signatures of fluorophores, normalized between 0 and 1,
-with fluorophores in rows and detectors (channels) in columns.}
+\item{spectra}{Spectral signatures of fluorophores, normalized between 0
+and 1, with fluorophores in rows and detectors in columns.}
 }
 \value{
 Unmixed data with cells in rows and fluorophores in columns.

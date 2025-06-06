@@ -1,14 +1,19 @@
-# plot_convergence.r
+# convergence_plot.r
 
 #' @title Convergence Plot
-#' @description Plots convergence of iterative refinement of the spillover matrix.
+#'
+#' @description Plots convergence of iterative refinement of the spillover
+#' matrix.
 #'
 #' @importFrom ggplot2 ggplot aes labs geom_hline geom_point scale_x_continuous
 #' @importFrom ggplot2 scale_y_log10 scale_shape_manual theme_bw theme
 #' @importFrom ggplot2 element_line element_text element_rect margin ggsave
+#'
 #' @param convergence.log Dataframe with convergence data of AutoSpectral.
 #' @param asp List with AutoSpectral parameters.
+#'
 #' @return None. The function saves the generated convergence plot to a file.
+#'
 #' @export
 
 convergence.plot <- function( convergence.log, asp )

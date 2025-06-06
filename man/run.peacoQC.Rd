@@ -13,12 +13,13 @@ run.peacoQC(expr.data, spectral.channel, all.channels, asp)
 
 \item{all.channels}{A character vector specifying all channels.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 }
 \value{
 A list containing the cleaned expression data for each sample.
 }
 \description{
 This function runs PeacoQC to remove flow fluctuation errors
-    from expression data using parallel processing if specified.
+from expression data using parallel processing if specified.
 }

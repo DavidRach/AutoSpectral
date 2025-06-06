@@ -15,24 +15,24 @@ fit.robust.linear.model(x.data, y.data, x.name, y.name, asp, fix.unmix = FALSE)
 
 \item{y.name}{The name of the response variable.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.
-A list of essential parameters.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 
-\item{fix.unmix}{Logical, default is FALSE. If TRUE, sets coefficient to zero
-in case of failed convergence. Used for fix.my.unmix.}
+\item{fix.unmix}{Logical, default is \code{FALSE}. If \code{TRUE}, sets coefficient to
+zero in case of failed convergence. Used for \code{fix.my.unmix.}}
 }
 \value{
 A matrix with the intercept and p-value, and coefficient and p-value.
 }
 \description{
 Returns a matrix by rows, with the intercept and p-value, and
-    coefficient and p-value, of a robust linear model fitted to the input data.
-    Reverts to a standard linear model in case of no convergence.
+coefficient and p-value, of a robust linear model fitted to the input data.
+Reverts to a standard linear model in case of no convergence.
 }
 \details{
 Fit Robust Linear Model
 
 This function returns a matrix by rows, with the intercept and p-value,
-    and coefficient and p-value, of a robust linear model fitted to the
-    input data. It reverts to a standard linear model in case of no convergence.
+and coefficient and p-value, of a robust linear model fitted to the input
+data. It reverts to a standard linear model in case of no convergence.
 }

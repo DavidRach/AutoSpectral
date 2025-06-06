@@ -4,31 +4,35 @@
 #' Get Fluorophore Spectra
 #'
 #' This function retrieves the fluorophore spectra for flow cytometry data,
-#'     optionally using cleaned expression data and biexponential transformation.
-#'     It also plots and saves the spectra, and performs cosine similarity QC for
-#'     controls.
+#' optionally using cleaned expression data and biexponential transformation.
+#' It also plots and saves the spectra, and performs cosine similarity QC for
+#' controls.
 #'
 #' @title Get Fluorophore Spectra
+#'
 #' @description Retrieves the fluorophore spectra for flow cytometry data,
-#'     optionally using cleaned expression data and biexponential transformation.
+#' optionally using cleaned expression data and biexponential transformation.
 #'
 #' @importFrom flowWorkspace flowjo_biexp
+#'
 #' @param flow.control A list containing flow cytometry control data.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
-#' @param use.clean.expr Logical indicating whether to use cleaned expression data
-#'     (default is FALSE).
-#' @param biexp Logical indicating whether to apply biexponential transformation
-#'     (default is FALSE).
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
+#' @param use.clean.expr Logical indicating whether to use cleaned expression
+#' data, default is `FALSE`
+#' @param biexp Logical indicating whether to apply biexponential
+#' transformation, default is `FALSE`
 #' @param af.spectra Optional autofluorescence spectra to include.
-#' @param plot.prefix Optional prefix for plot titles (default is "Initial").
+#' @param plot.prefix Optional prefix for plot titles, default is `Initial`.
 #'
 #' @return A matrix with the fluorophore spectra.
+#'
 #' @export
 
 
 get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
-                                         biexp = FALSE, af.spectra = NULL,
-                                         plot.prefix = "Initial" )
+                                     biexp = FALSE, af.spectra = NULL,
+                                     plot.prefix = "Initial" )
 {
   spectra.zero <- rep( 0, flow.control$spectral.channel.n )
   names( spectra.zero ) <- flow.control$spectral.channel

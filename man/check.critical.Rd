@@ -15,5 +15,6 @@ check.critical(condition, error.msg)
 Returns error.msg and breaks if FALSE, no return if TRUE.
 }
 \description{
-Checks condition, if not true prints error message and stops execution.
+Checks condition, if not true prints error message and
+stops execution.
 }

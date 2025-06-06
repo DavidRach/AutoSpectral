@@ -14,12 +14,15 @@ autofluorescence artefact identification is to be performed.}
 
 \item{spectral.channel}{Vector of spectral channel names.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 }
 \value{
-A list containing the identified autofluorescence artefacts for each negative sample.
+A list containing the identified autofluorescence artefacts for
+each negative sample.
 }
 \description{
-This function runs the identification of autofluorescence artefacts
-    on a list of negative samples, using the specified parameters and settings.
+This function runs the identification of autofluorescence
+artefacts on a list of negative samples, using the specified parameters
+and settings.
 }

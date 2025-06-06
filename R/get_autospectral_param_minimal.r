@@ -3,13 +3,16 @@
 
 #' Get Minimal Autospectral Parameters
 #'
-#' This function returns a minimal set of autospectral parameters.
+#' This function returns a minimal set of AutoSpectral parameters.
 #'
 #' @title Get Minimal Autospectral Parameters
-#' @description Returns a minimal set of autospectral parameters.
+#'
+#' @description Returns a minimal set of AutoSpectral parameters.
 #'
 #' @importFrom parallelly availableCores
-#' @return A list of minimal autospectral parameters.
+#'
+#' @return A list of minimal AutoSpectral parameters.
+#'
 #' @export
 
 

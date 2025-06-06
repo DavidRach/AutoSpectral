@@ -8,19 +8,19 @@ lapply.sequential(X, FUN, ..., future.seed = NULL)
 }
 \arguments{
 \item{X}{A vector (atomic or list) or an expression object. Other objects
-(including classed objects) will be coerced by `as.list`.}
+(including classed objects) will be coerced by \code{as.list}.}
 
-\item{FUN}{The function to be applied to each element of `X`.}
+\item{FUN}{The function to be applied to each element of \code{X}.}
 
-\item{...}{Optional arguments to `FUN`.}
+\item{...}{Optional arguments to \code{FUN}.}
 
 \item{future.seed}{Ignored in this function, included for compatibility with
-`future_lapply`.}
+\code{future_lapply}.}
 }
 \value{
-A list of the same length as `X` and named by `X`.
+A list of the same length as \code{X} and named by \code{X}.
 }
 \description{
-This function allows switching between `lapply` and `future_lapply`
-    without `future.seed` issues by using `lapply` sequentially.
+This function allows switching between \code{lapply} and
+\code{future_lapply} without \code{future.seed} issues by using \code{lapply} sequentially.
 }

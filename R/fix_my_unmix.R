@@ -2,7 +2,7 @@
 
 #' @title Fix My Unmix
 #' @description Attempt to automatically fix unmixing errors in fully stained
-#'     unmixed samples.
+#' unmixed samples.
 #'
 #' @importFrom ggplot2 ggplot
 #' @importFrom flowCore read.FCS
@@ -11,38 +11,39 @@
 #' @importFrom flowWorkspace flowjo_biexp
 #'
 #' @param spectra The spectral matrix, fluorophores x detectors. In this case,
-#'     it does not need to be a perfect match for the fluorophores in the fully
-#'     stained sample and may, for instance, be pulled from a database for the
-#'     same specification of cytometer.
-#' @param unstained.sample File path and name for a raw unstained sample, ideally
-#'     acquired the same day, and ideally matching the autofluorescence of the
-#'     fully stained sample.
+#' it does not need to be a perfect match for the fluorophores in the fully
+#' stained sample and may, for instance, be pulled from a database for the same
+#' specification of cytometer.
+#' @param unstained.sample File path and name for a raw unstained sample,
+#' ideally acquired the same day, and ideally matching the autofluorescence of
+#' the fully stained sample.
 #' @param fully.stained.sample File path and name for a raw fully stained sample.
 #' @param flow.control The flow.control list.
 #' @param asp The AutoSpectral parameter list.
 #' @param large.gate Logical, whether to use a large gate for identifying cells.
-#'     Default is TRUE and will work best for any panels containing any non-
-#'     lymphocyte markers.
-#' @param max.iter Numeric. Limits the number of iterations performed by the algorithm
-#'     to avoid overfitting.
-#' @param downsample Logical/numeric. Controls downsampling to speed up the algorithm.
-#'     If FALSE, no downsampling will be performed. If a numeric, that number of
-#'     cells will be used for downsampling. For rare markers, use larger numbers.
-#' @param unstained.threshold Numeric between 0 and 1, default 0.99. The threshold
-#'     used to determine positivity in the fully stained sample (the percentile
-#'     on the unstained sample in that channel).
-#' @param unstained.margin Numeric, default 1.3. The fudge factor above the
-#'     unstained.threshold.
-#' @param convergence.threshold Numeric, default 0.03. If the algorithm reaches
-#'     this minimal level of spillover error, it will stop.
-#' @param biexp Logical indicating whether to apply biexponential transformation
-#'     (default is FALSE).
-#' @param rs.lambda Numeric, default 0.1. Controls how rapidly the spillover
-#'     corrections are applied in order to reach convergence.
+#' Default is `TRUE` and will work best for any panels containing any
+#' non-lymphocyte markers.
+#' @param max.iter Numeric. Limits the number of iterations performed by the
+#' algorithm to avoid overfitting.
+#' @param downsample Logical/numeric. Controls downsampling to speed up the
+#' algorithm. If `FALSE`, no downsampling will be performed. If a numeric,
+#' that number of cells will be used for downsampling. For rare markers,
+#' use larger numbers.
+#' @param unstained.threshold Numeric between 0 and 1, default `0.99.` The
+#' threshold used to determine positivity in the fully stained sample
+#' (the percentile on the unstained sample in that channel).
+#' @param unstained.margin Numeric, default `1.3`. The fudge factor above the
+#' unstained.threshold.
+#' @param convergence.threshold Numeric, default `0.03`. If the algorithm
+#' reaches this minimal level of spillover error, it will stop.
+#' @param biexp Logical indicating whether to apply biexponential
+#' transformation, default is `FALSE`.
+#' @param rs.lambda Numeric, default `0.1`. Controls how rapidly the spillover
+#' corrections are applied in order to reach convergence.
 #'
-#' @return A list containing the corrected spillover matrix (fluorophores x fluorophores),
-#'     the corrected compensation matrix and the corrected spectra for unmixing
-#'     (fluorophores x detectors).
+#' @return A list containing the corrected spillover matrix
+#' (fluorophores x fluorophores), the corrected compensation matrix and the
+#' corrected spectra for unmixing (fluorophores x detectors).
 #'
 #' @export
 

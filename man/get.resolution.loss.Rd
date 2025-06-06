@@ -4,17 +4,15 @@
 \alias{get.resolution.loss}
 \title{Calculate Resolution Loss}
 \usage{
-get.resolution.loss(unmixed.expr, expr.data.max)
+get.resolution.loss(unmixed.expr)
 }
 \arguments{
 \item{unmixed.expr}{Matrix containing unmixed expression data.}
-
-\item{expr.data.max}{Maximum expression data value.}
 }
 \value{
 A numeric vector containing the resolution loss for each channel.
 }
 \description{
 This function calculates the resolution loss for each channel
-    in the unmixed expression data, based on the maximum expression data.
+in the unmixed expression data, based on the standard deviation above zero.
 }

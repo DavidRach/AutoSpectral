@@ -11,12 +11,13 @@ read.channel(control.dir, control.def.file, asp)
 
 \item{control.def.file}{File containing control definitions.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 }
 \value{
 A data frame containing the original and corrected channel names.
 }
 \description{
 This function reads channel information from control files and
-    corrects channel names based on specified forbidden characters.
+corrects channel names based on specified forbidden characters.
 }

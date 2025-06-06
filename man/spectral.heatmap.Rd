@@ -13,9 +13,11 @@ spectral.heatmap(
 )
 }
 \arguments{
-\item{spectra}{Matrix or dataframe containing spectral data (fluorophores x detectors).}
+\item{spectra}{Matrix or dataframe containing spectral data
+format: fluorophores x detectors.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 
 \item{plot.prefix}{Optional prefix for the plot filename.}
 
@@ -29,5 +31,5 @@ Saves the heatmap plot as a JPEG file in the specified directory.
 }
 \description{
 This function plots a spectral matrix as a heatmap and saves it
-    as a JPEG file.
+as a JPEG file.
 }

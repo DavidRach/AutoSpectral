@@ -21,64 +21,65 @@ clean.controls(
 )
 }
 \arguments{
-\item{flow.control}{Prepare using define.flow.control. List of the data and
-essential information about the cytometer and data structure.}
+\item{flow.control}{A list prepared using \code{define.flow.control}, containing
+the data and essential information about the cytometer and data structure.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.
-A list of essential parameters.}
+\item{asp}{The AutoSpectral parameter list, prepared using
+\code{get.autospectral.param}.}
 
-\item{time.clean}{Logical, default is FALSE. Determines whether to run PeacoQC to
+\item{time.clean}{Logical, default is \code{FALSE}. Whether to run PeacoQC to
 remove time-based inconsistencies in the controls.}
 
-\item{trim}{Logical, default is FALSE. Determines whether to remove extreme
-events (positive and negative) from controls. Extent of trimming is determined
-by trim.factor. Include trim.factor if setting trim to TRUE.}
+\item{trim}{Logical, default is \code{FALSE}. Whether to remove extreme events
+(positive and negative) from controls.}
 
-\item{trim.factor}{Numeric. Default is asp$rlm.trim.factor. Include trim.factor
-if setting trim to TRUE.}
+\item{trim.factor}{Numeric. Default is \code{asp$rlm.trim.factor}. Required if
+\code{trim = TRUE}.}
 
-\item{af.remove}{Logical, default is FALSE. Determines whether to remove
-intrusive autofluorescence contamination from cell controls using PCA-based
+\item{af.remove}{Logical, default is \code{FALSE}. Whether to remove intrusive
+autofluorescence contamination from cell controls using PCA-based
 identification and gating. Requires universal negatives to be defined in the
-control file and subsequently in flow.control via define.flow.control.}
+control file and in \code{flow.control}.}
 
-\item{universal.negative}{Logical, default is TRUE. Determines whether to
-use a universal negative sample as the negative for spectral extraction.
-Requires universal negatives to be defined in the
-control file and subsequently in flow.control via define.flow.control.}
+\item{universal.negative}{Logical, default is \code{TRUE}. Whether to use a
+universal negative sample as the negative for spectral extraction. Requires
+universal negatives to be defined in the control file and in \code{flow.control}.}
 
-\item{downsample}{Logical, default is TRUE. Determines whether to reduce cell
-and bead control events to speed up processing.}
+\item{downsample}{Logical, default is \code{TRUE}. Whether to reduce cell and bead
+control events to speed up processing.}
 
-\item{negative.n}{Number of events to include in the downsampled negative
-population. Default is asp$negative.n.}
+\item{negative.n}{Integer. Number of events to include in the downsampled
+negative population. Default is \code{asp$negative.n}.}
 
-\item{positive.n}{Number of events to include in the downsampled positive
-population. Default is asp$positive.n}
+\item{positive.n}{Integer. Number of events to include in the downsampled
+positive population. Default is \code{asp$positive.n}.}
 
-\item{scatter.match}{Logical, default is TRUE. Determines whether to select
-negative events based scatter profiles matching the positive events. Scatter
-matching defines a region of FSC and SSC determined by the distribution of
-selected positive events (see positive.n) and defines a gate for this region.}
+\item{scatter.match}{Logical, default is \code{TRUE}. Whether to select negative
+events based on scatter profiles matching the positive events. Defines a
+region of FSC and SSC based on the distribution of selected positive events.}
 
-\item{refactor}{Logical, default is TRUE. Reassigns event indices after cleaning
-steps, setting up fresh, consistent indices.}
+\item{refactor}{Logical, default is \code{TRUE}. Reassigns event indices after
+cleaning steps to ensure consistent indexing.}
 
-\item{return.separately}{Logical, default is FALSE. Provides the option to
-return the cleaned expression data as an output as well as storing the clean
-data in flow.control.}
+\item{return.separately}{Logical, default is \code{FALSE}. If \code{TRUE}, returns the
+cleaned expression data as output in addition to storing it in
+\code{flow.control}.}
 }
 \value{
-No returns unless return.separately is set to TRUE. Output is stored
-    in flow.control so that flow.control can be used subsequenlty as a complete
-    data set.
+If \code{return.separately = TRUE}, returns the cleaned expression data.
+Otherwise, no return value; the cleaned data is stored in \code{flow.control} for
+downstream use.
 }
 \description{
-A four-part function to clean single color controls in order to extract
-    fluorophore signatures. Any part can be run independently.
-    Stage 1: PeacoQC to eliminate flow artefacts.
-    Stage 2: Trimming to eliminate extreme events.
-    Stage 3: AF noise removal using PCA unmixing on matching unstained (cells only).
-    Stage 4: brightest event selection from positive, universal negative from
-    matching negative and downsampling to speed up rlm spectra optimization.
+A four-part function to clean single-color controls in order to extract
+fluorophore signatures. Any part can be run independently:
+\itemize{
+\item \strong{Stage 1}: PeacoQC to eliminate flow artefacts.
+\item \strong{Stage 2}: Trimming to eliminate extreme events.
+\item \strong{Stage 3}: Autofluorescence noise removal using PCA unmixing on matching
+unstained (cells only).
+\item \strong{Stage 4}: Brightest event selection from positive, universal negative
+from matching negative, and downsampling to speed up RLM spectra
+optimization.
+}
 }

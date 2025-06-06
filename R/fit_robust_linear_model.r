@@ -3,25 +3,29 @@
 #' Fit Robust Linear Model
 #'
 #' This function returns a matrix by rows, with the intercept and p-value,
-#'     and coefficient and p-value, of a robust linear model fitted to the
-#'     input data. It reverts to a standard linear model in case of no convergence.
+#' and coefficient and p-value, of a robust linear model fitted to the input
+#' data. It reverts to a standard linear model in case of no convergence.
 #'
 #' @title Fit Robust Linear Model
+#'
 #' @description Returns a matrix by rows, with the intercept and p-value, and
-#'     coefficient and p-value, of a robust linear model fitted to the input data.
-#'     Reverts to a standard linear model in case of no convergence.
+#' coefficient and p-value, of a robust linear model fitted to the input data.
+#' Reverts to a standard linear model in case of no convergence.
 #'
 #' @importFrom MASS rlm
 #' @importFrom stats lm
+#'
 #' @param x.data A vector containing the predictor variable data.
 #' @param y.data A vector containing the response variable data.
 #' @param x.name The name of the predictor variable.
 #' @param y.name The name of the response variable.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
-#'     A list of essential parameters.
-#' @param fix.unmix Logical, default is FALSE. If TRUE, sets coefficient to zero
-#'     in case of failed convergence. Used for fix.my.unmix.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
+#' @param fix.unmix Logical, default is `FALSE`. If `TRUE`, sets coefficient to
+#' zero in case of failed convergence. Used for `fix.my.unmix.`
+#'
 #' @return A matrix with the intercept and p-value, and coefficient and p-value.
+#'
 #' @export
 
 

@@ -6,12 +6,19 @@
 #' This function returns a good color palette for a given density distribution.
 #'
 #' @title Get Density Color Palette
+#'
 #' @description Returns a good color palette for a given density distribution.
+#'
 #' @importFrom grDevices colorRampPalette
 #' @importFrom stats ecdf
+#'
 #' @param dens A numeric vector representing the density distribution.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#'
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
+#'
 #' @return A vector of colors representing the density palette.
+#'
 #' @export
 
 get.density.palette <- function( dens, asp )

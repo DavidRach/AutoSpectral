@@ -25,12 +25,14 @@ removal is to be performed.}
 
 \item{universal.negative}{Name of the universal negative control.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 }
 \value{
-A list containing the expression data with autofluorescence removed for each sample.
+A list containing the expression data with autofluorescent events
+removedfor each sample.
 }
 \description{
 This function runs the autofluorescence removal process on a
-    list of samples, using the specified parameters and settings.
+list of samples, using the specified parameters and settings.
 }

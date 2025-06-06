@@ -3,19 +3,22 @@
 
 #' Downsample Control Data
 #'
-#' This function downsamples control data by selecting a specified number of positive and negative events based on peak channel values.
+#' This function downsamples control data by selecting a specified number of
+#' positive and negative events based on peak channel values.
 #'
 #' @title Downsample Control Data
 #' @description Downsamples control data by selecting a specified number of
-#'     positive and negative events based on peak channel values.
+#' positive and negative events based on peak channel values.
 #'
-#' @param clean.expr.data A list containing cleaned expression data for each sample.
+#' @param clean.expr.data A list containing cleaned expression data for each
+#' sample.
 #' @param samp The sample identifier.
 #' @param peak.channels A vector of peak channels for the samples.
 #' @param negative.n The number of negative events to select.
 #' @param positive.n The number of positive events to select.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
-#'     A list of essential parameters.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
+#'
 #' @return A matrix with the selected expression data.
 #' @export
 

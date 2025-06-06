@@ -1,58 +1,58 @@
 # define_flow_control.r
 
-#' @title Define Flow Control
+##' @title Define Flow Control
+#'
 #' @description
-#' A complex function designed to convert the single-stained control fcs files
-#'     and the metadata control.def.file into a data structure for AutoSpectral.
-#'     Reads the metadata file and locates the corresponding fcs files.
-#'     Determines the gates that will be needed based on varibles such as beads/cells,
-#'     large.gate and viability.gate, and then creates gates for each combination.
-#'     Imports and gates the data in the fcs files.
-#'     Assigns various factors to track the data.
+#' A complex function designed to convert the single-stained control FCS files
+#' and the metadata `control.def.file` into a data structure for AutoSpectral.
+#' It reads the metadata file, locates the corresponding FCS files, determines
+#' the gates needed based on variables such as beads or cells, `large.gate`, and
+#' `viability.gate`, and then creates gates for each combination. It imports
+#' and gates the data in the FCS files and assigns various factors to track
+#' the data.
 #'
 #' @importFrom future plan multisession
 #' @importFrom future.apply future_lapply
 #' @importFrom dplyr filter
 #'
-#' @param control.dir file path to the single stained control fcs files
-#' @param control.def.file csv file defining the single color control file names,
-#'     fluorophores they represent, marker names, peak channels and gating requirements.
-#' @param asp The AutoSpectral parameter list defined using get.autospectral.param.
-#' @param gate Logical, default is TRUE. Not currently in use. To be implemented
-#'     to allow pre-gated data to be read in without applying additional gating here.
+#' @param control.dir File path to the single-stained control FCS files.
+#' @param control.def.file CSV file defining the single-color control file names,
+#' fluorophores they represent, marker names, peak channels, and gating requirements.
+#' @param asp The AutoSpectral parameter list defined
+#' using `get.autospectral.param`.
+#' @param gate Logical, default is `TRUE`. Not currently in use. To be implemented
+#' to allow pre-gated data to be read in without applying additional gating here.
 #'
-#' @return flow.control
-#'     Returns the flow.control list with the following components:
-#' \describe{
-#'   \item{filename}{Names of the single color control files.}
-#'   \item{fluorophore}{Corresponding fluorophores used in the experiment.}
-#'   \item{antigen}{Corresponding markers used in the experiment.}
-#'   \item{control.type}{Type of control used (beads or cells).}
-#'   \item{universal.negative}{Corresponding universal negative for each control.}
-#'   \item{viability}{Logical factor; whether a control represents a viability marker.}
-#'   \item{large.gate}{Logical factor; large gate setting.}
-#'   \item{autof.channel.idx}{Index of the autofluorescence marker channel.}
-#'   \item{event.number.width}{Width of the event number.}
-#'   \item{expr.data.max}{Maximum expression data value.}
-#'   \item{expr.data.max.ceil}{Ceiling of the maximum expression data value.}
-#'   \item{expr.data.min}{Minimum expression data value.}
-#'   \item{channel}{Preliminary peak channels for the fluorophores.}
-#'   \item{channel.n}{Number of channels.}
-#'   \item{spectral.channel}{Spectral channel information.}
-#'   \item{spectral.channel.n}{Number of spectral channels.}
-#'   \item{sample}{Sample names (fluorophores).}
-#'   \item{scatter.and.channel}{FSC, SSC and peak channel information.}
-#'   \item{scatter.and.channel.label}{Labels for scatter and channel.}
-#'   \item{scatter.and.channel.spectral}{FSC, SSC and spectral channels.}
-#'   \item{scatter.parameter}{Scatter parameters used for gating.}
-#'   \item{event}{Event factor.}
-#'   \item{event.n}{Number of events.}
-#'   \item{event.sample}{Sample information for events. Links events to samples.}
-#'   \item{event.type}{Type of events.}
-#'   \item{expr.data}{Expression data. The data to be used for extracting spectra.}
-#' }
+#' @return A list (`flow.control`) with the following components:
+#' - `filename`: Names of the single-color control files.
+#' - `fluorophore`: Corresponding fluorophores used in the experiment.
+#' - `antigen`: Corresponding markers used in the experiment.
+#' - `control.type`: Type of control used (beads or cells).
+#' - `universal.negative`: Corresponding universal negative for each control.
+#' - `viability`: Logical factor; whether a control represents a viability marker.
+#' - `large.gate`: Logical factor; large gate setting.
+#' - `autof.channel.idx`: Index of the autofluorescence marker channel.
+#' - `event.number.width`: Width of the event number.
+#' - `expr.data.max`: Maximum expression data value.
+#' - `expr.data.max.ceil`: Ceiling of the maximum expression data value.
+#' - `expr.data.min`: Minimum expression data value.
+#' - `channel`: Preliminary peak channels for the fluorophores.
+#' - `channel.n`: Number of channels.
+#' - `spectral.channel`: Spectral channel information.
+#' - `spectral.channel.n`: Number of spectral channels.
+#' - `sample`: Sample names (fluorophores).
+#' - `scatter.and.channel`: FSC, SSC, and peak channel information.
+#' - `scatter.and.channel.label`: Labels for scatter and channel.
+#' - `scatter.and.channel.spectral`: FSC, SSC, and spectral channels.
+#' - `scatter.parameter`: Scatter parameters used for gating.
+#' - `event`: Event factor.
+#' - `event.n`: Number of events.
+#' - `event.sample`: Sample information for events. Links events to samples.
+#' - `event.type`: Type of events.
+#' - `expr.data`: Expression data used for extracting spectra.
 #'
 #' @export
+
 
 
 define.flow.control <- function( control.dir, control.def.file, asp,

@@ -7,10 +7,10 @@
 get.autospectral.param(cytometer = "aurora", figures = TRUE)
 }
 \arguments{
-\item{cytometer}{The type of cytometer (default is "aurora").}
+\item{cytometer}{The type of cytometer, default is \code{aurora}.}
 
 \item{figures}{Logical indicating whether to set up directory parameters for
-figures and tables (default is TRUE).}
+figures and tables, default is \code{TRUE}}
 }
 \value{
 A list of autospectral parameters.
@@ -22,5 +22,5 @@ Retrieves autospectral parameters for a specified cytometer.
 Get Autospectral Parameters
 
 This function retrieves autospectral parameters for a specified cytometer.
-    It sets up directory parameters for figures and tables if required.
+It sets up directory parameters for figures and tables if required.
 }

@@ -13,14 +13,15 @@ id.af.artefacts(clean.expr, universal.neg, spectral.channel, asp)
 
 \item{spectral.channel}{Vector of spectral channel names.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 }
 \value{
 A list containing the autofluorescence components and gate boundaries.
 }
 \description{
 This function identifies spikes of autofluorescence based on a
-    negative control, defines gates for removal, plots removal gates, plots
-    spectra of cells with and without removal, and returns gate boundaries
-    and the components needed to transform single-stained controls.
+negative control, defines gates for removal, plots removal gates, plots
+spectra of cells with and without removal, and returns gate boundaries
+and the components needed to transform single-stained controls.
 }

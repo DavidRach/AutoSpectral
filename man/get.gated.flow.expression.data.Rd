@@ -39,18 +39,19 @@ get.gated.flow.expression.data(
 
 \item{scatter.and.channel.label}{A label for scatter and channel.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 }
 \value{
 A matrix with the gated expression data.
 }
 \description{
-Retrieves gated flow cytometry expression data for specified samples,
-    removing out-of-range events and applying gating boundaries.
+Retrieves gated flow cytometry expression data for specified
+samples, removing out-of-range events and applying gating boundaries.
 }
 \details{
 Get Gated Flow Expression Data
 
-This function retrieves gated flow cytometry expression data for specified samples,
-    removing out-of-range events and applying gating boundaries.
+This function retrieves gated flow cytometry expression data for specified
+samples, removing out-of-range events and applying gating boundaries.
 }

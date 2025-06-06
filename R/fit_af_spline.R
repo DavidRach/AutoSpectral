@@ -4,23 +4,27 @@
 #' Fit Spline to Autofluorescence Data
 #'
 #' This function fits a spline to autofluorescence data, removing extreme events
-#'     and defining bounds equally far from zero. It uses robust linear modeling
-#'     and identifies events within a specified number of standard deviations
-#'     from the spline.
+#' and defining bounds equally far from zero. It uses robust linear modeling
+#' and identifies events within a specified number of standard deviations from
+#' the spline.
 #'
 #' @title Fit Spline to Autofluorescence Data
+#'
 #' @description Fits a spline to autofluorescence data, removing extreme events
-#'     and defining bounds equally far from zero.
+#' and defining bounds equally far from zero.
 #'
 #' @importFrom MASS rlm
 #' @importFrom tripack tri.mesh convex.hull
 #' @importFrom stats predict
+#'
 #' @param af.data A matrix containing the autofluorescence data.
 #' @param af.gate.idx A vector of indexes indicating the gate.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
-#'     A list of essential parameters.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
+#'
 #' @return A list with the boundaries of the events within the specified number
-#'     of standard deviations from the spline.
+#' of standard deviations from the spline.
+#'
 #' @export
 
 

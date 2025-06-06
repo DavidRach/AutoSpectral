@@ -2,21 +2,26 @@
 # plotting function for scatter-matching of universal negative
 
 #' @title Plot Scatter-Matching of Universal Negative
-#' @description This function generates scatter plots for matching positive and
-#'     negative expression data based on specified scatter parameters.
+#'
+#' @description This function generates scatter plots for matching positive
+#' and negative expression data based on specified scatter parameters.
+#'
 #' @importFrom KernSmooth bkde2D dpik
 #' @importFrom ggplot2 ggplot aes scale_color_gradientn facet_wrap
 #' @importFrom ggplot2 xlab ylab scale_x_continuous scale_y_continuous theme_bw
 #' @importFrom ggplot2 theme element_rect element_text margin ggsave guide_colorbar
 #' @importFrom rlang .data
-#'
 #' @importFrom scattermore geom_scattermore
+#'
 #' @param pos.expr.data A matrix containing the positive expression data.
 #' @param neg.expr.data A matrix containing the negative expression data.
 #' @param fluor.name A character string specifying the fluorophore name.
 #' @param scatter.param A character vector specifying the scatter parameters.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
+#'
 #' @return None. The function saves the generated scatter plot to a file.
+#'
 #' @export
 
 

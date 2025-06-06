@@ -2,24 +2,29 @@
 
 #' @title Run Universal Negative
 #' @description This function processes universal negative samples to generate
-#'     expression data based on specified parameters.
+#' expression data based on specified parameters.
+#'
 #' @param clean.expr A matrix containing cleaned expression data.
 #' @param univ.sample A character vector specifying the names of universal
-#'     negative samples.
-#' @param universal.negatives A list containing universal negative control parameters.
+#' negative samples.
+#' @param universal.negatives A list containing universal negative control
+#' parameters.
 #' @param scatter.param A character vector specifying the scatter parameters.
 #' @param peak.channels A character vector specifying the peak channels.
 #' @param downsample A numeric value indicating the downsampling factor.
 #' @param negative.n A numeric value indicating the number of negative events.
 #' @param positive.n A numeric value indicating the number of positive events.
 #' @param spectral.channel A character vector specifying the spectral channels.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
-#' @param control.type A character string specifying the type of control
-#'     (beads or cells).
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
+#' @param control.type A character string specifying the
+#' type of control: `beads` or `cells`
 #' @param scatter.match A logical value indicating whether scatter matching
-#'     is performed.
+#' is performed.
+#'
 #' @return A list containing the processed expression data for each universal
-#'     negative sample.
+#' negative sample.
+#'
 #' @export
 
 

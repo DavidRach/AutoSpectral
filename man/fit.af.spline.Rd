@@ -11,22 +11,22 @@ fit.af.spline(af.data, af.gate.idx, asp)
 
 \item{af.gate.idx}{A vector of indexes indicating the gate.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.
-A list of essential parameters.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 }
 \value{
 A list with the boundaries of the events within the specified number
-    of standard deviations from the spline.
+of standard deviations from the spline.
 }
 \description{
 Fits a spline to autofluorescence data, removing extreme events
-    and defining bounds equally far from zero.
+and defining bounds equally far from zero.
 }
 \details{
 Fit Spline to Autofluorescence Data
 
 This function fits a spline to autofluorescence data, removing extreme events
-    and defining bounds equally far from zero. It uses robust linear modeling
-    and identifies events within a specified number of standard deviations
-    from the spline.
+and defining bounds equally far from zero. It uses robust linear modeling
+and identifies events within a specified number of standard deviations from
+the spline.
 }

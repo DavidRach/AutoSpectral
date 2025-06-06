@@ -1,4 +1,4 @@
-# plot_unmix_fix.r
+# unmix_fix_plot.r
 
 #' @title Unmixing Fixing Plot
 #'
@@ -15,17 +15,17 @@
 #' @importFrom scales trans_new
 #'
 #' @param original.data The fully stained sample with the original unmixing.
-#' @param compensated.data The fully stained sample with compensation corrections
-#'     applied.
+#' @param compensated.data The fully stained sample with compensation
+#' corrections applied.
 #' @param plot.idx The index of the biplot comparisons to be plotted.
 #' @param asp The AutoSpectral parameter list.
-#' @param unstained.thresholds Numeric between 0 and 1, default 0.99. The threshold
-#'     used to determine positivity in the fully stained sample (the percentile
-#'     on the unstained sample in that channel).
-#' @param unstained.margin Numeric, default 1.5. The fudge factor above the
-#'     unstained.threshold.
-#' @param spread.estimate Numeric matrix. The estimated spillover spread for the
-#'     panel.
+#' @param unstained.thresholds Numeric between 0 and 1, default `0.99.`
+#' The threshold used to determine positivity in the fully stained sample,
+#' corresponding to the percentile on the unstained sample in that channel.
+#' @param unstained.margin Numeric. The fudge factor above
+#' the `unstained.threshold`
+#' @param spread.estimate Numeric matrix. The estimated spillover spread for
+#' the panel.
 #' @param output.dir The folder where the plot will be saved.
 #'
 #' @return No returns. Creates a jpeg plot.

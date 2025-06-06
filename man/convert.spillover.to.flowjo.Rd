@@ -12,16 +12,19 @@ convert.spillover.to.flowjo(
 )
 }
 \arguments{
-\item{spillover.file.name}{The file name of the spillover csv file to be imported.}
+\item{spillover.file.name}{The file name of the spillover csv file to be
+imported.}
 
-\item{flowjo.file.name}{The name given to the generated FlowJo compensation file.}
+\item{flowjo.file.name}{The name given to the generated FlowJo compensation
+file.}
 
 \item{input.dir}{Path to the spillover csv file.}
 
-\item{output.dir}{Path to the folder where the compensation mtx file will be written.}
+\item{output.dir}{Path to the folder where the compensation mtx file will
+be written.}
 }
 \value{
-No return. Write the xml .mtx file.
+No return. Writes the xml .mtx file.
 }
 \description{
 A quick and dirty method for writing a FlowJo-compatible compensation matrix

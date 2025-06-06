@@ -1,8 +1,9 @@
 # unmix_fcs.r
 
 #' @title Unmix FCS Data
+#'
 #' @description This function performs spectral unmixing on FCS data using
-#'     various methods.
+#' various methods.
 #'
 #' @importFrom flowCore read.FCS keyword exprs flowFrame parameters pData
 #' @importFrom flowCore write.FCS parameters<-
@@ -11,32 +12,35 @@
 #'
 #' @param fcs.file A character string specifying the path to the FCS file.
 #' @param spectra A matrix containing the spectral data.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
 #' @param flow.control A list containing flow cytometry control parameters.
 #' @param method A character string specifying the unmixing method to use.
-#'     Options are "OLS", "WLS", "Poisson" and "FastPoisson". Default is "OLS".
-#'     "FastPoisson" requires installation of AutoSpectralRcpp.
-#' @param weights Optional numeric vector of weights (one per fluorescent detector).
-#'     Default is NULL, in which case weighting will be done by channel means.
-#'     Only used for WLS
+#' Options are `OLS`, `WLS`, `Poisson` and `FastPoisson`. Default is `OLS`.
+#' `FastPoisson` requires installation of `AutoSpectralRcpp`
+#' @param weights Optional numeric vector of weights (one per fluorescent
+#' detector). Default is `NULL`, in which case weighting will be done by
+#' channel means (Poisson variance). Only used for `WLS`.
 #' @param output.dir A character string specifying the directory to save the
-#'     unmixed FCS file. Default is NULL.
+#' unmixed FCS file. Default is `NULL`.
 #' @param file.suffix A character string to append to the output file name.
-#'     Default is NULL.
-#' @param include.raw A logical value indicating whether to include raw expression
-#'     data in the output. Default is FALSE.
+#' Default is `NULL`.
+#' @param include.raw A logical value indicating whether to include raw
+#' expression data in the written FCS file. Default is `FALSE`.
 #' @param include.imaging A logical value indicating whether to include imaging
-#'     parameters in the output. Default is FALSE.
-#' @param divergence.threshold Numeric. Used for FastPoisson only. Threshold to
-#'     trigger reversion towards WLS unmixing when Poisson result diverge.
+#' parameters in the written FCS file. Default is `FALSE`.
+#' @param divergence.threshold Numeric. Used for `FastPoisson` only.
+#' Threshold to trigger reversion towards WLS unmixing when Poisson result
+#' diverges for a given point.
 #' @param divergence.handling String. How to handle divergent cells from Poisson
-#'     IRLS. Options are "NonNeg" (non-negativity will be enforced), "WLS" (revert
-#'     to WLS intial unmix) or "Balance" (WLS and NonNeg will be averaged).
-#'     Default is "Balance".
-#' @param balance.weight Numeric. Weighting to average non-convergent cells. Used
-#'     for "Balance" option under divergence.handling. Default is 0.5.
+#' IRLS. Options are `NonNeg` (non-negativity will be enforced), `WLS` (revert
+#' to WLS intial unmix) or `Balance` (WLS and NonNeg will be averaged).
+#' Default is `Balance`
+#' @param balance.weight Numeric. Weighting to average non-convergent cells.
+#' Used for `Balance` option under `divergence.handling`. Default is `0.5`.
 #'
 #' @return None. The function writes the unmixed FCS data to a file.
+#'
 #' @export
 
 

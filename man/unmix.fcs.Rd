@@ -25,45 +25,47 @@ unmix.fcs(
 
 \item{spectra}{A matrix containing the spectral data.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 
 \item{flow.control}{A list containing flow cytometry control parameters.}
 
 \item{method}{A character string specifying the unmixing method to use.
-Options are "OLS", "WLS", "Poisson" and "FastPoisson". Default is "OLS".
-"FastPoisson" requires installation of AutoSpectralRcpp.}
+Options are \code{OLS}, \code{WLS}, \code{Poisson} and \code{FastPoisson}. Default is \code{OLS}.
+\code{FastPoisson} requires installation of \code{AutoSpectralRcpp}}
 
-\item{weights}{Optional numeric vector of weights (one per fluorescent detector).
-Default is NULL, in which case weighting will be done by channel means.
-Only used for WLS}
+\item{weights}{Optional numeric vector of weights (one per fluorescent
+detector). Default is \code{NULL}, in which case weighting will be done by
+channel means (Poisson variance). Only used for \code{WLS}.}
 
 \item{output.dir}{A character string specifying the directory to save the
-unmixed FCS file. Default is NULL.}
+unmixed FCS file. Default is \code{NULL}.}
 
 \item{file.suffix}{A character string to append to the output file name.
-Default is NULL.}
+Default is \code{NULL}.}
 
-\item{include.raw}{A logical value indicating whether to include raw expression
-data in the output. Default is FALSE.}
+\item{include.raw}{A logical value indicating whether to include raw
+expression data in the written FCS file. Default is \code{FALSE}.}
 
 \item{include.imaging}{A logical value indicating whether to include imaging
-parameters in the output. Default is FALSE.}
+parameters in the written FCS file. Default is \code{FALSE}.}
 
-\item{divergence.threshold}{Numeric. Used for FastPoisson only. Threshold to
-trigger reversion towards WLS unmixing when Poisson result diverge.}
+\item{divergence.threshold}{Numeric. Used for \code{FastPoisson} only.
+Threshold to trigger reversion towards WLS unmixing when Poisson result
+diverges for a given point.}
 
 \item{divergence.handling}{String. How to handle divergent cells from Poisson
-IRLS. Options are "NonNeg" (non-negativity will be enforced), "WLS" (revert
-to WLS intial unmix) or "Balance" (WLS and NonNeg will be averaged).
-Default is "Balance".}
+IRLS. Options are \code{NonNeg} (non-negativity will be enforced), \code{WLS} (revert
+to WLS intial unmix) or \code{Balance} (WLS and NonNeg will be averaged).
+Default is \code{Balance}}
 
-\item{balance.weight}{Numeric. Weighting to average non-convergent cells. Used
-for "Balance" option under divergence.handling. Default is 0.5.}
+\item{balance.weight}{Numeric. Weighting to average non-convergent cells.
+Used for \code{Balance} option under \code{divergence.handling}. Default is \code{0.5}.}
 }
 \value{
 None. The function writes the unmixed FCS data to a file.
 }
 \description{
 This function performs spectral unmixing on FCS data using
-    various methods.
+various methods.
 }

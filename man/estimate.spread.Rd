@@ -7,7 +7,7 @@
 estimate.spread(spectra)
 }
 \arguments{
-\item{spectra}{The spectral matrix (fluorophores x detectors)}
+\item{spectra}{The spectral matrix, dimensions fluorophores x detectors.}
 }
 \value{
 The estimated spread matrix

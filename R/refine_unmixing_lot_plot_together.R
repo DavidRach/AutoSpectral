@@ -1,10 +1,10 @@
-# plot_density_log_together.r
+# refine_unmixing_lot_plot_together.r
 
 #' @title Plot Density of Log Values Together
 #'
 #' @description This function plots the density of log values for initial and
-#'     final steps of AutoSpectral, and calculation with positive and negative
-#'     populations, using ggplot2.
+#' final steps of AutoSpectral, and calculation with positive and negative
+#' populations, using ggplot2.
 #'
 #' @importFrom ggplot2 ggplot aes geom_density scale_color_manual scale_fill_manual
 #' @importFrom ggplot2 scale_linetype_manual labs theme_bw theme element_line
@@ -15,14 +15,16 @@
 #' @param x.table List of data frames containing values to be plotted.
 #' @param x.label Label for the x-axis.
 #' @param plot.file.path Path to save the plot file.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
 #'
 #' @return Saves the plot as a JPEG file in the specified directory.
+#'
 #' @export
 
 
-refine.unmixing.log.plot.together <- function( x.table, x.label, plot.file.path, asp )
-{
+refine.unmixing.log.plot.together <- function( x.table, x.label, plot.file.path,
+                                               asp ) {
 
   # get values avoiding matrix diagonal
   x.data <- lapply( x.table, function( xt ) {

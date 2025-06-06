@@ -1,14 +1,18 @@
 # trim_extreme_events.r
 
 #' @title Trim Extreme Events
+#'
 #' @description This function trims extreme events from expression data based
-#'     on a specified peak channel and trim factor.
+#' on a specified peak channel and trim factor.
+#'
 #' @param expr.data A  matrix containing the expression data.
 #' @param peak.channel A character string specifying the peak channel to be
-#'     used for trimming.
+#' used for trimming.
 #' @param trim.factor A numeric value indicating the proportion of extreme
-#'     events to trim from both ends of the peak channel distribution.
+#' events to trim from both ends of the peak channel distribution.
+#'
 #' @return A matrix with the extreme events trimmed.
+#'
 #' @export
 
 

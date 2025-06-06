@@ -4,14 +4,18 @@
 #' Get Autospectral Parameters
 #'
 #' This function retrieves autospectral parameters for a specified cytometer.
-#'     It sets up directory parameters for figures and tables if required.
+#' It sets up directory parameters for figures and tables if required.
 #'
 #' @title Get Autospectral Parameters
+#'
 #' @description Retrieves autospectral parameters for a specified cytometer.
-#' @param cytometer The type of cytometer (default is "aurora").
+#'
+#' @param cytometer The type of cytometer, default is `aurora`.
 #' @param figures Logical indicating whether to set up directory parameters for
-#'     figures and tables (default is TRUE).
+#' figures and tables, default is `TRUE`
+#'
 #' @return A list of autospectral parameters.
+#'
 #' @export
 
 

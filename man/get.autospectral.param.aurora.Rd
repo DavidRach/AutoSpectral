@@ -7,18 +7,18 @@
 get.autospectral.param.aurora(autosp.param)
 }
 \arguments{
-\item{autosp.param}{A list of initial autospectral parameters.}
+\item{autosp.param}{A list of initial AutoSpectral parameters.}
 }
 \value{
-A list of autospectral parameters specific to the Aurora cytometer.
+A list of AutoSpectral parameters specific to the Aurora cytometer.
 }
 \description{
 Returns parameters for running a calculation of unmixing with
-    autospectral, without creating any figures or tables.
+AutoSpectral, without creating any figures or tables.
 }
 \details{
 Get Autospectral Parameters for Aurora Cytometer
 
 This function returns parameters for running a calculation of unmixing with
-    autospectral, without creating any figures or tables.
+AutoSpectral, without creating any figures or tables.
 }

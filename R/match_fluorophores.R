@@ -7,13 +7,14 @@
 #' @title Match Fluorophores
 #'
 #' @description This function matches control filenames to fluorophores in the
-#'     fluorophore database, including synonyms, and returns the matched fluorophores.
+#' fluorophore database, including synonyms, and returns the matched fluorophores.
 #'
 #' @param control.filenames Vector of control filenames.
 #' @param fluorophore.database Data frame containing fluorophore information,
-#'     including synonyms.
+#' including synonyms.
 #'
 #' @return A named vector of matched fluorophores for each control filename.
+#'
 #' @export
 
 

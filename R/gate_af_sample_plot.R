@@ -1,11 +1,11 @@
-# plot_gate_af_sample.r
+# gate_af_sample_plot.r
 
 
 #' @title Plot Gate Autofluorescence Sample
 #'
 #' @description This function plots the gate autofluorescence sample,
-#'     including upper and lower boundaries, using ggplot2 and other necessary
-#'     packages.
+#' including upper and lower boundaries, using ggplot2 and other necessary
+#' packages.
 #'
 #' @importFrom ggplot2 ggplot aes scale_x_continuous scale_y_continuous
 #' @importFrom ggplot2 scale_color_gradientn theme_bw theme element_line
@@ -20,9 +20,11 @@
 #' @param af.data Matrix containing autofluorescence data points.
 #' @param af.boundary.lower Matrix containing lower boundary information.
 #' @param af.boundary.upper Matrix containing upper boundary information.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
 #'
 #' @return Saves the plot as a JPEG file in the specified directory.
+#'
 #' @export
 
 

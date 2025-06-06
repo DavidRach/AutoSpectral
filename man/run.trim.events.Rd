@@ -13,21 +13,24 @@ run.trim.events(
 )
 }
 \arguments{
-\item{trim.sample.data}{A list containing the expression data for each sample.}
+\item{trim.sample.data}{A list containing the expression data for each
+sample.}
 
 \item{trim.sample}{A character vector specifying the names of the samples.}
 
-\item{trim.peak.channels}{A list containing the peak channels for each sample.}
+\item{trim.peak.channels}{A list containing the peak channels for each
+sample.}
 
-\item{trim.factor}{A numeric value indicating the proportion of extreme events
-to trim from both ends of the peak channel distribution.}
+\item{trim.factor}{A numeric value indicating the proportion of extreme
+events to trim from both ends of the peak channel distribution.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 }
 \value{
 A list containing the trimmed expression data for each sample.
 }
 \description{
 This function trims extreme events from multiple samples based
-    on specified peak channels and trim factors.
+on specified peak channels and trim factors.
 }

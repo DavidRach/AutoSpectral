@@ -1,4 +1,4 @@
-# plot_density_log.r
+# refine_unmixing_lot_plot.r
 
 # Plots density of log values segregated by sign, ignoring diagonal
 # coefficients and zeroes.
@@ -6,7 +6,7 @@
 #' @title Plot Density of Log Values
 #'
 #' @description This function plots the density of log values, excluding matrix
-#'     diagonal and zero values, using ggplot2.
+#' diagonal and zero values, using ggplot2.
 #'
 #' @importFrom ggplot2 ggplot aes geom_density scale_color_manual scale_fill_manual
 #' @importFrom ggplot2 scale_linetype_manual labs theme_bw theme element_line
@@ -17,9 +17,11 @@
 #' @param x.data Data frame containing values to be plotted.
 #' @param x.label Label for the x-axis.
 #' @param plot.file.path Path to save the plot file.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
 #'
 #' @return Saves the plot as a JPEG file in the specified directory.
+#'
 #' @export
 
 

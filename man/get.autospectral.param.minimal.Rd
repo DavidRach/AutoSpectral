@@ -7,13 +7,13 @@
 get.autospectral.param.minimal()
 }
 \value{
-A list of minimal autospectral parameters.
+A list of minimal AutoSpectral parameters.
 }
 \description{
-Returns a minimal set of autospectral parameters.
+Returns a minimal set of AutoSpectral parameters.
 }
 \details{
 Get Minimal Autospectral Parameters
 
-This function returns a minimal set of autospectral parameters.
+This function returns a minimal set of AutoSpectral parameters.
 }

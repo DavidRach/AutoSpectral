@@ -4,17 +4,20 @@
 #' @title Run Autofluorescence Removal
 #'
 #' @description This function runs the autofluorescence removal process on a
-#'     list of samples, using the specified parameters and settings.
+#' list of samples, using the specified parameters and settings.
 #'
 #' @param clean.expr List containing cleaned expression data.
 #' @param af.removal.sample Vector of sample names for which autofluorescence
-#'     removal is to be performed.
+#' removal is to be performed.
 #' @param neg.artefacts.list List of negative artefacts.
 #' @param spectral.channel Vector of spectral channel names.
 #' @param universal.negative Name of the universal negative control.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
 #'
-#' @return A list containing the expression data with autofluorescence removed for each sample.
+#' @return A list containing the expression data with autofluorescent events
+#' removedfor each sample.
+#'
 #' @export
 
 

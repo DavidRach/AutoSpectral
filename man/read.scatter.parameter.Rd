@@ -7,12 +7,13 @@
 read.scatter.parameter(asp)
 }
 \arguments{
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 }
 \value{
 A vector of scatter parameters.
 }
 \description{
 This function reads scatter parameters from a specified file or
-    uses default scatter parameters if the file is not available.
+uses default scatter parameters if the file is not available.
 }

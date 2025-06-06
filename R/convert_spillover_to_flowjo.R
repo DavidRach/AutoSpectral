@@ -6,12 +6,15 @@
 #' A quick and dirty method for writing a FlowJo-compatible compensation matrix
 #' file from any spillover csv file.
 #'
-#' @param spillover.file.name The file name of the spillover csv file to be imported.
-#' @param flowjo.file.name The name given to the generated FlowJo compensation file.
+#' @param spillover.file.name The file name of the spillover csv file to be
+#' imported.
+#' @param flowjo.file.name The name given to the generated FlowJo compensation
+#' file.
 #' @param input.dir Path to the spillover csv file.
-#' @param output.dir Path to the folder where the compensation mtx file will be written.
+#' @param output.dir Path to the folder where the compensation mtx file will
+#' be written.
 #'
-#' @return No return. Write the xml .mtx file.
+#' @return No return. Writes the xml .mtx file.
 #'
 #' @export
 

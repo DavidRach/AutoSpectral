@@ -10,7 +10,7 @@
 #'
 #' @title Perform Quality Control on Flow Cytometry Data using PeacoQC
 #' @description Performs quality control on flow cytometry data using the
-#'     PeacoQC method.
+#' PeacoQC method.
 #'
 #' @importFrom flowCore transform flowFrame exprs keyword transformList keyword<-
 #' @importFrom PeacoQC PeacoQC PlotPeacoQC RemoveMargins
@@ -23,7 +23,7 @@
 #' @param output.dir The directory to save output files.
 #' @param time.param The time channel parameter.
 #' @param all.channels A vector of all channels to be included in the final
-#'     cleaned data.
+#' cleaned data.
 #' @param asp The AutoSpectral parameter list.
 #' @return A matrix with the cleaned expression data.
 #' @export

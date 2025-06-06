@@ -5,7 +5,7 @@
 #' Calculates the cosine similarity between columns of the input matrix (spectra).
 #'
 #' @param spectra.t The transposed spectral matrix (or dataframe), represented as
-#'     detectors in rows and fluorophores in columns.
+#' detectors in rows and fluorophores in columns.
 #' @return The cosine similarity matrix in fluorophores x fluorophores.
 #' @export
 

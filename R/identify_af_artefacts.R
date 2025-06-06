@@ -4,15 +4,16 @@
 # defines gates for removal
 # plots removal gates
 # plots spectra of cells with and without removal
-# returns gate boundaries and the components needed to transform single-stained controls
+# returns gate boundaries and the components needed to transform
+# single-stained controls
 
 
 #' @title Identify Autofluorescence Artefacts
 #'
 #' @description This function identifies spikes of autofluorescence based on a
-#'     negative control, defines gates for removal, plots removal gates, plots
-#'     spectra of cells with and without removal, and returns gate boundaries
-#'     and the components needed to transform single-stained controls.
+#' negative control, defines gates for removal, plots removal gates, plots
+#' spectra of cells with and without removal, and returns gate boundaries
+#' and the components needed to transform single-stained controls.
 #'
 #' @importFrom stats prcomp median mad
 #' @importFrom sp point.in.polygon
@@ -20,15 +21,16 @@
 #' @param clean.expr List containing cleaned expression data.
 #' @param universal.neg Name of the universal negative control.
 #' @param spectral.channel Vector of spectral channel names.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
 #'
 #' @return A list containing the autofluorescence components and gate boundaries.
 #' @export
 
 
 
-id.af.artefacts <- function( clean.expr, universal.neg,
-                                   spectral.channel, asp ) {
+id.af.artefacts <- function( clean.expr, universal.neg, spectral.channel,
+                             asp ) {
 
   if ( asp$verbose )
     message( paste( "\033[34m", "Identifying autofluorescence contamination in",

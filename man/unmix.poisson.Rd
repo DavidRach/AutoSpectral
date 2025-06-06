@@ -11,13 +11,14 @@ unmix.poisson(raw.data, spectra, asp)
 
 \item{spectra}{Matrix containing spectra information.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 }
 \value{
 A matrix containing the unmixed data.
 }
 \description{
-This function performs unmixing of raw data using Poisson regression,
-    with iterative reweighted least squares (IRLS) and fallback methods for
-    cells that fail to converge.
+This function performs unmixing of raw data using Poisson
+regression, with iterative reweighted least squares, IRLS, and fallback
+methods for cells that fail to converge.
 }

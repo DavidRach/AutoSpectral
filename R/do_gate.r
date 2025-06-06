@@ -2,21 +2,19 @@
 
 
 #' @title Do Gate
+#'
 #' @description
-#' Perform gating on scatter parameters
-#'     Returns a vector with the indexes of events inside the initial gate on
-#'     scatter parameters.
+#' Performs gating on scatter parameters and returns a vector with the indexes
+#' of events inside the initial gate.
 #'
-#'     Proceeds in three steps:
-#' \itemize{
-#'   \item Defines bound by data trimming
-#'   \item Defines region around the target maximum found in bound
-#'   \item Defines gate around target maximum, only in region
-#' }
+#' The gating proceeds in three steps:
 #'
-#'     Uses numerical search of maxima over estimated densities.
-#'     Uses Voronoi tessellations to improve density estimation around maxima.
+#' - Defines bounds by data trimming
+#' - Defines a region around the target maximum found within the bounds
+#' - Defines a gate around the target maximum, only within that region
 #'
+#' The method uses numerical search of maxima over estimated densities and
+#' Voronoi tessellations to improve density estimation around maxima.
 #'
 #' @importFrom KernSmooth bkde2D
 #' @importFrom deldir deldir tile.list which.tile
@@ -28,9 +26,12 @@
 #' @param large.gate A logical vector indicating the large gate.
 #' @param samp A sample identifier.
 #' @param scatter.and.channel.label A label for scatter and channel.
-#' @param control.type The type of control used, beads or cells.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param control.type The type of control used, either "beads" or "cells".
+#' @param asp The AutoSpectral parameter list, prepared using
+#' `get.autospectral.param`.
+#'
 #' @return A vector with the indexes of events inside the initial gate.
+#'
 #' @export
 
 

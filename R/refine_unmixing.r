@@ -3,7 +3,7 @@
 #' @title Refine Unmixing
 #'
 #' @description This function refines the unmixing process for spectral data,
-#'     iteratively updating the spectra matrix and calculating unmixing errors.
+#' iteratively updating the spectra matrix and calculating unmixing errors.
 #'
 #' @importFrom flowWorkspace flowjo_biexp
 #' @importFrom stats sd
@@ -11,11 +11,13 @@
 #'
 #' @param spectra.initial Initial spectra matrix.
 #' @param flow.control List containing flow control information.
-#' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
+#' @param asp The AutoSpectral parameter list.
+#' Prepare using `get.autospectral.param`
 #' @param clean.expr Logical indicating whether to clean expression data.
 #' @param plot.prefix Optional prefix for the plot title.
 #'
 #' @return The refined spectra matrix.
+#'
 #' @export
 
 

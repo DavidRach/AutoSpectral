@@ -7,7 +7,8 @@
 create.directory(asp)
 }
 \arguments{
-\item{asp}{The AutoSpectral parameter list defined using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list defined
+using \code{get.autospectral.param}}
 }
 \value{
 No returns. Creates directories in the current working directory.

@@ -25,7 +25,8 @@ run.universal.negative(
 \item{univ.sample}{A character vector specifying the names of universal
 negative samples.}
 
-\item{universal.negatives}{A list containing universal negative control parameters.}
+\item{universal.negatives}{A list containing universal negative control
+parameters.}
 
 \item{scatter.param}{A character vector specifying the scatter parameters.}
 
@@ -39,19 +40,20 @@ negative samples.}
 
 \item{spectral.channel}{A character vector specifying the spectral channels.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 
-\item{control.type}{A character string specifying the type of control
-(beads or cells).}
+\item{control.type}{A character string specifying the
+type of control: \code{beads} or \code{cells}}
 
 \item{scatter.match}{A logical value indicating whether scatter matching
 is performed.}
 }
 \value{
 A list containing the processed expression data for each universal
-    negative sample.
+negative sample.
 }
 \description{
 This function processes universal negative samples to generate
-    expression data based on specified parameters.
+expression data based on specified parameters.
 }

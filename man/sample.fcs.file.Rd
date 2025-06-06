@@ -9,16 +9,19 @@ sample.fcs.file(file.name, control.dir, downsample.n, asp)
 \arguments{
 \item{file.name}{A character string specifying the name of the FCS file.}
 
-\item{control.dir}{A character string specifying the directory containing the control FCS file.}
+\item{control.dir}{A character string specifying the directory containing
+the control FCS file.}
 
-\item{downsample.n}{A numeric value indicating the number of events to downsample.}
+\item{downsample.n}{A numeric value indicating the number of events to
+downsample.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 }
 \value{
 A matrix containing the sampled events from the FCS file.
 }
 \description{
-This function samples events from an FCS file based on specified
-    parameters and downsampling criteria.
+This function samples events from an FCS file based on
+specified parameters and downsampling criteria.
 }

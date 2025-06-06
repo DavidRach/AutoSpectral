@@ -18,20 +18,22 @@ get.unmixing.error(
 
 \item{fluorophores}{Vector of fluorophore names.}
 
-\item{scale.untransformed}{Logical indicating whether to scale untransformed data.}
+\item{scale.untransformed}{Logical indicating whether to scale untransformed
+data.}
 
 \item{transform.inv}{Function to apply the inverse transformation.}
 
 \item{flow.event.sample}{Vector indicating the sample for each flow event.}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{asp}{The AutoSpectral parameter list.
+Prepare using \code{get.autospectral.param}}
 }
 \value{
 A list containing the unmixing correction matrices for intercept,
-    coefficient, slope, and skewness.
+coefficient, slope, and skewness.
 }
 \description{
-This function calculates the unmixing error for each fluorophore,
-    including intercept, coefficient, slope, and skewness, using robust
-    linear modeling.
+This function calculates the unmixing error for each
+fluorophore, including intercept, coefficient, slope, and skewness, using
+robust linear modeling.
 }

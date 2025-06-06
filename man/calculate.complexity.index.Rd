@@ -7,15 +7,16 @@
 calculate.complexity.index(spectra)
 }
 \arguments{
-\item{spectra}{Spectral signatures of fluorophores, normalized between 0 and 1,
-with fluorophores in rows and detectors (channels) in columns. More than one
-spectra are needed to calculate anything here.}
+\item{spectra}{A matrix of spectral signatures of fluorophores, normalized
+between 0 and 1.
+Fluorophores should be in rows and detectors (channels) in columns.
+More than one spectrum is required to perform the calculation.}
 }
 \value{
-The complexity index (condition number) for the
-    spectral flow cytometry panel.
+A numeric value representing the complexity index (condition number)
+for the spectral flow cytometry panel.
 }
 \description{
 Calculates the complexity index (condition number) for a set of
-    fluorophores (a spectral panel).
+fluorophores in a spectral panel.
 }
