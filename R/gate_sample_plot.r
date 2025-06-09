@@ -2,8 +2,9 @@
 
 #' @title Plot Pre-defined Gate on Sample
 #'
-#' @description This function plots a pre-defined gate on a sample,
-#' using ggplot2 and other necessary packages.
+#' @description
+#' This function plots a pre-defined gate on a sample, using ggplot2 and other
+#' necessary packages.
 #'
 #' @importFrom ggplot2 ggplot aes scale_x_continuous scale_y_continuous
 #' @importFrom ggplot2 scale_color_gradientn theme_bw theme element_line
@@ -27,8 +28,6 @@
 #' @return Saves the plot as a JPEG file in the specified directory.
 #'
 #' @export
-
-
 
 gate.sample.plot <- function( samp, gate.data, gate.marker, gate.boundary,
                               scatter.and.channel.label, control.type, asp )

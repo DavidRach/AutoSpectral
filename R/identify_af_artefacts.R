@@ -1,16 +1,9 @@
 # identify_af_artefacts.r
 
-# identifies spikes of autofluorescence based on a negative control
-# defines gates for removal
-# plots removal gates
-# plots spectra of cells with and without removal
-# returns gate boundaries and the components needed to transform
-# single-stained controls
-
-
 #' @title Identify Autofluorescence Artefacts
 #'
-#' @description This function identifies spikes of autofluorescence based on a
+#' @description
+#' This function identifies spikes of autofluorescence based on a
 #' negative control, defines gates for removal, plots removal gates, plots
 #' spectra of cells with and without removal, and returns gate boundaries
 #' and the components needed to transform single-stained controls.
@@ -26,8 +19,6 @@
 #'
 #' @return A list containing the autofluorescence components and gate boundaries.
 #' @export
-
-
 
 id.af.artefacts <- function( clean.expr, universal.neg, spectral.channel,
                              asp ) {

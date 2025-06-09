@@ -18,12 +18,6 @@ Prepare using \code{get.autospectral.param}}
 A vector with the indexes of events inside the initial gate.
 }
 \description{
-Returns a vector with the indexes of events inside the initial
-gate on autofluorescence parameters.
-}
-\details{
-Perform Gating on Autofluorescence Parameters
-
 This function returns a vector with the indexes of events inside the initial
 gate on autofluorescence parameters. It proceeds through several steps to
 define the gate boundaries and identify density maxima using numerical

@@ -1,10 +1,10 @@
 # run_downsample.r
 
-
 #' @title Run Downsample
 #'
-#' @description This function runs the downsampling process on a list of
-#' samples, using the specified peak channels and parameters.
+#' @description
+#' This function runs the downsampling process on a list of samples, using the
+#' specified peak channels and parameters.
 #'
 #' @param clean.expr.data List containing cleaned expression data.
 #' @param downsample.sample Vector of sample names to be downsampled.
@@ -17,7 +17,6 @@
 #' @return A list containing the downsampled expression data for each sample.
 #'
 #' @export
-
 
 run.downsample <- function( clean.expr.data, downsample.sample, peak.channels,
                             negative.n, positive.n, asp ){

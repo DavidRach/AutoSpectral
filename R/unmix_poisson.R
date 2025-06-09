@@ -2,9 +2,10 @@
 
 #' @title Unmix Using Poisson Regression
 #'
-#' @description This function performs unmixing of raw data using Poisson
-#' regression, with iterative reweighted least squares, IRLS, and fallback
-#' methods for cells that fail to converge.
+#' @description
+#' This function performs unmixing of raw data using Poisson regression, with
+#' iterative reweighted least squares (IRLS) and fallback methods for cells
+#' that fail to converge.
 #'
 #' @importFrom stats glm.fit glm.control poisson coef
 #' @importFrom future plan multisession
@@ -18,7 +19,6 @@
 #' @return A matrix containing the unmixed data.
 #'
 #' @export
-
 
 unmix.poisson <- function( raw.data, spectra, asp ) {
 

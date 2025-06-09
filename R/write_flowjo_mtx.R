@@ -14,7 +14,6 @@
 #'
 #' @export
 
-
 write.flowjo.mtx <- function( spillover.matrix, flowjo.file.name ) {
 
   # clean up any bad names

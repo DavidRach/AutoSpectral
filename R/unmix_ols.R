@@ -2,7 +2,8 @@
 
 #' @title unmix.ols
 #'
-#' @description Performs spectral unmixing using ordinary least squares
+#' @description
+#' Performs spectral unmixing using ordinary least squares
 #'
 #' @param raw.data Expression data from raw fcs files. Cells in rows and
 #' detectors in columns. Columns should be fluorescent data only and must
@@ -13,7 +14,6 @@
 #' @return Unmixed data with cells in rows and fluorophores in columns.
 #'
 #' @export
-
 
 unmix.ols <- function( raw.data, spectra ) {
 

@@ -1,10 +1,10 @@
 # run_af_removal.r
 
-
 #' @title Run Autofluorescence Removal
 #'
-#' @description This function runs the autofluorescence removal process on a
-#' list of samples, using the specified parameters and settings.
+#' @description
+#' This function runs the autofluorescence removal process on a list of samples,
+#' using the specified parameters and settings.
 #'
 #' @param clean.expr List containing cleaned expression data.
 #' @param af.removal.sample Vector of sample names for which autofluorescence
@@ -16,10 +16,9 @@
 #' Prepare using `get.autospectral.param`
 #'
 #' @return A list containing the expression data with autofluorescent events
-#' removedfor each sample.
+#' removed for each sample.
 #'
 #' @export
-
 
 run.af.removal <- function( clean.expr, af.removal.sample, neg.artefacts.list,
                             spectral.channel, universal.negative, asp ) {

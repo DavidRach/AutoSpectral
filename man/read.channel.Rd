@@ -18,6 +18,6 @@ Prepare using \code{get.autospectral.param}}
 A data frame containing the original and corrected channel names.
 }
 \description{
-This function reads channel information from control files and
-corrects channel names based on specified forbidden characters.
+This function reads channel information from control files and corrects
+channel names based on specified forbidden characters.
 }

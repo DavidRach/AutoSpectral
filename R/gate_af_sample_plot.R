@@ -3,9 +3,9 @@
 
 #' @title Plot Gate Autofluorescence Sample
 #'
-#' @description This function plots the gate autofluorescence sample,
-#' including upper and lower boundaries, using ggplot2 and other necessary
-#' packages.
+#' @description
+#' This function plots the gate autofluorescence sample, including upper and
+#' lower boundaries, using ggplot2 and other necessary packages.
 #'
 #' @importFrom ggplot2 ggplot aes scale_x_continuous scale_y_continuous
 #' @importFrom ggplot2 scale_color_gradientn theme_bw theme element_line
@@ -26,8 +26,6 @@
 #' @return Saves the plot as a JPEG file in the specified directory.
 #'
 #' @export
-
-
 
 gate.af.sample.plot <- function( samp, af.data,
                                  af.boundary.lower, af.boundary.upper,

@@ -19,6 +19,6 @@ events to trim from both ends of the peak channel distribution.}
 A matrix with the extreme events trimmed.
 }
 \description{
-This function trims extreme events from expression data based
-on a specified peak channel and trim factor.
+This function trims extreme events from expression data based on a specified
+peak channel and trim factor. Not recommended for most panels.
 }

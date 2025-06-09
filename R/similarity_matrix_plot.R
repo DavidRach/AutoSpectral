@@ -2,8 +2,10 @@
 
 #' @title Similarity Matrix Plot
 #'
-#' @description This function plots the similarity matrix as a heatmap and saves
-#' it as a JPEG file. It also calculates and displays the complexity index.
+#' @description
+#' This function plots the similarity matrix (cosine similarity) as a heatmap
+#' and saves it as a JPEG file. It also calculates and displays the complexity
+#' index (condition number) of the matrix.
 #'
 #' @importFrom ggplot2 ggplot aes geom_tile scale_fill_viridis_c theme_minimal
 #' @importFrom ggplot2 coord_fixed element_text labs ggsave
@@ -15,7 +17,7 @@
 #' Prepare using `get.autospectral.param`
 #' @param plot.prefix Optional prefix for the plot filename. Default is `NULL`
 #'
-#' @return Saves the heatmap plot as a JPEG file in the specified directory.
+#' @return Saves the heatmap plot as a JPEG file in the similarity directory.
 #'
 #' @export
 

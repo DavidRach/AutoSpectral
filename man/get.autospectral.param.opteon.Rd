@@ -14,11 +14,5 @@ A list of AutoSpectral parameters specific to the Opteon cytometer.
 }
 \description{
 Returns parameters for running a calculation of unmixing with
-AutoSpectral, without creating any figures or tables.
-}
-\details{
-Get Autospectral Parameters for Opteon Cytometer
-
-This function returns parameters for running a calculation of unmixing with
-AutoSpectral, without creating any figures or tables.
+AutoSpectral for the Opteon, without creating any figures or tables.
 }

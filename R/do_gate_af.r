@@ -1,17 +1,12 @@
 # do_gate_af.r
 
-
-#' Perform Gating on Autofluorescence Parameters
+#' @title Perform Gating on Autofluorescence Parameters
 #'
+#' @description
 #' This function returns a vector with the indexes of events inside the initial
 #' gate on autofluorescence parameters. It proceeds through several steps to
 #' define the gate boundaries and identify density maxima using numerical
 #' search and Voronoi tessellations.
-#'
-#' @title Perform Gating on Autofluorescence Parameters
-#'
-#' @description Returns a vector with the indexes of events inside the initial
-#' gate on autofluorescence parameters.
 #'
 #' @importFrom KernSmooth bkde2D
 #' @importFrom deldir deldir tile.list which.tile

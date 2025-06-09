@@ -18,7 +18,7 @@ Prepare using \code{get.autospectral.param}}
 A matrix containing the unmixed data.
 }
 \description{
-This function performs unmixing of raw data using Poisson
-regression, with iterative reweighted least squares, IRLS, and fallback
-methods for cells that fail to converge.
+This function performs unmixing of raw data using Poisson regression, with
+iterative reweighted least squares (IRLS) and fallback methods for cells
+that fail to converge.
 }

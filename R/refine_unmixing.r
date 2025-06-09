@@ -2,8 +2,9 @@
 
 #' @title Refine Unmixing
 #'
-#' @description This function refines the unmixing process for spectral data,
-#' iteratively updating the spectra matrix and calculating unmixing errors.
+#' @description
+#' This function refines the unmixing process for spectral data, iteratively
+#' updating the spectra matrix and calculating unmixing errors.
 #'
 #' @importFrom flowWorkspace flowjo_biexp
 #' @importFrom stats sd
@@ -19,7 +20,6 @@
 #' @return The refined spectra matrix.
 #'
 #' @export
-
 
 refine.unmixing <- function( spectra.initial, flow.control, asp,
                              clean.expr = FALSE, plot.prefix = "Refined" )
@@ -308,7 +308,7 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
                         asp )
     }
 
-    if ( ! is.null( asp$table.convergence.dir ) ){
+    if ( ! is.null( asp$table.convergence.dir ) ) {
       write.csv( rs.convergence.log,
                  file = file.path( asp$table.convergence.dir,
                  sprintf( "%s.csv", asp$convergence.file.name ) ),
@@ -316,14 +316,13 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
     }
 
 
-    if ( ! is.null( asp$figure.convergence.dir ) ){
+    if ( ! is.null( asp$figure.convergence.dir ) ) {
 
       convergence.plot( rs.convergence.log, asp )
     }
 
     # save spectral matrix
-    if ( ! is.null( asp$table.spectra.dir ) )
-    {
+    if ( ! is.null( asp$table.spectra.dir ) ) {
       table.spectra.file.name <- sprintf( "%s.csv", plot.title )
 
       write.csv( spectra.update.reverted,
@@ -332,13 +331,17 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
     }
 
     # plot spectra
-    if ( ! is.null( asp$figure.similarity.heatmap.dir ) ){
-      spectral.trace( spectra.update.reverted, flow.control, asp, plot.title,
-                    asp$figure.spectra.dir )
+    if ( ! is.null( asp$figure.spectra.dir ) ) {
+      spectral.trace( spectral.matrix = spectra.update.reverted,
+                      plot.title = plot.title,
+                      plot.dir = asp$figure.spectra.dir,
+                      split.lasers = TRUE,
+                      asp$figure.spectra.line.size,
+                      asp$figure.spectra.point.size )
     }
 
     # plot similarity matrix heatmap
-    if ( ! is.null( asp$figure.spectra.dir ) ){
+    if ( ! is.null( asp$figure.similarity.heatmap.dir ) ) {
       similarity.matrix.plot( spectra.update.reverted, asp, plot.prefix )
     }
 

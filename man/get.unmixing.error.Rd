@@ -33,7 +33,6 @@ A list containing the unmixing correction matrices for intercept,
 coefficient, slope, and skewness.
 }
 \description{
-This function calculates the unmixing error for each
-fluorophore, including intercept, coefficient, slope, and skewness, using
-robust linear modeling.
+This function calculates the unmixing error for each fluorophore, including
+intercept, coefficient, slope, and skewness, using robust linear modeling.
 }

@@ -1,14 +1,9 @@
 # get_gated_flow_expression_data.r
 
-
-#' Get Gated Flow Expression Data
-#'
-#' This function retrieves gated flow cytometry expression data for specified
-#' samples, removing out-of-range events and applying gating boundaries.
-#'
 #' @title Get Gated Flow Expression Data
 #'
-#' @description Retrieves gated flow cytometry expression data for specified
+#' @description
+#' Retrieves gated flow cytometry expression data for specified
 #' samples, removing out-of-range events and applying gating boundaries.
 #'
 #' @importFrom flowCore read.FCS exprs
@@ -30,7 +25,6 @@
 #' @return A matrix with the gated expression data.
 #'
 #' @export
-
 
 get.gated.flow.expression.data <- function( samp, file.name, control.dir,
                                             scatter.and.spectral.channel,

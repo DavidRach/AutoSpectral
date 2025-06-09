@@ -31,6 +31,6 @@ Prepare using \code{get.autospectral.param}}
 A list containing the trimmed expression data for each sample.
 }
 \description{
-This function trims extreme events from multiple samples based
-on specified peak channels and trim factors.
+This function trims extreme events from multiple samples based on specified
+peak channels and trim factors.
 }

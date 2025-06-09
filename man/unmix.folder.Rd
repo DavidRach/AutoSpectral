@@ -66,7 +66,7 @@ Used for \code{Balance} option under \code{divergence.handling}. Default is \cod
 None. Saves the unmixed FCS files to the specified output directory.
 }
 \description{
-This function unmixes all FCS files in a specified directory
-using the provided spectra and method, and saves the unmixed data to an
-output directory.
+This function unmixes all FCS files in a specified directory using the
+provided spectra and method, and saves the unmixed FCS files to an output
+directory of the user's choice.
 }

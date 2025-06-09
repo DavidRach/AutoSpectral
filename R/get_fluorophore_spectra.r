@@ -1,17 +1,12 @@
 # get_fluorophore_spectra.r
 
-
-#' Get Fluorophore Spectra
+#' @title Get Fluorophore Spectra
 #'
+#' @description
 #' This function retrieves the fluorophore spectra for flow cytometry data,
 #' optionally using cleaned expression data and biexponential transformation.
 #' It also plots and saves the spectra, and performs cosine similarity QC for
 #' controls.
-#'
-#' @title Get Fluorophore Spectra
-#'
-#' @description Retrieves the fluorophore spectra for flow cytometry data,
-#' optionally using cleaned expression data and biexponential transformation.
 #'
 #' @importFrom flowWorkspace flowjo_biexp
 #'
@@ -28,7 +23,6 @@
 #' @return A matrix with the fluorophore spectra.
 #'
 #' @export
-
 
 get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
                                      biexp = FALSE, af.spectra = NULL,
@@ -97,7 +91,7 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
           # fit robust linear model
           spectra.model.result <- fit.robust.linear.model(
             peak.channel.expr, channel.expr,
-            peak.channel, channel, asp )
+            peak.channel, channel, asp$rlm.iter.max )
 
           fluor.spectra.coef[ channel ] <- spectra.model.result[ 2 ]
         }
@@ -148,7 +142,7 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
           # fit robust linear model
           spectra.model.result <- fit.robust.linear.model(
             peak.channel.expr, channel.expr,
-            peak.channel, channel, asp )
+            peak.channel, channel, asp$rlm.iter.max )
 
           fluor.spectra.coef[ channel ] <- spectra.model.result[ 2 ]
         }
@@ -173,8 +167,11 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
       fluorophore.spectra.plot <- rbind( fluorophore.spectra.plot, af.spectra )
     }
 
-    spectral.trace( fluorophore.spectra.plot, flow.control, asp, plot.title,
-                 asp$figure.spectra.dir )
+    spectral.trace( spectral.matrix = fluorophore.spectra.plot,
+                    plot.title = plot.title, plot.dir = asp$figure.spectra.dir,
+                    split.lasers = TRUE,
+                    asp$figure.spectra.line.size,
+                    asp$figure.spectra.point.size )
     spectral.heatmap( fluorophore.spectra.plot, asp, plot.prefix,
                       output.dir = asp$figure.spectra.dir )
   }

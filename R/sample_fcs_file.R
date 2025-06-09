@@ -2,8 +2,9 @@
 
 #' @title Sample FCS File
 #'
-#' @description This function samples events from an FCS file based on
-#' specified parameters and downsampling criteria.
+#' @description
+#' This function samples events from an FCS file based on specified parameters
+#' and downsampling criteria.
 #'
 #' @importFrom flowCore read.FCS exprs
 #'
@@ -18,7 +19,6 @@
 #' @return A matrix containing the sampled events from the FCS file.
 #'
 #' @export
-
 
 sample.fcs.file <- function( file.name, control.dir, downsample.n, asp ) {
 

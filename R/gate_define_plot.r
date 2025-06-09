@@ -3,7 +3,8 @@
 
 #' @title Gate Definition Plot
 #'
-#' @description This function plots the gate during the definition step,
+#' @description
+#' This function plots the gate during the definition step,
 #' including boundaries and regions.
 #'
 #' @importFrom ggplot2 ggplot aes scale_x_continuous scale_y_continuous
@@ -28,8 +29,6 @@
 #' @return Saves the plot as a JPEG file in the specified directory.
 #'
 #' @export
-
-
 
 gate.define.plot <- function( samp, gate.data, gate.marker, gate.bound,
     gate.region, gate.population, scatter.and.channel.label, asp )

@@ -16,10 +16,5 @@ Prepare using \code{get.autospectral.param}}
 A vector of colors representing the density palette.
 }
 \description{
-Returns a good color palette for a given density distribution.
-}
-\details{
-Get Density Color Palette
-
-This function returns a good color palette for a given density distribution.
+Returns a good color palette for plotting cell density distribution.
 }

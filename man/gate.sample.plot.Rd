@@ -35,6 +35,6 @@ Prepare using \code{get.autospectral.param}}
 Saves the plot as a JPEG file in the specified directory.
 }
 \description{
-This function plots a pre-defined gate on a sample,
-using ggplot2 and other necessary packages.
+This function plots a pre-defined gate on a sample, using ggplot2 and other
+necessary packages.
 }

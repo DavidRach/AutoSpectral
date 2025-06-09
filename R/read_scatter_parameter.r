@@ -2,8 +2,9 @@
 
 #' @title Read Scatter Parameters
 #'
-#' @description This function reads scatter parameters from a specified file or
-#' uses default scatter parameters if the file is not available.
+#' @description
+#' This function reads scatter parameters from a specified file or uses default
+#' scatter parameters if the file is not available.
 #'
 #' @importFrom utils read.csv
 #'

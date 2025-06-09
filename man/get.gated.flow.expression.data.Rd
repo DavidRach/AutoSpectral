@@ -49,9 +49,3 @@ A matrix with the gated expression data.
 Retrieves gated flow cytometry expression data for specified
 samples, removing out-of-range events and applying gating boundaries.
 }
-\details{
-Get Gated Flow Expression Data
-
-This function retrieves gated flow cytometry expression data for specified
-samples, removing out-of-range events and applying gating boundaries.
-}

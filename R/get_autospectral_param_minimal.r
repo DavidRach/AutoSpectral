@@ -1,20 +1,15 @@
 # get_autospectral_param_minimal.r
 
 
-#' Get Minimal Autospectral Parameters
-#'
-#' This function returns a minimal set of AutoSpectral parameters.
-#'
 #' @title Get Minimal Autospectral Parameters
 #'
-#' @description Returns a minimal set of AutoSpectral parameters.
+#' @description Returns the base set of AutoSpectral parameters.
 #'
 #' @importFrom parallelly availableCores
 #'
 #' @return A list of minimal AutoSpectral parameters.
 #'
 #' @export
-
 
 get.autospectral.param.minimal <- function()
 {
@@ -323,7 +318,9 @@ get.autospectral.param.minimal <- function()
       figure.scatter.axis.title.size = 12.0,
 
       figure.spectra.line.size = 1,
-      figure.spectra.point.size = 1
+      figure.spectra.point.size = 1,
+
+      heatmap.color.palette = "viridis"
 
     )
 }

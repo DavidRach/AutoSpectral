@@ -20,6 +20,6 @@ Prepare using \code{get.autospectral.param}}
 A list containing the reloaded flow control information.
 }
 \description{
-This function reloads essential information from control files
-to permit rapid unmixing at a later date.
+This function reloads essential information from control files to permit
+rapid unmixing at a later date, without recalculating spectra or gates.
 }

@@ -22,6 +22,6 @@ Prepare using \code{get.autospectral.param}}
 A matrix containing the sampled events from the FCS file.
 }
 \description{
-This function samples events from an FCS file based on
-specified parameters and downsampling criteria.
+This function samples events from an FCS file based on specified parameters
+and downsampling criteria.
 }

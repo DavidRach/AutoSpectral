@@ -2,7 +2,8 @@
 
 #' @title Unmixing Fixing Plot
 #'
-#' @description Plots the data before and after automated unmixing corrections.
+#' @description
+#' Plots the data before and after automated unmixing corrections.
 #'
 #' @importFrom ggplot2 ggplot scale_x_continuous scale_y_continuous aes facet_wrap
 #' @importFrom ggplot2 scale_color_gradientn guide_colorbar geom_path theme_classic
@@ -31,8 +32,6 @@
 #' @return No returns. Creates a jpeg plot.
 #'
 #' @export
-#'
-
 
 unmix.fix.plot <- function( original.data, compensated.data, plot.idx,
                             asp, unstained.thresholds, unstained.margin,

@@ -1,11 +1,9 @@
-# refine_unmixing_lot_plot.r
-
-# Plots density of log values segregated by sign, ignoring diagonal
-# coefficients and zeroes.
+# refine_unmixing_log_plot.r
 
 #' @title Plot Density of Log Values
 #'
-#' @description This function plots the density of log values, excluding matrix
+#' @description
+#' This function plots the density of log values, excluding matrix
 #' diagonal and zero values, using ggplot2.
 #'
 #' @importFrom ggplot2 ggplot aes geom_density scale_color_manual scale_fill_manual
@@ -23,8 +21,6 @@
 #' @return Saves the plot as a JPEG file in the specified directory.
 #'
 #' @export
-
-
 
 refine.unmixing.log.plot <- function( x.data, x.label, plot.file.path, asp )
 {

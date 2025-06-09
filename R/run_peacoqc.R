@@ -2,8 +2,9 @@
 
 #' @title Run PeacoQC
 #'
-#' @description This function runs PeacoQC to remove flow fluctuation errors
-#' from expression data using parallel processing if specified.
+#' @description
+#' This function runs PeacoQC to remove flow fluctuation errors from expression
+#' data using parallel processing if specified.
 #'
 #' @importFrom future plan multisession
 #' @importFrom future.apply future_lapply
@@ -18,7 +19,6 @@
 #' @return A list containing the cleaned expression data for each sample.
 #'
 #' @export
-
 
 run.peacoQC <- function( expr.data, spectral.channel,
                               all.channels, asp ){

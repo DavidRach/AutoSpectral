@@ -15,6 +15,5 @@ convergence.plot(convergence.log, asp)
 None. The function saves the generated convergence plot to a file.
 }
 \description{
-Plots convergence of iterative refinement of the spillover
-matrix.
+Plots convergence of iterative refinement of the spillover matrix.
 }

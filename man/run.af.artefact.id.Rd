@@ -22,7 +22,6 @@ A list containing the identified autofluorescence artefacts for
 each negative sample.
 }
 \description{
-This function runs the identification of autofluorescence
-artefacts on a list of negative samples, using the specified parameters
-and settings.
+This function runs the identification of autofluorescence artefacts on a
+list of negative samples, using the specified parameters and settings.
 }

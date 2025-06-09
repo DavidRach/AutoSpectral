@@ -21,6 +21,6 @@ lapply.sequential(X, FUN, ..., future.seed = NULL)
 A list of the same length as \code{X} and named by \code{X}.
 }
 \description{
-This function allows switching between \code{lapply} and
-\code{future_lapply} without \code{future.seed} issues by using \code{lapply} sequentially.
+This function allows switching between \code{lapply} and \code{future_lapply} without
+\code{future.seed} issues by using \code{lapply} sequentially.
 }

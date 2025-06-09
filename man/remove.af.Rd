@@ -33,6 +33,6 @@ A matrix containing the expression data with autofluorescent events
 removed for the sample.
 }
 \description{
-This function removes autofluorescence contamination from a
-sample, using the specified parameters and settings.
+This function removes autofluorescence contamination from a sample, using
+the specified parameters and settings.
 }

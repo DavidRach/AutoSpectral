@@ -1,13 +1,9 @@
 # get_density_palette.r
 
-
-#' Get Density Color Palette
-#'
-#' This function returns a good color palette for a given density distribution.
-#'
 #' @title Get Density Color Palette
 #'
-#' @description Returns a good color palette for a given density distribution.
+#' @description
+#' Returns a good color palette for plotting cell density distribution.
 #'
 #' @importFrom grDevices colorRampPalette
 #' @importFrom stats ecdf

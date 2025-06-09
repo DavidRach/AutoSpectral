@@ -15,8 +15,8 @@ create.control.file(control.dir, asp)
 No returns. Outputs a csv file called fcs_control_file.csv
 }
 \description{
-A helper function to draft a description of your single stained
-control files such that AutoSpectral can understand and process them correctly.
+A helper function to draft a description of your single stained control
+files such that AutoSpectral can understand and process them correctly.
 Given a set of single stained control fcs files, \code{create.control.file} will
 produce a csv file listing the matching peak detector channels for your
 fluorophores (if known). If your files contain bead or cell tags in the filename,

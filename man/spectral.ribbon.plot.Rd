@@ -40,6 +40,6 @@ None. The function saves the generated spectral ribbon plot to
 a file.
 }
 \description{
-This function generates spectral ribbon plots for positive and
-negative expression data.
+This function generates spectral ribbon plots for positive and negative
+expression data.
 }

@@ -2,8 +2,9 @@
 
 #' @title Spectral Ribbon Plot
 #'
-#' @description This function generates spectral ribbon plots for positive and
-#' negative expression data.
+#' @description
+#' This function generates spectral ribbon plots for positive and negative
+#' expression data.
 #'
 #' @importFrom tidyr pivot_longer
 #' @importFrom ggplot2 ggplot aes scale_y_continuous geom_bin2d facet_wrap xlab

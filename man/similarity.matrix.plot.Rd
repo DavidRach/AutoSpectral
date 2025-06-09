@@ -15,9 +15,10 @@ Prepare using \code{get.autospectral.param}}
 \item{plot.prefix}{Optional prefix for the plot filename. Default is \code{NULL}}
 }
 \value{
-Saves the heatmap plot as a JPEG file in the specified directory.
+Saves the heatmap plot as a JPEG file in the similarity directory.
 }
 \description{
-This function plots the similarity matrix as a heatmap and saves
-it as a JPEG file. It also calculates and displays the complexity index.
+This function plots the similarity matrix (cosine similarity) as a heatmap
+and saves it as a JPEG file. It also calculates and displays the complexity
+index (condition number) of the matrix.
 }

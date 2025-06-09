@@ -16,9 +16,3 @@ A list of AutoSpectral parameters specific to the Aurora cytometer.
 Returns parameters for running a calculation of unmixing with
 AutoSpectral, without creating any figures or tables.
 }
-\details{
-Get Autospectral Parameters for Aurora Cytometer
-
-This function returns parameters for running a calculation of unmixing with
-AutoSpectral, without creating any figures or tables.
-}

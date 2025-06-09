@@ -2,8 +2,9 @@
 
 #' @title Reload Flow Control Information
 #'
-#' @description This function reloads essential information from control files
-#' to permit rapid unmixing at a later date.
+#' @description
+#' This function reloads essential information from control files to permit
+#' rapid unmixing at a later date, without recalculating spectra or gates.
 #'
 #' @importFrom utils read.csv
 #' @importFrom dplyr filter
@@ -47,27 +48,40 @@ reload.flow.control <- function( control.dir, control.def.file, asp ) {
   flow.control.type <- control.table$control.type
   names( flow.control.type ) <- flow.fluorophore
 
+  flow.antigen <- control.table$marker
+  flow.channel <- control.table$channel
+
   check.critical( anyDuplicated( control.table$filename ) == 0,
                   "duplicated filenames in fcs data" )
 
   # read scatter parameters
   flow.scatter.parameter <- read.scatter.parameter( asp )
 
-  # set scatter parameters and channels
+  # set labels for time, scatter parameters and channels
+  flow.scatter.and.channel <- c( asp$default.time.parameter,
+                                 flow.scatter.parameter, flow.channel )
   flow.scatter.and.channel.spectral <- c( asp$default.time.parameter,
                                           flow.scatter.parameter,
                                           flow.spectral.channel )
+
+  flow.scatter.and.channel.label <- c( "Time", flow.scatter.parameter,
+                                       ifelse( ! is.na( flow.antigen ),
+                                               paste0( flow.antigen, " - ", flow.fluorophore ),
+                                               flow.channel ) )
+  names( flow.scatter.and.channel.label ) <- flow.scatter.and.channel
 
   # make control info
   flow.control <- list(
     filename = control.table$filename,
     fluorophore = flow.fluorophore,
     control.type = flow.control.type,
-    antigen = control.table$marker,
+    antigen = flow.antigen,
+    channel = flow.channel,
     expr.data.max = asp$expr.data.max,
     expr.data.min = asp$expr.data.min,
     spectral.channel = flow.spectral.channel,
     sample = control.table$sample,
+    scatter.and.channel.label = flow.scatter.and.channel.label,
     scatter.and.channel.spectral = flow.scatter.and.channel.spectral,
     scatter.parameter = flow.scatter.parameter
   )

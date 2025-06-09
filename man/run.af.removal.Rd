@@ -30,9 +30,9 @@ Prepare using \code{get.autospectral.param}}
 }
 \value{
 A list containing the expression data with autofluorescent events
-removedfor each sample.
+removed for each sample.
 }
 \description{
-This function runs the autofluorescence removal process on a
-list of samples, using the specified parameters and settings.
+This function runs the autofluorescence removal process on a list of samples,
+using the specified parameters and settings.
 }

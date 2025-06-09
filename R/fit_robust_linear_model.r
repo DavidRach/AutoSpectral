@@ -1,15 +1,10 @@
 # fit_robust_linear_model.r
 
-#' Fit Robust Linear Model
-#'
-#' This function returns a matrix by rows, with the intercept and p-value,
-#' and coefficient and p-value, of a robust linear model fitted to the input
-#' data. It reverts to a standard linear model in case of no convergence.
-#'
 #' @title Fit Robust Linear Model
 #'
-#' @description Returns a matrix by rows, with the intercept and p-value, and
-#' coefficient and p-value, of a robust linear model fitted to the input data.
+#' @description
+#' Returns a matrix by rows, with the intercept and coefficient of a robust
+#' linear model fitted to the input data.
 #' Reverts to a standard linear model in case of no convergence.
 #'
 #' @importFrom MASS rlm
@@ -19,22 +14,23 @@
 #' @param y.data A vector containing the response variable data.
 #' @param x.name The name of the predictor variable.
 #' @param y.name The name of the response variable.
-#' @param asp The AutoSpectral parameter list.
-#' Prepare using `get.autospectral.param`
+#' @param max.iter Numeric. Maximum number of iterations for the robust linear
+#' model. Default is `100`.
 #' @param fix.unmix Logical, default is `FALSE`. If `TRUE`, sets coefficient to
 #' zero in case of failed convergence. Used for `fix.my.unmix.`
 #'
-#' @return A matrix with the intercept and p-value, and coefficient and p-value.
+#' @return A vector with the intercept and coefficient.
 #'
 #' @export
 
 
 
-fit.robust.linear.model <-  function( x.data, y.data, x.name, y.name, asp,
+fit.robust.linear.model <-  function( x.data, y.data, x.name, y.name,
+                                      max.iter = 100,
                                       fix.unmix = FALSE )
 {
   X.data.int <- cbind( 1, x.data )
-  xy.model <- rlm( X.data.int, y.data, maxit = asp$rlm.iter.max )
+  xy.model <- rlm( X.data.int, y.data, maxit = max.iter )
 
     if ( xy.model$converged ) {
 

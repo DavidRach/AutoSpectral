@@ -20,6 +20,6 @@ Prepare using \code{get.autospectral.param}}
 A list containing the cleaned expression data for each sample.
 }
 \description{
-This function runs PeacoQC to remove flow fluctuation errors
-from expression data using parallel processing if specified.
+This function runs PeacoQC to remove flow fluctuation errors from expression
+data using parallel processing if specified.
 }

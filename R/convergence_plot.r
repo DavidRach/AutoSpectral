@@ -2,8 +2,8 @@
 
 #' @title Convergence Plot
 #'
-#' @description Plots convergence of iterative refinement of the spillover
-#' matrix.
+#' @description
+#' Plots convergence of iterative refinement of the spillover matrix.
 #'
 #' @importFrom ggplot2 ggplot aes labs geom_hline geom_point scale_x_continuous
 #' @importFrom ggplot2 scale_y_log10 scale_shape_manual theme_bw theme

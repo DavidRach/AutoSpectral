@@ -40,12 +40,6 @@ cleaned data.}
 A matrix with the cleaned expression data.
 }
 \description{
-Performs quality control on flow cytometry data using the
-PeacoQC method.
-}
-\details{
-Perform Quality Control on Flow Cytometry Data using PeacoQC
-
 This function performs quality control on flow cytometry data using the
 PeacoQC method. It transforms the data, removes margins, and identifies
 good cells. The function also optionally plots the results and saves

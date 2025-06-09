@@ -1,9 +1,9 @@
 # resolution loss function
 
-
 #' @title Calculate Resolution Loss
 #'
-#' @description This function calculates the resolution loss for each channel
+#' @description
+#' This function calculates the resolution loss for each channel
 #' in the unmixed expression data, based on the standard deviation above zero.
 #'
 #' @importFrom stats sd
@@ -13,8 +13,6 @@
 #' @return A numeric vector containing the resolution loss for each channel.
 #'
 #' @export
-
-
 
 get.resolution.loss <- function( unmixed.expr ) {
 

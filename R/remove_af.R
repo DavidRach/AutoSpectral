@@ -1,10 +1,10 @@
 # remove_af.r
 
-
 #' @title Remove Autofluorescence Contamination
 #'
-#' @description This function removes autofluorescence contamination from a
-#' sample, using the specified parameters and settings.
+#' @description
+#' This function removes autofluorescence contamination from a sample, using
+#' the specified parameters and settings.
 #'
 #' @importFrom sp point.in.polygon
 #'
@@ -21,7 +21,6 @@
 #' removed for the sample.
 #'
 #' @export
-
 
 remove.af <- function( clean.expr.data, samp, af.artefact, spectral.channel,
                        universal.negative, asp ) {

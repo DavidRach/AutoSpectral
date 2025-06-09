@@ -9,7 +9,8 @@ spectral.heatmap(
   asp,
   plot.prefix = NULL,
   legend.label = "Intensity",
-  output.dir = NULL
+  output.dir = NULL,
+  color.palette = "viridis"
 )
 }
 \arguments{
@@ -25,11 +26,16 @@ Prepare using \code{get.autospectral.param}}
 
 \item{output.dir}{Optional output directory. Default is NULL, in which case
 the spectra figure folder will be used.}
+
+\item{color.palette}{Optional character string defining the viridis color
+palette to be used for the fluorophore traces. Default is \code{viridis}. Options
+are the viridis color options: \code{magma}, \code{inferno}, \code{plasma}, \code{viridis},
+\code{cividis}, \code{rocket}, \code{mako} and \code{turbo}.}
 }
 \value{
 Saves the heatmap plot as a JPEG file in the specified directory.
 }
 \description{
-This function plots a spectral matrix as a heatmap and saves it
-as a JPEG file.
+This function plots the spectral matrix as a heatmap using the specified
+color palette, and saves it as a JPEG file.
 }

@@ -18,9 +18,3 @@ A list of autospectral parameters.
 \description{
 Retrieves autospectral parameters for a specified cytometer.
 }
-\details{
-Get Autospectral Parameters
-
-This function retrieves autospectral parameters for a specified cytometer.
-It sets up directory parameters for figures and tables if required.
-}

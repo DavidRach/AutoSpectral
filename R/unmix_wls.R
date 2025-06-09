@@ -1,10 +1,10 @@
 # unmix_wls.r
-#'
+
 #' @title Unmix Using Weighted Least Squares
 #'
-#' @description This function performs unmixing of raw data using weighted
-#' least squares, AKA WLS, based on the provided spectra.
-#' Weighting is by channel power.
+#' @description
+#' This function performs unmixing of raw data using weighted least squares,
+#' AKA WLS, based on the provided spectra. Weighting is by channel power.
 #'
 #' @param raw.data Expression data from raw fcs files. Cells in rows and
 #' detectors in columns. Columns should be fluorescent data only and must
@@ -19,7 +19,6 @@
 #' fluorophores in columns.
 #'
 #' @export
-
 
 unmix.wls <- function( raw.data, spectra, weights = NULL ) {
 

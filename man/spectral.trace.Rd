@@ -6,32 +6,43 @@
 \usage{
 spectral.trace(
   spectral.matrix,
-  flow.control,
-  asp,
   plot.title = "Fluorophore Spectra",
-  plot.dir,
-  split.lasers = TRUE
+  plot.dir = NULL,
+  split.lasers = TRUE,
+  figure.spectra.line.size = 1,
+  figure.spectra.point.size = 1,
+  color.palette = NULL
 )
 }
 \arguments{
-\item{spectral.matrix}{Matrix containing spectral data.}
+\item{spectral.matrix}{Matrix or dataframe containing spectral data. This
+should be in format fluorophores x detectors. Row names will be used as the
+fluorophore names. Column names will be used as the detectors (channels).}
 
-\item{flow.control}{List containing flow control information, including
-spectral channels.}
+\item{plot.title}{Title for the plot. Default is \verb{Fluorophore Spectra}}
 
-\item{asp}{The AutoSpectral parameter list. Prepare using get.autospectral.param.}
+\item{plot.dir}{Directory to save the plot files. Default is \code{NULL}, in
+which case the current working directory will be used.}
 
-\item{plot.title}{Title for the plot.}
+\item{split.lasers}{Logical indicating whether to create a second plot split
+by excitation lasers. Default is \code{TRUE}.}
 
-\item{plot.dir}{Directory to save the plot files.}
+\item{figure.spectra.line.size}{Numeric. Defines the width of the trace lines
+on the plot. Default is \code{1}.}
 
-\item{split.lasers}{Logical indicating whether to split the plot by
-excitation lasers.}
+\item{figure.spectra.point.size}{Numeric. Defines the size of the points
+on the plot (one per detector). Default is \code{1}.}
+
+\item{color.palette}{Optional character string defining the viridis color
+palette to be used for the fluorophore traces. Default is \code{NULL}, in which
+case default R Brewer colors will be assigned automatically. Options are the
+viridis color options: \code{magma}, \code{inferno}, \code{plasma}, \code{viridis}, \code{cividis},
+\code{rocket}, \code{mako} and \code{turbo}.}
 }
 \value{
 Saves the plot(s) as JPEG files in the specified directory.
 }
 \description{
-This function plots the fluorophore spectra, optionally splitting
-by excitation lasers, and saves the plots as JPEG files.
+This function plots the fluorophore spectra as normalized traces, optionally
+splitting by excitation lasers, and saves the plots as JPEG files.
 }

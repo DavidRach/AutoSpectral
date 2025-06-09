@@ -3,8 +3,8 @@
 
 #' @title Create Heatmap Plot
 #'
-#' @description This function plots a matrix as a heatmap and saves it as a
-#' JPEG file.
+#' @description
+#' This function plots a matrix as a heatmap and saves it as a JPEG file.
 #'
 #' @importFrom ggplot2 ggplot aes geom_tile scale_fill_viridis_c theme_minimal
 #' @importFrom ggplot2 coord_fixed element_text labs ggsave
@@ -13,8 +13,6 @@
 #' @importFrom rlang .data
 #'
 #' @param matrix Matrix or dataframe containing spectral data.
-#' @param asp The AutoSpectral parameter list.
-#' Prepare using `get.autospectral.param`
 #' @param number.labels Logical indicating whether to add number labels to
 #' the heatmap.
 #' @param plot.prefix Optional prefix for the plot filename. Default is `NULL`,
@@ -24,7 +22,7 @@
 #' @param triangular Logical. Plot the lower triangle of the matrix only,
 #' diagonal included. Default is `FALSE`.
 #' @param output.dir Optional output directory. Default is `NULL`, in which case
-#' the similarity heatmap folder will be used.
+#' the working directory will be used.
 #' @param fixed.scale Logical, determines whether to use an externally supplied
 #' fixed scale (min and max) for the heatmap color scale. Useful for putting
 #' multiple plots on the same scale. Default is `FALSE`
@@ -32,16 +30,26 @@
 #' Default is `NULL`, for no fixed scaling.
 #' @param scale.max Optional numeric. Maximum for the fixed color scale.
 #' Default is `NULL`, for no fixed scaling.
+#' @param color.palette Optional character string defining the viridis color
+#' palette to be used for the fluorophore traces. Default is `viridis`. Options
+#' are the viridis color options: `magma`, `inferno`, `plasma`, `viridis`,
+#' `cividis`, `rocket`, `mako` and `turbo`.
+#' @param figure.width Numeric. Width of the heatmap figure. Default is `8`.
+#' @param figure.height Numeric. Height of the heatmap figure. Default is `6`.
 #'
 #' @return Saves the heatmap plot as a JPEG file and the SSM data as a CSV file
 #' in the specified directory.
 #'
 #' @export
 
-create.heatmap <- function( matrix, asp, number.labels, plot.prefix = NULL,
-                          legend.label = "heatmap",
-                          triangular = FALSE, output.dir = NULL,
-                          fixed.scale = FALSE, scale.min = NULL, scale.max = NULL ) {
+create.heatmap <- function( matrix, number.labels, plot.prefix = NULL,
+                            legend.label = "heatmap",
+                            triangular = FALSE,
+                            output.dir = NULL,
+                            fixed.scale = FALSE,
+                            scale.min = NULL, scale.max = NULL,
+                            color.palette = "viridis",
+                            figure.width = 8, figure.height = 6 ) {
 
   if ( !is.null( plot.prefix ) ) {
     heatmap.filename <- paste( plot.prefix, "heatmap.jpg" )
@@ -50,7 +58,7 @@ create.heatmap <- function( matrix, asp, number.labels, plot.prefix = NULL,
   }
 
   if ( is.null( output.dir ) )
-    output.dir <- asp$figure.similarity.heatmap.dir
+    output.dir <- getwd()
 
   # rearrange data
   heatmap.df <- as.data.frame( matrix )
@@ -83,10 +91,11 @@ create.heatmap <- function( matrix, asp, number.labels, plot.prefix = NULL,
 
   if ( fixed.scale ) {
     heatmap.plot <- heatmap.plot +
-      scale_fill_viridis_c( limits = c( scale.min, scale.max ) )
+      scale_fill_viridis_c( option = color.palette,
+                            limits = c( scale.min, scale.max ) )
   } else {
     heatmap.plot <- heatmap.plot +
-      scale_fill_viridis_c()
+      scale_fill_viridis_c( option = color.palette )
   }
 
   if ( number.labels ) {
@@ -97,6 +106,6 @@ create.heatmap <- function( matrix, asp, number.labels, plot.prefix = NULL,
 
   ggsave( filename = file.path( output.dir, heatmap.filename ),
           plot = heatmap.plot,
-          width = asp$figure.width, height = asp$figure.height )
+          width = figure.width, height = figure.height )
 
 }

@@ -6,7 +6,6 @@
 \usage{
 create.heatmap(
   matrix,
-  asp,
   number.labels,
   plot.prefix = NULL,
   legend.label = "heatmap",
@@ -14,14 +13,14 @@ create.heatmap(
   output.dir = NULL,
   fixed.scale = FALSE,
   scale.min = NULL,
-  scale.max = NULL
+  scale.max = NULL,
+  color.palette = "viridis",
+  figure.width = 8,
+  figure.height = 6
 )
 }
 \arguments{
 \item{matrix}{Matrix or dataframe containing spectral data.}
-
-\item{asp}{The AutoSpectral parameter list.
-Prepare using \code{get.autospectral.param}}
 
 \item{number.labels}{Logical indicating whether to add number labels to
 the heatmap.}
@@ -36,7 +35,7 @@ Default is \code{heatmap}}
 diagonal included. Default is \code{FALSE}.}
 
 \item{output.dir}{Optional output directory. Default is \code{NULL}, in which case
-the similarity heatmap folder will be used.}
+the working directory will be used.}
 
 \item{fixed.scale}{Logical, determines whether to use an externally supplied
 fixed scale (min and max) for the heatmap color scale. Useful for putting
@@ -47,12 +46,20 @@ Default is \code{NULL}, for no fixed scaling.}
 
 \item{scale.max}{Optional numeric. Maximum for the fixed color scale.
 Default is \code{NULL}, for no fixed scaling.}
+
+\item{color.palette}{Optional character string defining the viridis color
+palette to be used for the fluorophore traces. Default is \code{viridis}. Options
+are the viridis color options: \code{magma}, \code{inferno}, \code{plasma}, \code{viridis},
+\code{cividis}, \code{rocket}, \code{mako} and \code{turbo}.}
+
+\item{figure.width}{Numeric. Width of the heatmap figure. Default is \code{8}.}
+
+\item{figure.height}{Numeric. Height of the heatmap figure. Default is \code{6}.}
 }
 \value{
 Saves the heatmap plot as a JPEG file and the SSM data as a CSV file
 in the specified directory.
 }
 \description{
-This function plots a matrix as a heatmap and saves it as a
-JPEG file.
+This function plots a matrix as a heatmap and saves it as a JPEG file.
 }

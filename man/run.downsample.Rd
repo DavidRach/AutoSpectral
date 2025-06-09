@@ -31,6 +31,6 @@ Prepare using \code{get.autospectral.param}}
 A list containing the downsampled expression data for each sample.
 }
 \description{
-This function runs the downsampling process on a list of
-samples, using the specified peak channels and parameters.
+This function runs the downsampling process on a list of samples, using the
+specified peak channels and parameters.
 }

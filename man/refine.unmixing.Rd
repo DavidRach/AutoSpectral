@@ -28,6 +28,6 @@ Prepare using \code{get.autospectral.param}}
 The refined spectra matrix.
 }
 \description{
-This function refines the unmixing process for spectral data,
-iteratively updating the spectra matrix and calculating unmixing errors.
+This function refines the unmixing process for spectral data, iteratively
+updating the spectra matrix and calculating unmixing errors.
 }

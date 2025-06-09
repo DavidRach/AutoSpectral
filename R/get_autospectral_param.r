@@ -1,11 +1,5 @@
 # get_autospectral_param.r
 
-
-#' Get Autospectral Parameters
-#'
-#' This function retrieves autospectral parameters for a specified cytometer.
-#' It sets up directory parameters for figures and tables if required.
-#'
 #' @title Get Autospectral Parameters
 #'
 #' @description Retrieves autospectral parameters for a specified cytometer.
@@ -17,7 +11,6 @@
 #' @return A list of autospectral parameters.
 #'
 #' @export
-
 
 get.autospectral.param <- function( cytometer = "aurora", figures = TRUE )
 {

@@ -2,8 +2,8 @@
 
 #' @title Unmix FCS Data
 #'
-#' @description This function performs spectral unmixing on FCS data using
-#' various methods.
+#' @description
+#' This function performs spectral unmixing on FCS data using various methods.
 #'
 #' @importFrom flowCore read.FCS keyword exprs flowFrame parameters pData
 #' @importFrom flowCore write.FCS parameters<-
@@ -42,7 +42,6 @@
 #' @return None. The function writes the unmixed FCS data to a file.
 #'
 #' @export
-
 
 unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
                        method = "OLS",

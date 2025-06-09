@@ -1,10 +1,10 @@
 # scatter_match_plot.r
-# plotting function for scatter-matching of universal negative
 
 #' @title Plot Scatter-Matching of Universal Negative
 #'
-#' @description This function generates scatter plots for matching positive
-#' and negative expression data based on specified scatter parameters.
+#' @description
+#' This function generates scatter plots for matching positive and negative
+#' expression data, selected based on scatter parameters gates.
 #'
 #' @importFrom KernSmooth bkde2D dpik
 #' @importFrom ggplot2 ggplot aes scale_color_gradientn facet_wrap
@@ -23,7 +23,6 @@
 #' @return None. The function saves the generated scatter plot to a file.
 #'
 #' @export
-
 
 scatter.match.plot <- function( pos.expr.data, neg.expr.data, fluor.name,
                                 scatter.param, asp ){

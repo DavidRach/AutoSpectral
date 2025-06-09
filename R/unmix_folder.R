@@ -2,9 +2,10 @@
 
 #' @title Unmix All FCS Files in a Directory
 #'
-#' @description This function unmixes all FCS files in a specified directory
-#' using the provided spectra and method, and saves the unmixed data to an
-#' output directory.
+#' @description
+#' This function unmixes all FCS files in a specified directory using the
+#' provided spectra and method, and saves the unmixed FCS files to an output
+#' directory of the user's choice.
 #'
 #' @importFrom future plan multisession
 #' @importFrom future.apply future_lapply
@@ -41,7 +42,6 @@
 #' @return None. Saves the unmixed FCS files to the specified output directory.
 #'
 #' @export
-
 
 unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
                           method = "OLS",

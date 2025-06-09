@@ -2,8 +2,9 @@
 
 #' @title Plot Autofluorescence Gate
 #'
-#' @description This function plots the AF gate, including intermediate steps,
-#' using ggplot2 and other necessary packages.
+#' @description
+#' This function plots the AF gate, including intermediate steps, using ggplot2
+#' and other necessary packages.
 #'
 #' @importFrom ggplot2 ggplot aes scale_x_continuous scale_y_continuous
 #' @importFrom ggplot2 scale_color_gradientn theme_bw theme element_line
@@ -23,8 +24,6 @@
 #'
 #' @return Saves the plot as a JPEG file in the specified directory.
 #' @export
-
-
 
 gate.af.plot <- function( samp, gate.data, gate.bound, gate.region,
                           gate.population, asp ) {

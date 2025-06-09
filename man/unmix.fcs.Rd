@@ -66,6 +66,5 @@ Used for \code{Balance} option under \code{divergence.handling}. Default is \cod
 None. The function writes the unmixed FCS data to a file.
 }
 \description{
-This function performs spectral unmixing on FCS data using
-various methods.
+This function performs spectral unmixing on FCS data using various methods.
 }

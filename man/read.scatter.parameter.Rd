@@ -14,6 +14,6 @@ Prepare using \code{get.autospectral.param}}
 A vector of scatter parameters.
 }
 \description{
-This function reads scatter parameters from a specified file or
-uses default scatter parameters if the file is not available.
+This function reads scatter parameters from a specified file or uses default
+scatter parameters if the file is not available.
 }

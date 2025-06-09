@@ -1,16 +1,11 @@
 # do_peacoqc.r
 
-
-#' Perform Quality Control on Flow Cytometry Data using PeacoQC
-#'
+#' @title Perform Quality Control on Flow Cytometry Data using PeacoQC
+#' @description
 #' This function performs quality control on flow cytometry data using the
 #' PeacoQC method. It transforms the data, removes margins, and identifies
 #' good cells. The function also optionally plots the results and saves
 #' the cleaned data.
-#'
-#' @title Perform Quality Control on Flow Cytometry Data using PeacoQC
-#' @description Performs quality control on flow cytometry data using the
-#' PeacoQC method.
 #'
 #' @importFrom flowCore transform flowFrame exprs keyword transformList keyword<-
 #' @importFrom PeacoQC PeacoQC PlotPeacoQC RemoveMargins
@@ -25,9 +20,9 @@
 #' @param all.channels A vector of all channels to be included in the final
 #' cleaned data.
 #' @param asp The AutoSpectral parameter list.
+#'
 #' @return A matrix with the cleaned expression data.
 #' @export
-
 
 do.peacoQC <- function( dirty.expr, sample.name, spectral.channel,
                         biexp.transform, transform.inv,

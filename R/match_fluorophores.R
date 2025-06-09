@@ -1,13 +1,10 @@
 # match_fluorophores.r
 
-# match fluorophores in single stained fcs filenames to fluorophore database
-# used to create fcs_control_file.csv
-
-
 #' @title Match Fluorophores
 #'
-#' @description This function matches control filenames to fluorophores in the
-#' fluorophore database, including synonyms, and returns the matched fluorophores.
+#' @description
+#' This function matches control filenames to fluorophores in the fluorophore
+#' database, including synonyms, and returns the matched fluorophores.
 #'
 #' @param control.filenames Vector of control filenames.
 #' @param fluorophore.database Data frame containing fluorophore information,
@@ -16,8 +13,6 @@
 #' @return A named vector of matched fluorophores for each control filename.
 #'
 #' @export
-
-
 
 match.fluorophores <- function( control.filenames, fluorophore.database ){
 

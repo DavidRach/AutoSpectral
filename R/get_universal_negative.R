@@ -1,9 +1,9 @@
 # get_universal_negative.r
 
-
 #' @title Get Universal Negative Control
 #'
-#' @description This function identifies and processes the universal negative
+#' @description
+#' This function identifies and processes the universal negative
 #' control for a given sample, including scatter matching and plotting.
 #'
 #' @importFrom stats quantile median mad
@@ -31,8 +31,6 @@
 #' negative events.
 #'
 #' @export
-
-
 
 get.universal.negative <- function( clean.expr.data, samp,
                                     universal.negatives,

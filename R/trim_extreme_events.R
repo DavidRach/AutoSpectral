@@ -2,8 +2,9 @@
 
 #' @title Trim Extreme Events
 #'
-#' @description This function trims extreme events from expression data based
-#' on a specified peak channel and trim factor.
+#' @description
+#' This function trims extreme events from expression data based on a specified
+#' peak channel and trim factor. Not recommended for most panels.
 #'
 #' @param expr.data A  matrix containing the expression data.
 #' @param peak.channel A character string specifying the peak channel to be
@@ -14,7 +15,6 @@
 #' @return A matrix with the extreme events trimmed.
 #'
 #' @export
-
 
 trim.extreme.events <- function( expr.data, peak.channel, trim.factor ){
 

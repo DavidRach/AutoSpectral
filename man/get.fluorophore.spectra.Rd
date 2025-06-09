@@ -33,12 +33,6 @@ transformation, default is \code{FALSE}}
 A matrix with the fluorophore spectra.
 }
 \description{
-Retrieves the fluorophore spectra for flow cytometry data,
-optionally using cleaned expression data and biexponential transformation.
-}
-\details{
-Get Fluorophore Spectra
-
 This function retrieves the fluorophore spectra for flow cytometry data,
 optionally using cleaned expression data and biexponential transformation.
 It also plots and saves the spectra, and performs cosine similarity QC for

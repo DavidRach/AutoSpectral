@@ -1,11 +1,10 @@
 # get_unmixing_error.r
 
-
 #' @title Calculate Unmixing Error
 #'
-#' @description This function calculates the unmixing error for each
-#' fluorophore, including intercept, coefficient, slope, and skewness, using
-#' robust linear modeling.
+#' @description
+#' This function calculates the unmixing error for each fluorophore, including
+#' intercept, coefficient, slope, and skewness, using robust linear modeling.
 #'
 #' @importFrom moments skewness
 #' @importFrom future plan multisession
@@ -24,8 +23,6 @@
 #' coefficient, slope, and skewness.
 #'
 #' @export
-
-
 
 get.unmixing.error <- function( expr.data.unmix, fluorophores,
                                 scale.untransformed, transform.inv,
@@ -71,7 +68,7 @@ get.unmixing.error <- function( expr.data.unmix, fluorophores,
 
         spillover.model.result <- fit.robust.linear.model(
           channel.expr.proper, channel.expr,
-          fluorophore.proper, channel, asp )
+          fluorophore.proper, channel, asp$rlm.iter.max )
 
         unmixed.spillover.corr.inte[ channel ] <- spillover.model.result[ 1 ]
         unmixed.spillover.corr.coef[ channel ] <- spillover.model.result[ 2 ]

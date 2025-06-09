@@ -15,11 +15,5 @@ cytometer.
 }
 \description{
 Returns parameters for running a calculation of unmixing with
-AutoSpectral, without creating any figures or tables.
-}
-\details{
-Get Autospectral Parameters for DiscoverS8 Cytometer
-
-This function returns parameters for running a calculation of unmixing with
-AutoSpectral, without creating any figures or tables.
+AutoSpectral for the DiscoverS8, without creating any figures or tables.
 }

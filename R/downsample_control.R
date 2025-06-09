@@ -1,13 +1,9 @@
 # downsample_control.r
 
 
-#' Downsample Control Data
-#'
-#' This function downsamples control data by selecting a specified number of
-#' positive and negative events based on peak channel values.
-#'
 #' @title Downsample Control Data
-#' @description Downsamples control data by selecting a specified number of
+#' @description
+#' Downsamples control data by selecting a specified number of
 #' positive and negative events based on peak channel values.
 #'
 #' @param clean.expr.data A list containing cleaned expression data for each
@@ -21,8 +17,6 @@
 #'
 #' @return A matrix with the selected expression data.
 #' @export
-
-
 
 downsample.control <- function( clean.expr.data, samp, peak.channels,
                                  negative.n, positive.n, asp ){

@@ -2,8 +2,9 @@
 
 #' @title Create Control File
 #'
-#' @description A helper function to draft a description of your single stained
-#' control files such that AutoSpectral can understand and process them correctly.
+#' @description
+#' A helper function to draft a description of your single stained control
+#' files such that AutoSpectral can understand and process them correctly.
 #' Given a set of single stained control fcs files, `create.control.file` will
 #' produce a csv file listing the matching peak detector channels for your
 #' fluorophores (if known). If your files contain bead or cell tags in the filename,
@@ -15,6 +16,7 @@
 #'
 #' @param control.dir file path to the single stained control fcs files
 #' @param asp AutoSpectral parameter list. Generate using `get.autospectral.param`
+#'
 #' @return No returns. Outputs a csv file called fcs_control_file.csv
 #' @export
 

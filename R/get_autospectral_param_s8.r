@@ -1,14 +1,9 @@
 # get_autospectral_param_s8.r
 
-#' Get Autospectral Parameters for DiscoverS8 Cytometer
-#'
-#' This function returns parameters for running a calculation of unmixing with
-#' AutoSpectral, without creating any figures or tables.
-#'
 #' @title Get Autospectral Parameters for DiscoverS8 Cytometer
 #'
 #' @description Returns parameters for running a calculation of unmixing with
-#' AutoSpectral, without creating any figures or tables.
+#' AutoSpectral for the DiscoverS8, without creating any figures or tables.
 #'
 #' @param autosp.param A list of initial AutoSpectral parameters.
 #'

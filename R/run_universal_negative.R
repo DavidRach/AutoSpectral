@@ -1,8 +1,9 @@
 # run_universal_negative.r
 
 #' @title Run Universal Negative
-#' @description This function processes universal negative samples to generate
-#' expression data based on specified parameters.
+#' @description
+#' This function processes universal negative samples to generate expression
+#' data based on specified parameters.
 #'
 #' @param clean.expr A matrix containing cleaned expression data.
 #' @param univ.sample A character vector specifying the names of universal
@@ -26,7 +27,6 @@
 #' negative sample.
 #'
 #' @export
-
 
 run.universal.negative <- function( clean.expr, univ.sample,
                                     universal.negatives,

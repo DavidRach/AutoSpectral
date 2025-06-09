@@ -35,9 +35,3 @@ A matrix with the selected expression data.
 Downsamples control data by selecting a specified number of
 positive and negative events based on peak channel values.
 }
-\details{
-Downsample Control Data
-
-This function downsamples control data by selecting a specified number of
-positive and negative events based on peak channel values.
-}

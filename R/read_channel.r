@@ -1,10 +1,10 @@
 # read_channel.r
 
-
 #' @title Read Channel Information
 #'
-#' @description This function reads channel information from control files and
-#' corrects channel names based on specified forbidden characters.
+#' @description
+#' This function reads channel information from control files and corrects
+#' channel names based on specified forbidden characters.
 #'
 #' @importFrom utils read.csv read.table write.table
 #' @importFrom flowCore read.FCS

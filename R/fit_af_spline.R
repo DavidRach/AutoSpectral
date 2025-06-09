@@ -1,17 +1,12 @@
  # fit_af_spline.r
 
-
-#' Fit Spline to Autofluorescence Data
+#' @title Fit Spline to Autofluorescence Data
 #'
+#' @description
 #' This function fits a spline to autofluorescence data, removing extreme events
 #' and defining bounds equally far from zero. It uses robust linear modeling
 #' and identifies events within a specified number of standard deviations from
 #' the spline.
-#'
-#' @title Fit Spline to Autofluorescence Data
-#'
-#' @description Fits a spline to autofluorescence data, removing extreme events
-#' and defining bounds equally far from zero.
 #'
 #' @importFrom MASS rlm
 #' @importFrom tripack tri.mesh convex.hull
@@ -26,8 +21,6 @@
 #' of standard deviations from the spline.
 #'
 #' @export
-
-
 
 fit.af.spline <- function( af.data, af.gate.idx, asp ){
 

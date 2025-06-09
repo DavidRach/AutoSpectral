@@ -10,21 +10,48 @@ fix.my.unmix(
   fully.stained.sample,
   flow.control,
   asp,
-  large.gate = TRUE,
-  max.iter = 20,
-  downsample = 20000,
-  unstained.threshold = 0.99,
+  verbose = TRUE,
+  output.dir = "./FixMyUnmix",
+  large.gate = FALSE,
+  max.iter = 100,
+  gate.downsample.n = 1e+05,
+  model.downsample.n = 2e+05,
+  pos.threshold = 0.99,
+  neg.threshold = 0.8,
   unstained.margin = 1.3,
-  convergence.threshold = 0.03,
+  convergence.threshold = 0.005,
   biexp = FALSE,
-  rs.lambda = 0.1
+  rs.lambda = 0.1,
+  rs.delta.history.n = 10,
+  rs.delta.threshold.change = 1e-06,
+  min.neg.n = 50,
+  max.neg.n = 500,
+  min.pos.n = 50,
+  max.pos.n = 100,
+  rlm.max.iter = 100,
+  scatter.channels = flow.control$scatter.parameter,
+  spectral.channels = flow.control$spectral.channel,
+  scatter.and.spectral = flow.control$scatter.and.channel.spectral,
+  channel.labels = flow.control$scatter.and.channel.label,
+  heatmap.title = "Fixing_unmixing",
+  spillover.filename = "Fixed_spillover.csv",
+  spectra.filename = "Fixed_spectra.csv",
+  compensation.filename = "Fixed_compensation.csv",
+  flowjo.mtx.filename = "Fixed_compensation.mtx",
+  heatmap.number.labels = FALSE,
+  triangular.heatmap = TRUE,
+  heatmap.label = "Spillover",
+  heatmap.color.palette = "plasma",
+  heatmap.fig.width = 8,
+  heatmap.fig.height = 6,
+  spectra.color.palette = "magma"
 )
 }
 \arguments{
 \item{spectra}{The spectral matrix, fluorophores x detectors. In this case,
 it does not need to be a perfect match for the fluorophores in the fully
-stained sample and may, for instance, be pulled from a database for the same
-specification of cytometer.}
+stained sample and may, for instance, be pulled from a database for the
+same specification of cytometer.}
 
 \item{unstained.sample}{File path and name for a raw unstained sample,
 ideally acquired the same day, and ideally matching the autofluorescence of
@@ -36,40 +63,144 @@ the fully stained sample.}
 
 \item{asp}{The AutoSpectral parameter list.}
 
+\item{verbose}{Logical. Turns messages on or off. Default is \code{TRUE}.}
+
+\item{output.dir}{Character. Directory where plots and tables will be created.
+Directory will be created if it does not exist. Default is \code{./FixMyUnmix}.}
+
 \item{large.gate}{Logical, whether to use a large gate for identifying cells.
-Default is \code{TRUE} and will work best for any panels containing any
-non-lymphocyte markers.}
+Default is \code{FALSE}. For panels containing any non-lymphocyte markers,
+use \code{TRUE}.}
 
 \item{max.iter}{Numeric. Limits the number of iterations performed by the
-algorithm to avoid overfitting.}
+algorithm to avoid overfitting. Default is \code{100}.}
 
-\item{downsample}{Logical/numeric. Controls downsampling to speed up the
-algorithm. If \code{FALSE}, no downsampling will be performed. If a numeric,
-that number of cells will be used for downsampling. For rare markers,
-use larger numbers.}
+\item{gate.downsample.n}{Logical/numeric. Controls downsampling for the
+definition of the gate to speed up the processing. If \code{FALSE}, no downsampling
+will be performed for gating. If a numeric, that number of cells will be
+used. Does not affect subsequent steps. Default is \code{1e5}.}
 
-\item{unstained.threshold}{Numeric between 0 and 1, default \verb{0.99.} The
-threshold used to determine positivity in the fully stained sample
-(the percentile on the unstained sample in that channel).}
+\item{model.downsample.n}{Logical/numeric. Controls downsampling for the
+number of cells to be used in the algorithm itself. Default is \code{2e5}. For
+samples with rare markers, use a larger number, which will be somehwat slower.}
+
+\item{pos.threshold}{Numeric between 0 and 1, default \code{0.99} The threshold
+used to determine positivity in the fully stained sample (the percentile
+on the unstained sample in that channel).}
+
+\item{neg.threshold}{Numeric between 0 and 1, default \code{0.8}. The threshold
+used to determine negativity in the fully stained sample (the percentile
+on the unstained sample in that channel). Deprecated.}
 
 \item{unstained.margin}{Numeric, default \code{1.3}. The fudge factor above the
 unstained.threshold.}
 
-\item{convergence.threshold}{Numeric, default \code{0.03}. If the algorithm
-reaches this minimal level of spillover error, it will stop.}
+\item{convergence.threshold}{Numeric, default \code{0.005} corresponding to half
+a percent. If the algorithm reaches this minimal level of spillover error,
+it will stop.}
 
 \item{biexp}{Logical indicating whether to apply biexponential
-transformation, default is \code{FALSE}.}
+transformation. Default is \code{FALSE}.}
 
-\item{rs.lambda}{Numeric, default \code{0.1}. Controls how rapidly the spillover
+\item{rs.lambda}{Numeric, default 0.1. Controls how rapidly the spillover
 corrections are applied in order to reach convergence.}
+
+\item{rs.delta.history.n}{Numeric. Number of iterations to track in order to
+determine convergence. Default is \code{10}.}
+
+\item{rs.delta.threshold.change}{Numeric. Threshold to determine convergence
+based on a lack of change between iterations. Default is \code{1e-6}.}
+
+\item{min.neg.n}{Numeric. The minimum number of cells (points) in the
+negative region required to calculate corrections. Default is \code{50}. Channels
+with fewer events will not be considered.}
+
+\item{max.neg.n}{Numeric. The maximum number of negative events to use for
+the calculation. Default is \code{500}. Larger numbers may improve accuracy in
+messy samples, at the cost of increased calculation time.}
+
+\item{min.pos.n}{Numeric. The minimum number of cells (points) in the
+positive region required to calculate corrections. Default is \code{50}. Channels
+with fewer events will not be considered.}
+
+\item{max.pos.n}{Numeric. The maximum number of positive events to use for
+the calculation. Default is \code{100}. The brightest n events in each channel
+will be used, so this controls selection of the positive events and
+processing time.}
+
+\item{rlm.max.iter}{Numeric. The maximum number of iterations for the
+internal robust linear model call. Default is \code{100}.}
+
+\item{scatter.channels}{The names of the FSC and SSC channels to be used for
+gating. Must match parameter names from the FCS files. Default is
+\code{flow.control$scatter.parameter}, which requires the use of \code{AutoSpectral},
+either \code{define.flow.control} or \code{reload.flow.control}.}
+
+\item{spectral.channels}{The names of the fluorescent detector channels.
+Must match parameter names from the FCS files. Default is
+\code{flow.control$spectral.channel}, which requires the use of \code{AutoSpectral},
+either \code{define.flow.control} or \code{reload.flow.control}.}
+
+\item{scatter.and.spectral}{The names of the scatter and fluorescent detector
+channels. Must match parameter names from the FCS files. Default is
+\code{flow.control$scatter.and.channel.spectral}, which requires the use of
+\code{AutoSpectral}, either \code{define.flow.control} or \code{reload.flow.control}.}
+
+\item{channel.labels}{Labels for the scatter channels and peak channels for
+the fluorophores. Used for gating plots. Default is
+\code{flow.control$scatter.and.channel.label}, which requires the use of
+\code{AutoSpectral}, either \code{define.flow.control} or \code{reload.flow.control}.}
+
+\item{heatmap.title}{Character. Title for the saved heatmap showing identified
+unmixing errors. Default is \code{Fixing_unmixing}.}
+
+\item{spillover.filename}{Character. Name of the CSV file carrying the
+spillover (fluorophore x fluorophore in the unmixed space) values. Default
+is \code{Fixed_spillover.csv}.}
+
+\item{spectra.filename}{Character. Name of the CSV file carrying the fixed
+spectra (fluorophore x detectors in the raw space) values. Default
+is \code{Fixed_spectra.csv}.}
+
+\item{compensation.filename}{Character. Name of the CSV file carrying the
+compensation matrix (fluorophore x fluorophore in the unmixed space). Default
+is \code{Fixed_compensation.csv}.}
+
+\item{flowjo.mtx.filename}{Character. Name of the XML .mtx file carrying the
+compensation matrix for use in FlowJo. Default is \code{Fixed_compensation.mtx}.}
+
+\item{heatmap.number.labels}{Logical. Whether to include numbers on each
+square tile of the heatmap of unmixing errors showing the spillover value.
+Default is \code{FALSE} for better aesthetics.}
+
+\item{triangular.heatmap}{Logical. Whether to produce a triangular \code{TRUE} or
+square \code{FALSE} heatmap. Default is \code{TRUE}.}
+
+\item{heatmap.label}{Character. Title to put in the legend of the heatmap of
+identified unmixing errors. Default is \code{Spillover}.}
+
+\item{heatmap.color.palette}{Optional character string defining the viridis
+color palette to be used for the heatmap. Default is \code{viridis}. Options are
+the viridis color options: \code{magma},  \code{inferno}, \code{plasma}, \code{viridis},
+\code{cividis}, \code{rocket}, \code{mako} and \code{turbo}.}
+
+\item{heatmap.fig.width}{Numeric. Width of the heatmap figure.
+Default is \code{8}.}
+
+\item{heatmap.fig.height}{Numeric. Height of the heatmap figure.
+Default is \code{6}.}
+
+\item{spectra.color.palette}{Optional character string defining the viridis
+palette to be used for the fluorophore traces. Default is \code{NULL}, in which
+case default R Brewer colors will be assigned automatically. Options are the
+viridis color options: \code{magma}, \code{inferno}, \code{plasma}, \code{viridis}, \code{cividis},
+\code{rocket}, \code{mako} and \code{turbo}.}
 }
 \value{
-A list containing the corrected spillover matrix
-(fluorophores x fluorophores), the corrected compensation matrix and the
-corrected spectra for unmixing (fluorophores x detectors).
+A list containing the corrected spillover matrix (fluorophores x
+fluorophores), the corrected compensation matrix and the corrected spectra
+for unmixing (fluorophores x detectors).
 }
 \description{
-Attempt to automatically fix unmixing errors in fully stained
-unmixed samples.
+Attempt to automatically fix unmixing errors in fully stained unmixed samples.
 }

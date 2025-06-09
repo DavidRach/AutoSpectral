@@ -54,6 +54,6 @@ A list containing the processed expression data for each universal
 negative sample.
 }
 \description{
-This function processes universal negative samples to generate
-expression data based on specified parameters.
+This function processes universal negative samples to generate expression
+data based on specified parameters.
 }

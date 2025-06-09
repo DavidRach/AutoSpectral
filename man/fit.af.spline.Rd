@@ -19,12 +19,6 @@ A list with the boundaries of the events within the specified number
 of standard deviations from the spline.
 }
 \description{
-Fits a spline to autofluorescence data, removing extreme events
-and defining bounds equally far from zero.
-}
-\details{
-Fit Spline to Autofluorescence Data
-
 This function fits a spline to autofluorescence data, removing extreme events
 and defining bounds equally far from zero. It uses robust linear modeling
 and identifies events within a specified number of standard deviations from

@@ -2,8 +2,9 @@
 
 #' @title Run Trim Events
 #'
-#' @description This function trims extreme events from multiple samples based
-#' on specified peak channels and trim factors.
+#' @description
+#' This function trims extreme events from multiple samples based on specified
+#' peak channels and trim factors.
 #'
 #' @param trim.sample.data A list containing the expression data for each
 #' sample.
@@ -18,7 +19,6 @@
 #' @return A list containing the trimmed expression data for each sample.
 #'
 #' @export
-
 
 run.trim.events <- function( trim.sample.data, trim.sample,
                             trim.peak.channels, trim.factor, asp ){

@@ -1,11 +1,10 @@
 # run_af_artefact_id.r
 
-
 #' @title Run Autofluorescence Artefact Identification
 #'
-#' @description This function runs the identification of autofluorescence
-#' artefacts on a list of negative samples, using the specified parameters
-#' and settings.
+#' @description
+#' This function runs the identification of autofluorescence artefacts on a
+#' list of negative samples, using the specified parameters and settings.
 #'
 #' @param clean.expr List containing cleaned expression data.
 #' @param negative.sample Vector of negative sample names for which
@@ -18,7 +17,6 @@
 #' each negative sample.
 #'
 #' @export
-
 
 run.af.artefact.id <- function( clean.expr, negative.sample,
                                 spectral.channel, asp ){

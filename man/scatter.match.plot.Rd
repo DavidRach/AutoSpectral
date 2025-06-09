@@ -28,6 +28,6 @@ Prepare using \code{get.autospectral.param}}
 None. The function saves the generated scatter plot to a file.
 }
 \description{
-This function generates scatter plots for matching positive
-and negative expression data based on specified scatter parameters.
+This function generates scatter plots for matching positive and negative
+expression data, selected based on scatter parameters gates.
 }
