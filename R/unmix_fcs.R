@@ -156,18 +156,14 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
   parameters( flow.frame ) <- AnnotatedDataFrame( params )
 
   # update keywords
-  #fcs.keywords[[ "$FIL" ]] <- file.name
-  #fcs.keywords[[ "$UNMIXINGMETHOD" ]] <- method
-  #fcs.keywords[[ "$SPECTRA" ]] <- table( spectra )
-  #fcs.keywords[[ "$AUTOSPECTRAL" ]] <- packageVersion( "AutoSpectral" )
   keyword( flow.frame ) <- fcs.keywords
   keyword( flow.frame )[[ "$FIL" ]] <- file.name
   keyword( flow.frame )[[ "$UNMIXINGMETHOD" ]] <- method
   keyword( flow.frame )[[ "$AUTOSPECTRAL" ]] <- packageVersion( "AutoSpectral" )
 
-  for (i in seq_along(colnames(unmixed.data))) {
-    keyword(flow.frame)[[paste0("$P", i, "N")]] <- colnames(unmixed.data)[i]
-    keyword(flow.frame)[[paste0("$P", i, "S")]] <- colnames(unmixed.data)[i]
+  for ( i in seq_along( colnames( unmixed.data ) ) ) {
+    keyword( flow.frame )[[ paste0( "$P", i, "N" ) ]] <- colnames( unmixed.data )[ i ]
+    keyword( flow.frame )[[ paste0( "$P", i, "S" ) ]] <- colnames( unmixed.data )[ i ]
   }
 
   suppressWarnings( write.FCS( flow.frame, filename = file.path( output.dir, file.name ) ) )

@@ -180,6 +180,7 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
 
   # calculate similarity matrix
   similarity.matrix <- cosine.similarity( t( spectra ) )
+  similarity.matrix[ similarity.matrix <= 0 ] <- 1e-6
 
   # calculate unmixing matrix
   unmixing.matrix <- solve( spectra %*% t( spectra ) ) %*% spectra
@@ -411,6 +412,7 @@ fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
     rownames( marker.spillover ) <- fluorophores
 
     # ratio by similarity matrix
+    similarity.matrix[ similarity.matrix <= 0 ] <- 1e-6
     ratioed.coefficients <- marker.spillover * sqrt( similarity.matrix )
 
     # select worst pair for plotting on first run

@@ -26,6 +26,7 @@ create.control.file <- function( control.dir, asp ){
   control.file.name.base <- "fcs_control_file"
   control.file.name <- paste0( control.file.name.base, ".csv" )
   file.count <- 1
+
   while ( file.exists( control.file.name ) ) {
     control.file.name <- paste0( control.file.name.base, "_", file.count, ".csv")
     file.count <- file.count + 1
@@ -36,7 +37,7 @@ create.control.file <- function( control.dir, asp ){
   fluorophore.database <- read.csv( data.path )
   fluorophore.database[ fluorophore.database == "" ] <- NA
 
-  control.files <- list.files( control.dir )
+  control.files <- list.files( control.dir, pattern = ".fcs", ignore.case = TRUE )
 
   check.critical( ! is.null( control.files ) & length( control.files > 1 ),
                   "Single-stained control files not found. Check directory." )

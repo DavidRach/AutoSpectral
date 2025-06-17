@@ -31,6 +31,7 @@ unmix.wls <- function( raw.data, spectra, weights = NULL ) {
     channel.weights <- 1 / ( channel.var + 1e-6 )
 
     W <- diag( channel.weights )
+
   } else {
     if ( !is.numeric( weights ) )
       stop( "Weights must be a numeric vector." )
@@ -43,7 +44,6 @@ unmix.wls <- function( raw.data, spectra, weights = NULL ) {
 
     W <- diag( as.numeric( weights ) )
   }
-
 
   # Weighted LS solution: (M^T W M)^{-1} M^T W
   unmixing.matrix <- solve( t( spectra ) %*% W %*% spectra ) %*%
