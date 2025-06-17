@@ -5,7 +5,7 @@
 #'
 #' @description Returns the base set of AutoSpectral parameters.
 #'
-#' @importFrom parallelly availableCores
+#' @importFrom future availableCores
 #'
 #' @return A list of minimal AutoSpectral parameters.
 #'
@@ -52,7 +52,7 @@ get.autospectral.param.minimal <- function()
 
       parallel = FALSE,
 
-      worker.process.n = parallelly::availableCores() - 1,
+      worker.process.n = max( 1, future::availableCores() - 2 ),
 
       max.memory.n = 2 * 1024^3,
 

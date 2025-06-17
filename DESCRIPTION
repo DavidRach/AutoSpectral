@@ -1,7 +1,7 @@
 Package: AutoSpectral
 Type: Package
 Title: Tools for Unmxing Spectral Flow Cytometry Data
-Version: 0.2.6
+Version: 0.2.7
 Authors@R: c(
     person(
       "Oliver", "Burton",
@@ -37,7 +37,6 @@ Imports:
     ggplot2,
     grDevices,
     moments,
-    parallelly,
     rlang,
     scales,
     scattermore,
