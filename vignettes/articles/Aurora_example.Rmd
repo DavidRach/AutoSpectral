@@ -81,6 +81,8 @@ Check the spectral traces and heatmaps--do they look right?
 
 Normalized fluorophore signatures:
 ![Spectral Trace](figures/UniversalNegativeSpectra.jpg)
+Spectral heatmap:
+![Spectral heatmap](figures/Viridis_spectral_heatmap.jpg)
 
 Now we can unmix.
 By default, AutoSpectral extracts a single AF parameter. To unmix without AF 
