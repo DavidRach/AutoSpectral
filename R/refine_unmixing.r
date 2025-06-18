@@ -39,6 +39,11 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
   if ( !dir.exists( asp$table.convergence.dir ) )
     dir.create( asp$table.convergence.dir )
 
+  if ( !dir.exists( asp$figure.spectra.dir ) )
+    dir.create( asp$figure.spectra.dir )
+  if ( !dir.exists( asp$figure.similarity.heatmap.dir ) )
+    dir.create( asp$figure.similarity.heatmap.dir )
+
   if ( !is.null( plot.prefix ) ) {
     plot.title <- paste( plot.prefix, asp$spectra.file.name )
   } else {
@@ -197,13 +202,11 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
             rs.lambda, rs.delta, rs.delta.max, rs.delta.change )
 
         if ( asp$verbose )
-        {
           message( sprintf(
                 "iter %0*d, %s scale, lambda %.1f, delta %g, delta.max %g, delta.change %g\n",
                 rs.iter.width, rs.iter,
                 ifelse( rs.scale.untransformed, "linear", "bi-exp" ),
                 rs.lambda, rs.delta, rs.delta.max, rs.delta.change ) )
-        }
 
         # update iteration variables
         if ( rs.scale.untransformed && rs.delta.max < rs.delta.threshold )
@@ -247,10 +250,21 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
     }
 
 
-    # save and plot convergence and error metrics
-    # save and plot slope error
-    if ( ! is.null( asp$table.slope.error.dir ) )
-    {
+    # save convergence record
+    write.csv( rs.convergence.log,
+                 file = file.path( asp$table.convergence.dir,
+                 sprintf( "%s.csv", asp$convergence.file.name ) ),
+                 row.names = FALSE )
+
+    # save spectral matrix
+    table.spectra.file.name <- sprintf( "%s.csv", plot.title )
+
+    write.csv( spectra.update.reverted,
+                 file = file.path( asp$table.spectra.dir,
+                                   table.spectra.file.name ) )
+
+    if ( asp$figures ) {
+      # write slope (secondary spillover) error
       table.slope.error.file.name <- ifelse( rs.iter.last,
                                              sprintf( "%s.csv", asp$slope.error.file.name ),
                                              sprintf( "%s_%0*d.csv", asp$slope.error.file.name,
@@ -260,24 +274,21 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
                  file = file.path( asp$table.slope.error.dir,
                                    table.slope.error.file.name ) )
 
-    }
-
-    if ( ! is.null( asp$figure.slope.error.dir ) )
-    {
+      # plot slope (secondary spillover) error
       figure.slope.error.file.name <- sprintf( "%s%s.jpg",
                                                asp$slope.error.file.name,
                                                ifelse( rs.iter.last, "",
                                                        sprintf( "_%0*d", rs.iter.width, rs.iter ) ) )
 
       refine.unmixing.log.plot( slope.error, "unmixing error",
-                        file.path( asp$figure.slope.error.dir,
-                                   figure.slope.error.file.name ),
-                        asp )
-    }
+                                file.path( asp$figure.slope.error.dir,
+                                           figure.slope.error.file.name ),
+                                asp )
 
-    # save and plot skewness
-    if ( ! is.null( asp$table.skewness.dir ) )
-    {
+      # plot convergence
+      convergence.plot( rs.convergence.log, asp )
+
+      # write skewness data
       table.skewness.file.name <- ifelse( rs.iter.last,
                                           sprintf( "%s.csv", asp$skewness.file.name ),
                                           sprintf( "%s_%0*d.csv", asp$skewness.file.name,
@@ -286,10 +297,8 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
       write.csv( unmixing.error$skew,
                  file = file.path( asp$table.skewness.dir,
                                    table.skewness.file.name ) )
-    }
 
-    if ( ! is.null( asp$figure.skewness.dir ) )
-    {
+      # plot skewness
       if ( ! is.null( af.control ) )
         spillover.skewness <- unmixing.error$skew[
           - which( rownames( unmixing.error$skew ) == af.control ),
@@ -303,51 +312,30 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
                                                     sprintf( "_%0*d", rs.iter.width, rs.iter ) ) )
 
       refine.unmixing.log.plot( spillover.skewness, "spillover skewness",
-                        file.path( asp$figure.skewness.dir,
-                                   figure.skewness.file.name ),
-                        asp )
-    }
+                                file.path( asp$figure.skewness.dir,
+                                           figure.skewness.file.name ),
+                                asp )
 
-    if ( ! is.null( asp$table.convergence.dir ) ) {
-      write.csv( rs.convergence.log,
-                 file = file.path( asp$table.convergence.dir,
-                 sprintf( "%s.csv", asp$convergence.file.name ) ),
-                 row.names = FALSE )
-    }
-
-
-    if ( ! is.null( asp$figure.convergence.dir ) ) {
-
-      convergence.plot( rs.convergence.log, asp )
-    }
-
-    # save spectral matrix
-    if ( ! is.null( asp$table.spectra.dir ) ) {
-      table.spectra.file.name <- sprintf( "%s.csv", plot.title )
-
-      write.csv( spectra.update.reverted,
-                 file = file.path( asp$table.spectra.dir,
-                                   table.spectra.file.name ) )
-    }
-
-    # plot spectra
-    if ( ! is.null( asp$figure.spectra.dir ) ) {
+      # plot spectra
       spectral.trace( spectral.matrix = spectra.update.reverted,
                       plot.title = plot.title,
                       plot.dir = asp$figure.spectra.dir,
                       split.lasers = TRUE,
                       asp$figure.spectra.line.size,
                       asp$figure.spectra.point.size )
-    }
 
-    # plot similarity matrix heatmap
-    if ( ! is.null( asp$figure.similarity.heatmap.dir ) ) {
-      similarity.matrix.plot( spectra.update.reverted, asp, plot.prefix )
+      # plot similarity matrix heatmap
+      similarity.matrix.plot( spectra.update.reverted,
+                              filename = asp$similarity.heatmap.file.name,
+                              plot.prefix,
+                              output.dir = asp$figure.similarity.heatmap.dir,
+                              figure.width = asp$figure.width,
+                              figure.height = asp$figure.height )
+
     }
 
     # check convergence
-    check.critical( rs.convergence,
-        "no convergence in refinement of spectra matrix" )
+    check.critical( rs.convergence, "no convergence in refinement of spectra matrix" )
 
     return( spectra.update.reverted )
 }

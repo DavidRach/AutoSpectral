@@ -12,16 +12,16 @@
 #' @param peak.channels A vector of peak channels for the samples.
 #' @param negative.n The number of negative events to select.
 #' @param positive.n The number of positive events to select.
-#' @param asp The AutoSpectral parameter list.
-#' Prepare using `get.autospectral.param`
+#' @param verbose Logical. Default inherits from `asp$verbose`, i.e., `TRUE`.
 #'
 #' @return A matrix with the selected expression data.
 #' @export
 
 downsample.control <- function( clean.expr.data, samp, peak.channels,
-                                 negative.n, positive.n, asp ){
+                                negative.n, positive.n,
+                                verbose = asp$verbose ){
 
-  if ( asp$verbose )
+  if ( verbose )
     message( paste( "\033[34m", "Downsampling", samp, "\033[0m" ) )
 
   # should just pass control's data

@@ -56,7 +56,7 @@
 
 
 define.flow.control <- function( control.dir, control.def.file, asp,
-                                    gate = TRUE )
+                                 gate = TRUE )
 {
   # set up parallel processing
   if ( asp$parallel ){

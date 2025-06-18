@@ -296,9 +296,10 @@ clean.controls <- function( flow.control, asp,
                                                    seq_len( flow.sample.event.number ),
                                                    sep = "_")
 
-      if ( flow.sample.event.number < 500 )
-        warning( paste( "\033[31m", "Fewer than 500 gated events in",
-                    names( clean.expr )[ fs.idx ], "\033[0m", "\n" ) )
+      if ( flow.sample.event.number < asp$min.cell.warning.n )
+        warning( paste( "\033[31m", "Fewer than", asp$min.cell.warning.n,
+                        "gated events in",
+                        names( clean.expr )[ fs.idx ], "\033[0m", "\n" ) )
 
       if ( flow.sample.event.number > flow.sample.event.number.max )
         flow.sample.event.number.max <- flow.sample.event.number

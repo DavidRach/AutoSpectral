@@ -18,7 +18,6 @@
 #' ideally acquired the same day, and ideally matching the autofluorescence of
 #' the fully stained sample.
 #' @param fully.stained.sample File path and name for a raw fully stained sample.
-#' @param flow.control The flow.control list.
 #' @param asp The AutoSpectral parameter list.
 #' @param verbose Logical. Turns messages on or off. Default is `TRUE`.
 #' @param output.dir Character. Directory where plots and tables will be created.
@@ -127,7 +126,7 @@
 
 
 fix.my.unmix <- function( spectra, unstained.sample, fully.stained.sample,
-                          flow.control, asp,
+                          asp,
                           verbose = TRUE,
                           output.dir = "./FixMyUnmix",
                           large.gate = FALSE,

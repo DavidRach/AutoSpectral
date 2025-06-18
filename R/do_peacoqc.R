@@ -19,14 +19,24 @@
 #' @param time.param The time channel parameter.
 #' @param all.channels A vector of all channels to be included in the final
 #' cleaned data.
-#' @param asp The AutoSpectral parameter list.
+#' @param method The PeacoQC method to use. Inherited from `PeacoQC`. Options
+#' are `all`, `MAD` or `IT`. Default is `asp$peacoqc.method`, which by default
+#' is `MAD`.
+#' @param figures Logical. Controls whether PeacoQC plots are created. Default
+#' is `asp$figures`, for which the default is `TRUE`.
 #'
 #' @return A matrix with the cleaned expression data.
 #' @export
 
 do.peacoQC <- function( dirty.expr, sample.name, spectral.channel,
                         biexp.transform, transform.inv,
-                        output.dir, time.param, all.channels, asp ){
+                        output.dir, time.param, all.channels,
+                        method = asp$peacoqc.method,
+                        figures = asp$figures
+                        ){
+
+  if ( !dir.exists( output.dir ) )
+    dir.create( output.dir )
 
   transform.list <- transformList( spectral.channel, biexp.transform )
 
@@ -41,16 +51,15 @@ do.peacoQC <- function( dirty.expr, sample.name, spectral.channel,
   peacoQC.result <- suppressWarnings( PeacoQC(
     ff = dirty.ff,
     channels = spectral.channel,
-    determine_good_cells = asp$peacoqc.method,
+    determine_good_cells = method,
     plot = FALSE, save_fcs = FALSE,
     output_directory = output.dir,
     report = FALSE, time_channel_parameter = time.param
     ) )
 
-  if ( asp$figures ){
+  if ( figures ){
     PlotPeacoQC( dirty.ff, spectral.channel, output.dir,
                  display_peaks = peacoQC.result )
-
   }
 
   transform.list <- transformList( spectral.channel, transform.inv )

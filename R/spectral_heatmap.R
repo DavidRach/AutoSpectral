@@ -13,8 +13,6 @@
 #'
 #' @param spectra Matrix or dataframe containing spectral data
 #' format: fluorophores x detectors.
-#' @param asp The AutoSpectral parameter list.
-#' Prepare using `get.autospectral.param`
 #' @param plot.prefix Optional prefix for the plot filename.
 #' @param legend.label Character string that will appear on the heatmap legend.
 #' @param output.dir Optional output directory. Default is NULL, in which case
@@ -28,7 +26,7 @@
 #'
 #' @export
 
-spectral.heatmap <- function( spectra, asp, plot.prefix = NULL,
+spectral.heatmap <- function( spectra, plot.prefix = NULL,
                               legend.label = "Intensity", output.dir = NULL,
                               color.palette = "viridis" ) {
 
@@ -39,7 +37,7 @@ spectral.heatmap <- function( spectra, asp, plot.prefix = NULL,
   }
 
   if ( is.null( output.dir ) )
-    output.dir <- asp$figure.spectra.dir
+    output.dir <- getwd()
 
   heatmap.df <- data.frame( spectra, check.names = FALSE )
 

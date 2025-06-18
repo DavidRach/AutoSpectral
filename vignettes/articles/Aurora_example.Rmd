@@ -1,0 +1,113 @@
+---
+title: "Aurora_example"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(AutoSpectral)
+```
+
+To start, we need to get the relevant parameters for the cytometer. This tells
+AutoSpectral a lot about what you're doing. In this example, we'll use data from
+the Cytek Aurora.
+```{r, eval=FALSE}
+asp <- get.autospectral.param(cytometer = "aurora", figures = TRUE)
+```
+
+Create a folder containing only the single-stained control FCS files describe 
+the path to that folder here.
+```{r, eval=FALSE}
+control.dir <- "~/AutoSpectral_data/Aurora_example/Aurora_controls"
+```
+
+With this information, we can create a draft of the control file. More detail 
+on this will be included in a separate article. 
+```{r, eval=FALSE}
+create.control.file(control.dir, asp)
+```
+
+For now, we'll use the pre-filled control file, which you can get from Mendeley 
+Data.
+```{r, eval=FALSE}
+control.file <- "~/AutoSpectral_data/Aurora_example/aurora_fcs_control_file.csv"
+```
+
+Now we are ready to read in the fcs files, gate the cells and organize the 
+experiment.
+```{r, eval=FALSE}
+flow.control <- define.flow.control(control.dir, control.file, asp)
+```
+
+Check the gating plots.
+
+CD8 T cell gating:
+![CD8 lymphocyte gating plot](figures/SparkUV387.jpg)
+
+CD14 monocyte gating:
+![CD14 monocyte gating plot](figures/BV510.jpg)
+
+There are several parameters that control the automated gating. This will be
+covered in a separate article.
+
+Control cleaning is always recommended. The default option downsamples and sets 
+universal negatives, provided these are specified in the control file. More 
+detail on this in a separate article.
+```{r, eval=FALSE}
+clean.controls(flow.control, asp)
+```
+
+This generates scatter-matching plots showing the FSC/SSC of the positive events
+and events from the universal negative in the same region.
+
+CD8 scatter-matching plot:
+![CD8 scatter match plot](figures/SparkUV387_scatter_plot.jpg)
+
+CD14 scatter-matching plot:
+![CD14 scatter match plot](figures/BV510_scatter_plot.jpg)
+
+Spectra can now be isolated from the controls. To use the cleaned data, set 
+`use.clean.expr` to `TRUE`.
+```{r, eval=FALSE}
+spectra <- get.fluorophore.spectra(flow.control, asp, use.clean.expr = TRUE)
+```
+
+Check the spectral traces and heatmaps--do they look right?
+
+Normalized fluorophore signatures:
+![Spectral Trace](figures/Initial Universal Negative autospectral spectra.jpg)
+
+Now we can unmix.
+By default, AutoSpectral extracts a single AF parameter. To unmix without AF 
+extraction, remove this from the spectral matrix:
+```{r, eval=FALSE}
+fluorophore.only.spectra <- spectra[rownames(spectra) != "AF", ]
+```
+
+We can unmix a single FCS file:
+```{r, eval=FALSE}
+unmix.fcs("~/AutoSpectral_data/Aurora_example/Aurora_fully_stained/E1 Fresh_100ul_TS_BS_005.fcs",
+          spectra, asp, flow.control, method = "OLS")
+```
+
+Or, if we have a bunch of files in the folder, we can unmix them all:
+```{r, eval=FALSE}
+unmix.folder("~/AutoSpectral_data/Aurora_example/AutoSpectral/Aurora_fully_stained/",
+             spectra, asp, flow.control, method = "OLS")
+```
+
+By default, parallel processing is off. To activate it for faster unmixing, set:
+```{r, eval=FALSE}
+asp$parallel <- TRUE
+```
+
+Do this before calling the function, e.g., `define.flow.control` or 
+`clean.controls.` Turn it off again at any point:
+```{r, eval=FALSE}
+asp$parallel <- FALSE
+```

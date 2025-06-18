@@ -172,7 +172,7 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
                     split.lasers = TRUE,
                     asp$figure.spectra.line.size,
                     asp$figure.spectra.point.size )
-    spectral.heatmap( fluorophore.spectra.plot, asp, plot.prefix,
+    spectral.heatmap( fluorophore.spectra.plot, plot.prefix,
                       output.dir = asp$figure.spectra.dir )
   }
 
@@ -184,7 +184,12 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
 
   # cosine similarity QC for controls
   if ( asp$figures )
-    similarity.matrix.plot( fluorophore.spectra.plot, asp, plot.prefix )
+    similarity.matrix.plot( fluorophore.spectra.plot,
+                            filename = asp$similarity.heatmap.file.name,
+                            plot.prefix,
+                            output.dir = asp$figure.similarity.heatmap.dir,
+                            figure.width = asp$figure.width,
+                            figure.height = asp$figure.height )
 
   similarity.matrix <- cosine.similarity( t( fluorophore.spectra.plot ) )
 

@@ -30,7 +30,7 @@
 #' @param include.imaging Logical indicating whether to include imaging data in
 #' the written FCS file: relevant for S8 and A8. Default is `FALSE`
 #' @param divergence.threshold Numeric. Used for `FastPoisson` only. Threshold
-#' to trigger reversion towards WLS unmixing when Poisson result diverge.
+#' to trigger reversion towards WLS unmixing when Poisson result diverges.
 #' Default is `1e4`
 #' @param divergence.handling String. How to handle divergent cells from Poisson
 #' IRLS. Options are `NonNeg`, in which case non-negativity will be enforced,
