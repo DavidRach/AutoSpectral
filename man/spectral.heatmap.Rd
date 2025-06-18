@@ -6,7 +6,6 @@
 \usage{
 spectral.heatmap(
   spectra,
-  asp,
   plot.prefix = NULL,
   legend.label = "Intensity",
   output.dir = NULL,
@@ -16,9 +15,6 @@ spectral.heatmap(
 \arguments{
 \item{spectra}{Matrix or dataframe containing spectral data
 format: fluorophores x detectors.}
-
-\item{asp}{The AutoSpectral parameter list.
-Prepare using \code{get.autospectral.param}}
 
 \item{plot.prefix}{Optional prefix for the plot filename.}
 

@@ -80,7 +80,7 @@ spectra <- get.fluorophore.spectra(flow.control, asp, use.clean.expr = TRUE)
 Check the spectral traces and heatmaps--do they look right?
 
 Normalized fluorophore signatures:
-![Spectral Trace](figures/Initial Universal Negative autospectral spectra.jpg)
+![Spectral Trace](figures/UniversalNegativeSpectra.jpg)
 
 Now we can unmix.
 By default, AutoSpectral extracts a single AF parameter. To unmix without AF 

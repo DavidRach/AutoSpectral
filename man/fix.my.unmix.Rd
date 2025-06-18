@@ -8,7 +8,6 @@ fix.my.unmix(
   spectra,
   unstained.sample,
   fully.stained.sample,
-  flow.control,
   asp,
   verbose = TRUE,
   output.dir = "./FixMyUnmix",
@@ -58,8 +57,6 @@ ideally acquired the same day, and ideally matching the autofluorescence of
 the fully stained sample.}
 
 \item{fully.stained.sample}{File path and name for a raw fully stained sample.}
-
-\item{flow.control}{The flow.control list.}
 
 \item{asp}{The AutoSpectral parameter list.}
 

@@ -10,7 +10,7 @@ downsample.control(
   peak.channels,
   negative.n,
   positive.n,
-  asp
+  verbose = asp$verbose
 )
 }
 \arguments{
@@ -25,8 +25,7 @@ sample.}
 
 \item{positive.n}{The number of positive events to select.}
 
-\item{asp}{The AutoSpectral parameter list.
-Prepare using \code{get.autospectral.param}}
+\item{verbose}{Logical. Default inherits from \code{asp$verbose}, i.e., \code{TRUE}.}
 }
 \value{
 A matrix with the selected expression data.

@@ -51,7 +51,7 @@ written FCS file. Default is \code{FALSE}}
 the written FCS file: relevant for S8 and A8. Default is \code{FALSE}}
 
 \item{divergence.threshold}{Numeric. Used for \code{FastPoisson} only. Threshold
-to trigger reversion towards WLS unmixing when Poisson result diverge.
+to trigger reversion towards WLS unmixing when Poisson result diverges.
 Default is \code{1e4}}
 
 \item{divergence.handling}{String. How to handle divergent cells from Poisson

@@ -4,15 +4,36 @@
 \alias{similarity.matrix.plot}
 \title{Similarity Matrix Plot}
 \usage{
-similarity.matrix.plot(spectra, asp, plot.prefix = NULL)
+similarity.matrix.plot(
+  spectra,
+  filename = "autospectral_similarity_matrix",
+  plot.prefix = NULL,
+  output.dir = "figure_similarity_heatmap",
+  figure.width = 8,
+  figure.height = 6,
+  color.palette = "viridis"
+)
 }
 \arguments{
-\item{spectra}{Data frame containing spectral data.}
+\item{spectra}{Data frame or matrix containing spectral data.}
 
-\item{asp}{The AutoSpectral parameter list.
-Prepare using \code{get.autospectral.param}}
+\item{filename}{Character string for the output file. Default is
+\code{autospectral_similarity_matrix}.}
 
 \item{plot.prefix}{Optional prefix for the plot filename. Default is \code{NULL}}
+
+\item{output.dir}{File path where the plot will be created. Default is
+\code{figure_similarity_heatmap}. The directory will be created if it does not
+already exist.}
+
+\item{figure.width}{Numeric. Width of output plot. Default is \code{8}.}
+
+\item{figure.height}{Numeric. Height of output plot. Default is \code{6}.}
+
+\item{color.palette}{Optional character string defining the viridis color
+palette to be used for the fluorophore traces. Default is \code{viridis}. Options
+are the viridis color options: \code{magma}, \code{inferno}, \code{plasma}, \code{viridis},
+\code{cividis}, \code{rocket}, \code{mako} and \code{turbo}.}
 }
 \value{
 Saves the heatmap plot as a JPEG file in the similarity directory.
