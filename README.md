@@ -32,7 +32,7 @@ At the moment, the following cytometers are supported:
 There will likely be some unresolved issues with plotting data from
 certain configurations of the ID7000 and Aurora. Please note that FCS
 3.2 files from the S8 and A8 cytometers are not fully supported in
-flowCore. You will receive warnings, but things should still work.
+flowCore. You may receive warnings, but things should still work.
 
 If you want to use data from another cytometer and are wiling to provide
 files for establishing the workflow, contact the author/maintainer.
@@ -55,8 +55,8 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
   install.packages("BiocManager")
 BiocManager::install(c("flowWorkspace", "flowCore", "PeacoQC", "Biobase"))
 
-# install.packages("remotes")
-remotes::install_github("DrCytometer/AutoSpectral")
+# install.packages("devtools")
+devtools::install_github("DrCytometer/AutoSpectral")
 ```
 
 ## Example
@@ -108,5 +108,5 @@ no.af.spectra <- univ.neg.spectra[ ! rownames( univ.neg.spectra ) == "AF", ]
 sample.dir <- "./Raw samples"
 
 # perform unmixing, here we will unmix all fcs files in the folder using wls
-unmix.folder( sample.dir, no.af.spectra, asp, flow.control, method = "wls" )
+unmix.folder( sample.dir, no.af.spectra, asp, flow.control, method = "WLS" )
 ```
