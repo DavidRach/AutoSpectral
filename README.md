@@ -43,6 +43,10 @@ grant agreement No 874707 (EXIMIOUS), Wellcome Investigator Award,
 222442/A/21/Z and UKRI Proactive Vaccinology Award, MR/Y004450/1
 (IMMPROVE).
 
+AutoSpectral is provided under a GPL3 licence for academic use. If you
+wish to use AutoSpectral in a non-academic setting, please contact
+Adrian Liston regarding licencing options.
+
 ## Installation
 
 You can install the development version of AutoSpectral from
