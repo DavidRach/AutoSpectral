@@ -16,11 +16,18 @@
 #' Prepare using `get.autospectral.param`
 #' @param flow.control A list containing flow cytometry control parameters.
 #' @param method A character string specifying the unmixing method to use.
-#' Options are `OLS`, `WLS`, `Poisson` and `FastPoisson`. Default is `OLS`.
-#' `FastPoisson` requires installation of `AutoSpectralRcpp`
+#' Options are `OLS`, `WLS`, `AutoSpectral`, `Poisson` and `FastPoisson`.
+#' Default is `OLS`. `FastPoisson` requires installation of `AutoSpectralRcpp`.
+#' @param weighted Logical, whether to use ordinary or weighted least squares
+#' unmixing as the base algorithm in AutoSpectral unmixing.
+#' Default is `FALSE` and will use OLS.
 #' @param weights Optional numeric vector of weights (one per fluorescent
 #' detector). Default is `NULL`, in which case weighting will be done by
 #' channel means (Poisson variance). Only used for `WLS`.
+#' @param af.spectra Spectral signatures of autofluorescences, normalized
+#' between 0 and 1, with fluorophores in rows and detectors in columns. Prepare
+#' using `get.af.spectra`. Required for `AutoSpectral` unmixing. Default is
+#' `NULL` and will thus provoke failure if no spectra are provided.
 #' @param output.dir A character string specifying the directory to save the
 #' unmixed FCS file. Default is `NULL`.
 #' @param file.suffix A character string to append to the output file name.
@@ -45,7 +52,9 @@
 
 unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
                        method = "OLS",
+                       weighted = FALSE,
                        weights = NULL,
+                       af.spectra = NULL,
                        output.dir = NULL,
                        file.suffix = NULL,
                        include.raw = FALSE,
@@ -60,12 +69,12 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
 
   # import fcs, without warnings for fcs 3.2
   fcs.data <- suppressWarnings(
-    read.FCS( fcs.file, transformation = FALSE,
+    flowCore::read.FCS( fcs.file, transformation = FALSE,
               truncate_max_range = FALSE, emptyValue = FALSE )
   )
 
-  fcs.keywords <- keyword( fcs.data )
-  file.name <- keyword( fcs.data, "$FIL" )
+  fcs.keywords <- flowCore::keyword( fcs.data )
+  file.name <- flowCore::keyword( fcs.data, "$FIL" )
 
   # deal with manufacturer peculiarities in writing fcs files
   if ( asp$cytometer == "ID7000" ) {
@@ -96,6 +105,9 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
   unmixed.data <- switch( method,
                          "OLS" = unmix.ols( spectral.exprs, spectra ),
                          "WLS" = unmix.wls( spectral.exprs, spectra, weights ),
+                         "AutoSpectral" = unmix.autospectral( spectral.exprs, spectra,
+                                                              af.spectra, weighted,
+                                                              weights ),
                          "Poisson" = unmix.poisson( spectral.exprs, spectra, asp ),
                          "FastPoisson" = {
                            if ( requireNamespace("AutoSpectralRcpp", quietly = TRUE ) &&

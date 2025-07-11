@@ -10,7 +10,9 @@ unmix.fcs(
   asp,
   flow.control,
   method = "OLS",
+  weighted = FALSE,
   weights = NULL,
+  af.spectra = NULL,
   output.dir = NULL,
   file.suffix = NULL,
   include.raw = FALSE,
@@ -31,12 +33,21 @@ Prepare using \code{get.autospectral.param}}
 \item{flow.control}{A list containing flow cytometry control parameters.}
 
 \item{method}{A character string specifying the unmixing method to use.
-Options are \code{OLS}, \code{WLS}, \code{Poisson} and \code{FastPoisson}. Default is \code{OLS}.
-\code{FastPoisson} requires installation of \code{AutoSpectralRcpp}}
+Options are \code{OLS}, \code{WLS}, \code{AutoSpectral}, \code{Poisson} and \code{FastPoisson}.
+Default is \code{OLS}. \code{FastPoisson} requires installation of \code{AutoSpectralRcpp}.}
+
+\item{weighted}{Logical, whether to use ordinary or weighted least squares
+unmixing as the base algorithm in AutoSpectral unmixing.
+Default is \code{FALSE} and will use OLS.}
 
 \item{weights}{Optional numeric vector of weights (one per fluorescent
 detector). Default is \code{NULL}, in which case weighting will be done by
 channel means (Poisson variance). Only used for \code{WLS}.}
+
+\item{af.spectra}{Spectral signatures of autofluorescences, normalized
+between 0 and 1, with fluorophores in rows and detectors in columns. Prepare
+using \code{get.af.spectra}. Required for \code{AutoSpectral} unmixing. Default is
+\code{NULL} and will thus provoke failure if no spectra are provided.}
 
 \item{output.dir}{A character string specifying the directory to save the
 unmixed FCS file. Default is \code{NULL}.}

@@ -21,6 +21,9 @@ cell-based controls as easy as compensation beads. This should give you
 better accuracy and precision in your spectral definition and thus in
 your unmixing.
 
+Plus, you can extract each cell’s individual autofluorescent background
+in a manner specific to that cell, producing better unmixing.
+
 At the moment, the following cytometers are supported:
 
 - Cytek Aurora/Northern Lights (“aurora”)

@@ -16,13 +16,16 @@
 #' using `get.af.spectra`.
 #' @param weighted Logical, whether to use ordinary or weighted least squares
 #' unmixing as the base algorithm. Default is `FALSE` and will use OLS.
+#' @param weights Optional numeric vector of weights (one per fluorescent
+#' detector). Default is `NULL`, in which case weighting will be done by
+#' channel means (Poisson variance). Only used if `weighted`.
 #'
 #' @return Unmixed data with cells in rows and fluorophores in columns.
 #'
 #' @export
 
 unmix.autospectral <- function( raw.data, spectra, af.spectra,
-                                weighted = FALSE ) {
+                                weighted = FALSE, weights = NULL ) {
 
   # check for AF in spectra, remove if present
   if ( "AF" %in% rownames( spectra ) ) {
@@ -33,11 +36,6 @@ unmix.autospectral <- function( raw.data, spectra, af.spectra,
   if ( is.null( af.spectra ) )
     stop( "Multiple AF spectra must be provided." )
 
-  if ( weighted )
-    unmix <- unmix.wls
-  else
-    unmix <- unmix.ols
-
   fluorophores <- rownames( spectra )
   af.n <- nrow( af.spectra )
   cell.n <- nrow(raw.data)
@@ -45,7 +43,11 @@ unmix.autospectral <- function( raw.data, spectra, af.spectra,
   detector.n <- ncol(spectra)
 
   # initial no AF unmixing
-  no.af.unmixed <- unmix( raw.data, spectra )
+  if ( weighted )
+    no.af.unmixed <- unmix.wls( raw.data, spectra, weights )
+  else
+    no.af.unmixed <- unmix.ols( raw.data, spectra )
+
   no.af.residual <- rowSums( ( raw.data - ( no.af.unmixed %*% spectra  ) )^2 )
   no.af.unmixed <- cbind( no.af.unmixed, no.af.residual/1e3 )
 
@@ -62,7 +64,11 @@ unmix.autospectral <- function( raw.data, spectra, af.spectra,
     combined.spectra[ 1:fluorophore.n, ] <- spectra
     combined.spectra[ fluorophore.n + 1, ] <- af.spectra[ af, ]
 
-    unmixed <- unmix( raw.data, combined.spectra )
+    if ( weighted )
+      unmixed <- unmix.wls( raw.data, combined.spectra, weights )
+    else
+      unmixed <- unmix.ols( raw.data, combined.spectra )
+
     residual <- rowSums( ( raw.data - ( unmixed %*% combined.spectra ) )^2 )
 
     model.unmixings[[ af ]] <- unmixed

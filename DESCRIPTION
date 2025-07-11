@@ -1,7 +1,7 @@
 Package: AutoSpectral
 Type: Package
 Title: Tools for Unmxing Spectral Flow Cytometry Data
-Version: 0.3.0
+Version: 0.3.1
 Authors@R: c(
     person(
       "Oliver", "Burton",
@@ -18,7 +18,9 @@ Authors@R: c(
   )
 Description: Isolates and refines clean spectral signatures from 
     single stained controls. Deals with autofluorescence contamination in 
-    controls effectively. Unmix fcs files with ordinary or weighted least squares.
+    controls effectively. Unmix fcs files with ordinary or weighted least squares,
+    or with the hallmark AutoSpectral approach to deal with autofluorescence on
+    a per-cell basis.
 License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 LazyData: true
