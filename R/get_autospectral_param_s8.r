@@ -16,7 +16,7 @@ get.autospectral.param.s8 <- function( autosp.param )
 {
   # add cytometer-specific parameters
 
-  autosp.param$cytometer <- "DiscoverS8"
+  autosp.param$cytometer <- "FACSDiscover S8"
 
   autosp.param$scatter.data.min.x <- 0
 

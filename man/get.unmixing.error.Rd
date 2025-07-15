@@ -30,9 +30,9 @@ Prepare using \code{get.autospectral.param}}
 }
 \value{
 A list containing the unmixing correction matrices for intercept,
-coefficient, slope, and skewness.
+coefficient and slope.
 }
 \description{
 This function calculates the unmixing error for each fluorophore, including
-intercept, coefficient, slope, and skewness, using robust linear modeling.
+intercept, coefficient and slope, using robust linear modeling.
 }

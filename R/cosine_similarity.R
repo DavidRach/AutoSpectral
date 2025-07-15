@@ -12,7 +12,7 @@
 
 cosine.similarity <- function( spectra.t ) {
   spectra.t <- as.matrix( spectra.t )
-  euclidean.norm <- sqrt( colSums( spectra.t^2 ) )
+  euclidean.norm <- sqrt( colSums( spectra.t^2 ) + 1e-9 )
   dot.product <- t( spectra.t ) %*% spectra.t
   similarity.matrix <- dot.product / outer( euclidean.norm, euclidean.norm )
   return( similarity.matrix )

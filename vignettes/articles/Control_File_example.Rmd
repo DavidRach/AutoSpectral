@@ -133,19 +133,35 @@ splenocytes:
 
 ![Viability gate example](figures/cells_viabilityMarker_smallGate.jpg)
 
-So, for this dataset, the control file is now complete and we are ready to run
-AutoSpectral.
-
-If you happen to run `create.control.file` again, it will create another blank
-control file spreadsheet with an incrementing file number. This ensures that it
-doesn't overwrite your existing filled-in control file.
-
 Whatever you've named your control file (the default output is 
 `fcs_control_file.csv`), you'll need to tell AutoSpectral what it's called:
 
 ```{r, eval=FALSE}
 control.file <- "fcs_control_file.csv"
 ```
+
+
+To confirm that everything is set up correctly, and to check for a multitude of
+other potential problems, AutoSpectral contains this handy helper function called
+`check.control.file`. This actually checks your single-stained control FCS files
+as well to be sure that they're all consistent with each other. This outputs
+the list of critical errors (things that will probably stop AutoSpectral from
+running) and warnings (things to check--did you mean to set it up that way?) as
+a message to the screen and also returns it as an object. So, if there are a lot
+of errors, you can review the list again. Note that `check.control.file` runs
+inside of `define.flow.control` with a strict setting that will cause it to
+abort if it finds anything it deems to be an error. So, fix the errors first.
+
+```{r, eval=FALSE}
+potential.problems <- check.control.file(control.dir, control.file, asp)
+```
+
+For this dataset, the control file is now complete and we are ready to run
+AutoSpectral.
+
+If you happen to run `create.control.file` again, it will create another blank
+control file spreadsheet with an incrementing file number. This ensures that it
+doesn't overwrite your existing filled-in control file.
 
 In the next article, we'll look at how to create a control file for a more
 complex experiment where we have beads and cells, different universal negatives

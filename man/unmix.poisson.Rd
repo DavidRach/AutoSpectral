@@ -4,7 +4,7 @@
 \alias{unmix.poisson}
 \title{Unmix Using Poisson Regression}
 \usage{
-unmix.poisson(raw.data, spectra, asp)
+unmix.poisson(raw.data, spectra, asp, initial.weights = NULL)
 }
 \arguments{
 \item{raw.data}{Matrix containing raw data to be unmixed.}
@@ -13,6 +13,10 @@ unmix.poisson(raw.data, spectra, asp)
 
 \item{asp}{The AutoSpectral parameter list.
 Prepare using \code{get.autospectral.param}}
+
+\item{initial.weights}{Optional numeric vector of weights, one per fluorescent
+detector. Default is \code{NULL}, in which case weighting will be done by
+channel means.}
 }
 \value{
 A matrix containing the unmixed data.

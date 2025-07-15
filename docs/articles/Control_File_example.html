@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">AutoSpectral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.3</span>
       </span>
     </div>
 
@@ -53,6 +53,9 @@
     </li>
     <li>
       <a href="../articles/Control_File_example.html">Control_File_example</a>
+    </li>
+    <li>
+      <a href="../articles/Reload_AutoSpectral.html">Re-running_AutoSpectral</a>
     </li>
   </ul>
 </li>
@@ -195,17 +198,32 @@ mouse splenocytes:</p>
 <div class="float">
 <img src="figures/cells_viabilityMarker_smallGate.jpg" alt="Viability gate example"><div class="figcaption">Viability gate example</div>
 </div>
-<p>So, for this dataset, the control file is now complete and we are
-ready to run AutoSpectral.</p>
-<p>If you happen to run <code>create.control.file</code> again, it will
-create another blank control file spreadsheet with an incrementing file
-number. This ensures that it doesn’t overwrite your existing filled-in
-control file.</p>
 <p>Whatever you’ve named your control file (the default output is
 <code>fcs_control_file.csv</code>), you’ll need to tell AutoSpectral
 what it’s called:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">control.file</span> <span class="op">&lt;-</span> <span class="st">"fcs_control_file.csv"</span></span></code></pre></div>
+<p>To confirm that everything is set up correctly, and to check for a
+multitude of other potential problems, AutoSpectral contains this handy
+helper function called <code>check.control.file</code>. This actually
+checks your single-stained control FCS files as well to be sure that
+they’re all consistent with each other. This outputs the list of
+critical errors (things that will probably stop AutoSpectral from
+running) and warnings (things to check–did you mean to set it up that
+way?) as a message to the screen and also returns it as an object. So,
+if there are a lot of errors, you can review the list again. Note that
+<code>check.control.file</code> runs inside of
+<code>define.flow.control</code> with a strict setting that will cause
+it to abort if it finds anything it deems to be an error. So, fix the
+errors first.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">potential.problems</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/check.control.file.html">check.control.file</a></span><span class="op">(</span><span class="va">control.dir</span>, <span class="va">control.file</span>, <span class="va">asp</span><span class="op">)</span></span></code></pre></div>
+<p>For this dataset, the control file is now complete and we are ready
+to run AutoSpectral.</p>
+<p>If you happen to run <code>create.control.file</code> again, it will
+create another blank control file spreadsheet with an incrementing file
+number. This ensures that it doesn’t overwrite your existing filled-in
+control file.</p>
 <p>In the next article, we’ll look at how to create a control file for a
 more complex experiment where we have beads and cells, different
 universal negatives and, ideally, a viability marker. We’ll also see
@@ -227,7 +245,7 @@ what to do when your fluorophores can’t be found in the database.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer>

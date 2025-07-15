@@ -65,10 +65,10 @@ create.control.file <- function( control.dir, asp ){
   } else if ( asp$cytometer == "ID7000" ){
     detectors <- setNames( fluorophore.database$channel.ID7000, fluorophore.database$fluorophore )
 
-  } else if ( asp$cytometer == "DiscoverA8" ){
+  } else if ( asp$cytometer == "FACSDiscover A8" ){
     detectors <- setNames( fluorophore.database$channel.s8, fluorophore.database$fluorophore )
 
-  } else if ( asp$cytometer == "DiscoverS8" ){
+  } else if ( asp$cytometer == "FACSDiscover S8" ){
     detectors <- setNames( fluorophore.database$channel.s8, fluorophore.database$fluorophore )
 
   } else if ( asp$cytometer == "Opteon" ){

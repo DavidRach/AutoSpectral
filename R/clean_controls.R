@@ -158,10 +158,8 @@ clean.controls <- function( flow.control, asp,
                     "No cell-based universal negative samples could be identified.
                     To perform autofluorescence removal, you must specify a universal negative in the fcs_control_file." )
 
-
-    univ.neg.sample <- flow.control$fluorophore[ flow.control.type == "cells" &
-                                                   flow.sample %in% univ.neg &
-                                                   flow.control$fluorophore != "AF" ]
+    univ.neg.sample <- flow.control$sample[ flow.control.type == "cells" &
+                                                   flow.sample %in% univ.neg ]
 
     check.critical( length( univ.neg.sample ) > 0,
                     "No cell-based universal negative samples could be identified.
@@ -172,10 +170,8 @@ clean.controls <- function( flow.control, asp,
 
     # select cell-based single-stained samples to be used
     # must be cells and must have a corresponding universal negative
-    # note: last exclusion step can be modified to include AF control
     af.removal.sample <- flow.sample[ flow.control.type == "cells" &
                                         flow.negative %in% univ.neg ]
-    # & !( flow.control$fluorophore %in% univ.neg.sample )
 
     # check that is not length 0 and stop if is
     check.critical( length( af.removal.sample ) > 0,
@@ -183,7 +179,7 @@ clean.controls <- function( flow.control, asp,
                     To perform autofluorescence removal, you must specify a universal negative in the fcs_control_file." )
 
     # get af artefacts for each negative control
-    univ.neg.af.artefacts <- run.af.artefact.id( clean.expr, univ.neg,
+    univ.neg.af.artefacts <- run.af.artefact.id( clean.expr, univ.neg.sample,
                                                  spectral.channel, asp )
 
     # remove identified AF from single-color controls
@@ -193,8 +189,7 @@ clean.controls <- function( flow.control, asp,
                                        flow.negative,
                                        asp )
 
-    # if AF is among cleaned controls
-    # rename AF in cleaned controls to AF cleaned
+    # if AF is among cleaned controls, rename AF in cleaned controls to AF cleaned
     names( af.removed.expr )[ names( af.removed.expr ) == "AF" ] <- "AF cleaned"
 
     # replace AF in universal negative with AF cleaned

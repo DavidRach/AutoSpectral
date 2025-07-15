@@ -19,13 +19,16 @@
 #' @param weights Optional numeric vector of weights (one per fluorescent
 #' detector). Default is `NULL`, in which case weighting will be done by
 #' channel means (Poisson variance). Only used if `weighted`.
+#' @param calculate.error Logical, whether to calculate the RMSE unmixing model
+#' accuracy and include it as an output.
 #'
 #' @return Unmixed data with cells in rows and fluorophores in columns.
 #'
 #' @export
 
 unmix.autospectral <- function( raw.data, spectra, af.spectra,
-                                weighted = FALSE, weights = NULL ) {
+                                weighted = FALSE, weights = NULL,
+                                calculate.error = FALSE ) {
 
   # check for AF in spectra, remove if present
   if ( "AF" %in% rownames( spectra ) ) {
@@ -90,8 +93,20 @@ unmix.autospectral <- function( raw.data, spectra, af.spectra,
 
   rm( model.unmixings )
 
+  # calculate average per cell error
+  if ( calculate.error ) {
+    residual <- model.residuals[, af.idx ]
+    RMSE <- sqrt( mean( residual ) )
+  }
+
   colnames( unmixed.data ) <- c( fluorophores, "AF" )
 
-  return( unmixed.data )
+  if ( calculate.error )
+    return( list(
+      RMSE = RMSE,
+      unmixed.data = unmixed.data
+    ) )
+  else
+    return( unmixed.data )
 
 }

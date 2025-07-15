@@ -176,7 +176,7 @@ check.control.file <- function( control.dir, control.def.file, asp,
       errors$missing.channel <- problem.missing.channel
     }
 
-    warning.list$missing.channel <- missing.channel
+    # warning.list$missing.channel <- missing.channel
   }
 
   # check that control type has been filled in
@@ -349,7 +349,7 @@ check.control.file <- function( control.dir, control.def.file, asp,
   # check FCS files for consistency
   header.check <- lapply( control.table$filename, function( fcs ) {
 
-    fcs.header <- flowCore::read.FCSheader( fcs, path = control.dir )
+    fcs.header <- suppressWarnings( flowCore::read.FCSheader( fcs, path = control.dir ) )
     header.text <- fcs.header[[ 1 ]]
     param.n <- as.integer( header.text[ "$PAR" ] )
     param.names <- sapply( 1:param.n, function( i )
@@ -364,6 +364,18 @@ check.control.file <- function( control.dir, control.def.file, asp,
   param.names.list <- lapply( header.check, `[[`, "parameters" )
   cytometer.list <- sapply( header.check, `[[`, "cytometer" )
 
+  if ( asp$cytometer == "FACSDiscover S8" | asp$cytometer == "FACSDiscover A8" ) {
+    remove.non.spectral <- function( params, patterns ) {
+      params[ !sapply( params, function( p )
+        any( grepl( paste( patterns, collapse = "|" ), p ) ) ) ]
+    }
+
+    non.spectral <- asp$non.spectral.channel[ 4:length(asp$non.spectral.channel ) ]
+
+    param.names.list <- lapply( param.names.list, remove.non.spectral,
+                                        patterns = non.spectral )
+  }
+
   matching.parameters <- all( sapply( param.names.list[ -1 ], function( x )
     identical( x, param.names.list[[ 1 ]] ) ) )
 
@@ -372,7 +384,9 @@ check.control.file <- function( control.dir, control.def.file, asp,
                     "Please inspect or this will likely fail.", sep = "\n" ) )
     message( paste( "\033[31mInconsistencies found in parameter names across FCS files.",
                     "Please inspect or this will likely fail.\033[0m", sep = "\n" ) )
-    errors$parameter.mismatch <- !matching.parameters
+    errors$parameter.mismatch <- param.names.list[
+        sapply( param.names.list, function( x ) !identical( x, param.names.list[[ 1 ]] ) )
+      ]
   }
 
   matching.cytometers <- length( unique( cytometer.list ) ) == 1
@@ -416,8 +430,6 @@ check.control.file <- function( control.dir, control.def.file, asp,
     errors$mismatched.peak.channels <- mismatched.peak.channels
   }
 
-  error.checks <- list( Errors = errors, Warnings = warning.list )
-
   if ( length( errors ) > 0 ) {
     if ( strict ) {
       stop( paste( errors, collapse = "\n" ) )
@@ -426,7 +438,10 @@ check.control.file <- function( control.dir, control.def.file, asp,
     }
   } else {
     message( "\033[34mNo critical errors found in control file.\033[0m" )
+    errors <- "No Errors Found"
   }
+
+  error.checks <- list( Errors = errors, Warnings = warning.list )
 
   return( error.checks )
 

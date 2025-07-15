@@ -20,19 +20,22 @@ knitr::opts_chunk$set(
 
 AutoSpectral is AutoSpill updated for the spectral flow era.
 
+It is also pretty complex and newly released, so there will be bugs. Sorry.
+Please read the help pages and articles before submitting bug reports. There's
+a lot of info there.
+
 The goal of AutoSpectral is to provide you with the best possible spectral 
 signatures of the fluorophores in your single-stained controls. Whether or not
 these accurately model your fully stained samples will depend on what you've 
 chosen to use for the controls, how they were prepared and other factors such
-as any divergence in handling between samples and controls as well as machine
-variation. 
+as machine condition and any divergence in handling between samples and controls. 
 
 More to the point, AutoSpectral is intended to make working with messy cell-based
 controls as easy as compensation beads. This should give you better accuracy
 and precision in your spectral definition and thus in your unmixing.
 
 Plus, you can extract each cell's individual autofluorescent background in a 
-manner specific to that cell, producing better unmixing.
+manner specific to that cell, producing better unmixing with less spread.
 
 At the moment, the following cytometers are supported:
 
@@ -65,11 +68,12 @@ You can install the development version of AutoSpectral from [GitHub](https://gi
 
 ``` {r, eval = FALSE}
 
-# Install missing Bioconductor packages
+# Optional: Install Bioconductor packages
 if (!requireNamespace("BiocManager", quietly = TRUE))
   install.packages("BiocManager")
 BiocManager::install(c("flowWorkspace", "flowCore", "PeacoQC", "Biobase"))
 
+# You'll need devtools or remotes to install from GitHub.
 # install.packages("devtools")
 devtools::install_github("DrCytometer/AutoSpectral")
 ```
@@ -81,48 +85,56 @@ This is a basic example of the workflow, using samples from the ID7000:
 ```{r, eval = FALSE}
 library( AutoSpectral )
 
-# define the location of the single-stained control files
+# Define the location of the single-stained control files.
 control.dir <- "./Cell controls"
 
-# get the parameters for your cytometer
-# supported cytometers include "aurora", "id7000", "a8", "s8" and "opteon"
+# Get the parameters for your cytometer.
+# Supported cytometers include "aurora", "id7000", "a8", "s8" and "opteon".
 asp <- get.autospectral.param( cytometer = "id7000", figures = TRUE )
 
-# optionally, create a control file
-# after creating it, manually edit to ensure it is correct
+# Optionally, create a control file (see article on this).
+# After creating it, manually edit to ensure it is correct.
 create.control.file( control.dir, asp )
 
-# load the edited control file
+# Locate the edited control file.
 control.def.file <- "fcs_control_file.csv"
 
-# adjustments to automated gating
-# this will be covered more extensively elsewhere
-# in this case, the cells on scatter are very small, so we modify the target
+# check the control file for errors
+control.file.errors <- check.control.file(control.dir, control.def.file, asp)
+
+## Adjustments to automated gating
+# This will be covered more extensively elsewhere.
+# in this case, the cells on scatter are very small, so we modify the target.
 asp$gate.bound.density.max.target.cells <- 0
 
-# load the control files, gate, prepare for spectral extraction
-# this is usually the slowest step
+# Load the control files, gate, prepare for spectral extraction.
+# This is usually the slowest step.
 flow.control <- define.flow.control( control.dir, control.def.file, asp )
 
-# for speed and accuracy, cleaning the controls by using scatter-matched universal
-# negatives are recommended for both beads and cells
+# For speed and accuracy, the recommended approach is to clean the controls
+# using separate (universal) negative samples for both beads and cells.
+# In doing so, we select cells with matching autofluorescent background and
+# restrict the calculations to the brightest events.
 clean.controls( flow.control, asp, universal.negative = TRUE, downsample = TRUE,
                 scatter.match = TRUE )
 
-# extract the clean spectra
+# Extract the clean spectra
 univ.neg.spectra <- get.fluorophore.spectra( flow.control, asp, 
                                             use.clean.expr = TRUE,
                                             plot.prefix = "Universal Negative Cells" )
 
-# by default AutoSpectral extracts autofluorescence as a spectrum
-# to remove this for unmixing:
+# By default AutoSpectral extracts autofluorescence as a spectrum.
+# This is comparable to "Autofluorescence as a Fluorescent Tag" in SpectroFlo
+# More on this later.
+# To remove this AF parameter for unmixing:
 no.af.spectra <- univ.neg.spectra[ ! rownames( univ.neg.spectra ) == "AF", ]
 
-## unmixing
-# set the location of the raw files to be unmixed
+## Unmixing
+# Set the location of the raw files to be unmixed.
 sample.dir <- "./Raw samples"
 
-# perform unmixing, here we will unmix all fcs files in the folder using wls
+# Perform unmixing, here we will unmix all fcs files in the folder using 
+# Weighted least squares (WLS or in Sony lingo, WLSM).
 unmix.folder( sample.dir, no.af.spectra, asp, flow.control, method = "WLS" )
 
 

@@ -4,9 +4,8 @@
 #'
 #' @description
 #' This function calculates the unmixing error for each fluorophore, including
-#' intercept, coefficient, slope, and skewness, using robust linear modeling.
+#' intercept, coefficient and slope, using robust linear modeling.
 #'
-#' @importFrom moments skewness
 #' @importFrom future plan multisession
 #' @importFrom future.apply future_lapply
 #'
@@ -20,7 +19,7 @@
 #' Prepare using `get.autospectral.param`
 #'
 #' @return A list containing the unmixing correction matrices for intercept,
-#' coefficient, slope, and skewness.
+#' coefficient and slope.
 #'
 #' @export
 
@@ -49,7 +48,6 @@ get.unmixing.error <- function( expr.data.unmix, fluorophores,
     unmixed.spillover.corr.inte <- unmixed.spillover.zero
     unmixed.spillover.corr.coef <- unmixed.spillover.zero
     unmixed.spillover.corr.slop <- unmixed.spillover.zero
-    unmixed.spillover.corr.skew <- unmixed.spillover.zero
 
     for( channel in fluorophores ){
 
@@ -73,11 +71,10 @@ get.unmixing.error <- function( expr.data.unmix, fluorophores,
         unmixed.spillover.corr.inte[ channel ] <- spillover.model.result[ 1 ]
         unmixed.spillover.corr.coef[ channel ] <- spillover.model.result[ 2 ]
 
-        # get slope and skewness in untransformed scale
+        # get slope in untransformed scale
         if ( scale.untransformed ){
 
           unmixed.spillover.corr.slop[ channel ] <- unmixed.spillover.corr.coef[ channel ]
-          unmixed.spillover.corr.skew[ channel ] <- skewness( channel.expr )
 
         } else {
 
@@ -104,15 +101,12 @@ get.unmixing.error <- function( expr.data.unmix, fluorophores,
               ( x2 - x1 ) * ( y2p - y1p ) /
               ( ( x2p - x1p ) * ( y2 - y1 ) )
           }
-
-          unmixed.spillover.corr.skew[ channel ] <-
-            skewness( transform.inv( channel.expr ) )
         }
       }
     } # channel
 
     c( unmixed.spillover.corr.inte, unmixed.spillover.corr.coef,
-       unmixed.spillover.corr.slop, unmixed.spillover.corr.skew )
+       unmixed.spillover.corr.slop )
 
   } )
 
@@ -124,9 +118,7 @@ get.unmixing.error <- function( expr.data.unmix, fluorophores,
     coef = unmixed.matrix.corr[ , 1 : fluorophore.n +
                                   fluorophore.n ],
     slop = unmixed.matrix.corr[ , 1 : fluorophore.n +
-                                  2 * fluorophore.n ],
-    skew = unmixed.matrix.corr[ , 1 : fluorophore.n +
-                                  3 * fluorophore.n ]
+                                  2 * fluorophore.n ]
   )
 
   return( unmixing.corr )

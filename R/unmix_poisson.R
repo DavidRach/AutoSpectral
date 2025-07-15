@@ -15,15 +15,18 @@
 #' @param spectra Matrix containing spectra information.
 #' @param asp The AutoSpectral parameter list.
 #' Prepare using `get.autospectral.param`
+#' @param initial.weights Optional numeric vector of weights, one per fluorescent
+#' detector. Default is `NULL`, in which case weighting will be done by
+#' channel means.
 #'
 #' @return A matrix containing the unmixed data.
 #'
 #' @export
 
-unmix.poisson <- function( raw.data, spectra, asp ) {
+unmix.poisson <- function( raw.data, spectra, asp, initial.weights = NULL ) {
 
   # initialize with WLS unmixing (approximates Poisson weighting)
-  unmixed.data <- unmix.wls( raw.data, spectra )
+  unmixed.data <- unmix.wls( raw.data, spectra, initial.weights )
 
   # handle zeros and negative values
   spectra.t <- t( abs( spectra ) )

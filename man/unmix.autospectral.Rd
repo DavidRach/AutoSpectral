@@ -9,7 +9,8 @@ unmix.autospectral(
   spectra,
   af.spectra,
   weighted = FALSE,
-  weights = NULL
+  weights = NULL,
+  calculate.error = FALSE
 )
 }
 \arguments{
@@ -30,6 +31,9 @@ unmixing as the base algorithm. Default is \code{FALSE} and will use OLS.}
 \item{weights}{Optional numeric vector of weights (one per fluorescent
 detector). Default is \code{NULL}, in which case weighting will be done by
 channel means (Poisson variance). Only used if \code{weighted}.}
+
+\item{calculate.error}{Logical, whether to calculate the RMSE unmixing model
+accuracy and include it as an output.}
 }
 \value{
 Unmixed data with cells in rows and fluorophores in columns.

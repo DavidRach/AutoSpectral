@@ -16,8 +16,13 @@
 #' Prepare using `get.autospectral.param`
 #' @param flow.control A list containing flow cytometry control parameters.
 #' @param method A character string specifying the unmixing method to use.
-#' Options are `OLS`, `WLS`, `Poisson` and `FastPoisson`. Default is `OLS`.
-#' `FastPoisson` requires installation of `AutoSpectralRcpp`
+#' The default is `Automatic`, which uses `AutoSpectral` for AF extraction if
+#' af.spectra are provided and automatically selects `OLS` or `WLS` depending
+#' on which is normal for the given cytometer in `asp$cytometer`. This means
+#' that files from the ID7000, A8 and S8 will be unmixed using `WLS` while
+#' others will be unmixed with `OLS`. Any option can be set manually.
+#' Manual options are `OLS`, `WLS`, `AutoSpectral`, `Poisson` and `FastPoisson`.
+#' Default is `OLS`. `FastPoisson` requires installation of `AutoSpectralRcpp`.
 #' @param weights Optional numeric vector of weights: one per fluorescent
 #' detector. Default is `NULL`, in which case weighting will be done by
 #' channel means. Only used for `WLS`
@@ -44,7 +49,7 @@
 #' @export
 
 unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
-                          method = "OLS",
+                          method = "Automatic",
                           weights = NULL,
                           output.dir = NULL,
                           file.suffix = NULL,

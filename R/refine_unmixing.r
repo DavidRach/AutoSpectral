@@ -29,11 +29,6 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
   if ( !dir.exists( asp$table.slope.error.dir ) )
     dir.create( asp$table.slope.error.dir )
 
-  if ( !dir.exists( asp$figure.skewness.dir ) )
-    dir.create( asp$figure.skewness.dir )
-  if ( !dir.exists( asp$table.skewness.dir ) )
-    dir.create( asp$table.skewness.dir )
-
   if ( !dir.exists( asp$figure.convergence.dir ) )
     dir.create( asp$figure.convergence.dir )
   if ( !dir.exists( asp$table.convergence.dir ) )
@@ -287,34 +282,6 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
 
       # plot convergence
       convergence.plot( rs.convergence.log, asp )
-
-      # write skewness data
-      table.skewness.file.name <- ifelse( rs.iter.last,
-                                          sprintf( "%s.csv", asp$skewness.file.name ),
-                                          sprintf( "%s_%0*d.csv", asp$skewness.file.name,
-                                                   rs.iter.width, rs.iter ) )
-
-      write.csv( unmixing.error$skew,
-                 file = file.path( asp$table.skewness.dir,
-                                   table.skewness.file.name ) )
-
-      # plot skewness
-      if ( ! is.null( af.control ) )
-        spillover.skewness <- unmixing.error$skew[
-          - which( rownames( unmixing.error$skew ) == af.control ),
-          - which( colnames( unmixing.error$skew ) == af.control ) ]
-      else
-        spillover.skewness <- unmixing.error$skew
-
-      figure.skewness.file.name <- sprintf( "%s%s.jpg",
-                                            asp$skewness.file.name,
-                                            ifelse( rs.iter.last, "",
-                                                    sprintf( "_%0*d", rs.iter.width, rs.iter ) ) )
-
-      refine.unmixing.log.plot( spillover.skewness, "spillover skewness",
-                                file.path( asp$figure.skewness.dir,
-                                           figure.skewness.file.name ),
-                                asp )
 
       # plot spectra
       spectral.trace( spectral.matrix = spectra.update.reverted,

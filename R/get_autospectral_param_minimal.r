@@ -216,21 +216,6 @@ get.autospectral.param.minimal <- function()
       convergence.shape.biexp = "circle",
       convergence.shape.posnegpop = "triangle open",
 
-      ### fix my unmix parameters
-      fix.unmixing.dir = "./Fix_my_unmix",
-      fix.unmixing.plot = "Fixing_unmixing_plot.jpg",
-      fix.unmixing.heatmap = "Fixing_unmixing",
-      fix.spectra.filename = "Fixed_spectra.csv",
-      fix.spillover.filename = "Fixed_spillover.csv",
-      fix.compensation.filename = "Fixed_compensation.csv",
-      fix.compensation.flowjo = "Fixed_compensation.mtx",
-      fix.unmix.plot.breaks = c( -1e3, -1e2, -10, 0, 10, 1e2, 1e3, 3e3,
-                                 1e4, 3e4, 1e5, 3e5, 1e6 ),
-      fix.unmix.figure.width = 12,
-      fix.unmix.figure.height = 6,
-      fix.unmix.bw.factor = 10,
-      fix.unmix.grid.n = 1000,
-
       ### directory parameters
       unmixed.fcs.dir = "AutoSpectral_unmixed",
 
@@ -244,13 +229,11 @@ get.autospectral.param.minimal <- function()
       figure.convergence.dir = NULL,
       figure.spectra.dir = NULL,
       figure.slope.error.dir = NULL,
-      figure.skewness.dir = NULL,
       figure.similarity.heatmap.dir = NULL,
 
       table.convergence.dir = NULL,
       table.spectra.dir = NULL,
       table.slope.error.dir = NULL,
-      table.skewness.dir = NULL,
 
       ### filename parameters
       # files you can use to load in information
@@ -264,7 +247,6 @@ get.autospectral.param.minimal <- function()
       af.file.name = "autospectral autofluorescence",
       spectra.file.name = "autospectral spectra",
       slope.error.file.name = "autospectral_slope_error",
-      skewness.file.name = "autospectral_skewness",
       similarity.heatmap.file.name = "autospectral_similarity_matrix",
       ssm.heatmap.file.name = "autospectral_spread_matrix",
 

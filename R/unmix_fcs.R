@@ -16,7 +16,12 @@
 #' Prepare using `get.autospectral.param`
 #' @param flow.control A list containing flow cytometry control parameters.
 #' @param method A character string specifying the unmixing method to use.
-#' Options are `OLS`, `WLS`, `AutoSpectral`, `Poisson` and `FastPoisson`.
+#' The default is `Automatic`, which uses `AutoSpectral` for AF extraction if
+#' af.spectra are provided and automatically selects `OLS` or `WLS` depending
+#' on which is normal for the given cytometer in `asp$cytometer`. This means
+#' that files from the ID7000, A8 and S8 will be unmixed using `WLS` while
+#' others will be unmixed with `OLS`. Any option can be set manually.
+#' Manual options are `OLS`, `WLS`, `AutoSpectral`, `Poisson` and `FastPoisson`.
 #' Default is `OLS`. `FastPoisson` requires installation of `AutoSpectralRcpp`.
 #' @param weighted Logical, whether to use ordinary or weighted least squares
 #' unmixing as the base algorithm in AutoSpectral unmixing.
@@ -36,6 +41,8 @@
 #' expression data in the written FCS file. Default is `FALSE`.
 #' @param include.imaging A logical value indicating whether to include imaging
 #' parameters in the written FCS file. Default is `FALSE`.
+#' @param calculate.error Logical, whether to calculate the RMSE unmixing model
+#' accuracy and include it as a keyword in the FCS file.
 #' @param divergence.threshold Numeric. Used for `FastPoisson` only.
 #' Threshold to trigger reversion towards WLS unmixing when Poisson result
 #' diverges for a given point.
@@ -51,7 +58,7 @@
 #' @export
 
 unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
-                       method = "OLS",
+                       method = "Automatic",
                        weighted = FALSE,
                        weights = NULL,
                        af.spectra = NULL,
@@ -59,12 +66,26 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
                        file.suffix = NULL,
                        include.raw = FALSE,
                        include.imaging = FALSE,
+                       calculate.error = TRUE,
                        divergence.threshold = 1e4,
                        divergence.handling = "Balance",
                        balance.weight = 0.5 ){
 
   if ( is.null( output.dir ) ){
     output.dir <- asp$unmixed.fcs.dir
+  }
+
+  # logic for default unmixing with cytometer-based selection
+  if ( method == "Automatic" ) {
+    if ( !is.null( af.spectra ) ) {
+      method <- "AutoSpectral"
+      if ( asp$cytometer %in% c( "FACSDiscover S8", "FACSDiscover A8", "ID7000" ) )
+        weighted <- TRUE
+    } else if ( asp$cytometer %in% c( "FACSDiscover S8", "FACSDiscover A8", "ID7000" ) ) {
+      method <- "WLS"
+    } else {
+      method <- "OLS"
+    }
   }
 
   # import fcs, without warnings for fcs 3.2
@@ -80,7 +101,7 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
   if ( asp$cytometer == "ID7000" ) {
     file.name <- sub( "Raw", method, file.name )
 
-  } else if ( asp$cytometer == "DiscoverS8" | asp$cytometer == "DiscoverA8" ) {
+  } else if ( asp$cytometer == "FACSDiscover S8" | asp$cytometer == "FACSDiscover A8" ) {
     file.name <- fcs.keywords$FILENAME
     file.name <- sub( ".*\\/", "", file.name )
     file.name <- sub( ".fcs", paste0( " ", method, ".fcs" ), file.name )
@@ -101,20 +122,51 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
   other.channels <- setdiff( colnames( fcs.exprs ), flow.control$spectral.channel )
   other.exprs <- fcs.exprs[ , other.channels, drop = FALSE ]
 
+  # define weights if needed
+  # if A8 or S8, pull detector reliability info from FCS file
+  # else, use empirical Poisson variance
+  if ( weighted | method == "WLS"| method == "Poisson"| method == "FastPoisson" ) {
+    if ( is.null( weights ) ) {
+
+      if ( asp$cytometer == "FACSDiscover S8" | asp$cytometer == "FACSDiscover A8" ) {
+        qspe <- fcs.keywords[[ "BDSPECTRAL QSPE" ]]
+        qspe.values <- strsplit(qspe, ",")[[ 1 ]]
+        n.channels <- as.numeric( qspe.values[ 1 ] )
+        channel.names <- qspe.values[ 2:( n.channels + 1 ) ]
+        weights <- as.numeric( qspe.values[ ( n.channels + 2 ):( n.channels * 2 + 1 ) ] )
+        names( weights ) <- channel.names
+
+        if ( all( flow.control$spectral.channel %in% names( weights ) ) ) {
+          weights <- 1 / weights[ flow.control$spectral.channel ]
+        } else {
+          # fallback to empirical weighting
+          channel.var <- colMeans( spectral.exprs )
+          weights <- 1 / ( channel.var + 1e-6 )
+        }
+
+      } else {
+        # weights are inverse of channel variances (mean if Poisson)
+        channel.var <- colMeans( spectral.exprs )
+        weights <- 1 / ( channel.var + 1e-6 )
+      }
+    }
+  }
+
   # apply unmixing using selected method
   unmixed.data <- switch( method,
                          "OLS" = unmix.ols( spectral.exprs, spectra ),
                          "WLS" = unmix.wls( spectral.exprs, spectra, weights ),
                          "AutoSpectral" = unmix.autospectral( spectral.exprs, spectra,
                                                               af.spectra, weighted,
-                                                              weights ),
-                         "Poisson" = unmix.poisson( spectral.exprs, spectra, asp ),
+                                                              weights, calculate.error ),
+                         "Poisson" = unmix.poisson( spectral.exprs, spectra, asp, weights ),
                          "FastPoisson" = {
                            if ( requireNamespace("AutoSpectralRcpp", quietly = TRUE ) &&
                                "unmix.poisson.fast" %in% ls( getNamespace( "AutoSpectralRcpp" ) ) ) {
                              tryCatch(
                                AutoSpectralRcpp::unmix.poisson.fast( spectral.exprs,
                                                                      spectra,
+                                                                     weights = weights,
                                                                      maxit = asp$rlm.iter.max,
                                                                      tol = 1e-6,
                                                                      n_threads = asp$worker.process.n,
@@ -128,14 +180,26 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
                              )
                            } else {
                              warning( "AutoSpectralRcpp not available, falling back to standard Poisson." )
-                             unmix.poisson( spectral.exprs, spectra, asp )
+                             unmix.poisson( spectral.exprs, spectra, asp, weights )
                            }
                          },
                          stop( "Unknown method" )
   )
 
-  # remove imaging parameters, which are pretty useless in big panels
-  if ( asp$cytometer == "DiscoverS8" | asp$cytometer == "DiscoverA8" &
+  # calculate model accuracy if desired
+  if ( calculate.error & method != "AutoSpectral" ) {
+    # for AutoSpectral unmixing, get error directly from the function call
+    residual <- rowSums( ( spectral.exprs - ( unmixed.data %*% spectra ) )^2 )
+    RMSE <- sqrt( mean( residual ) )
+  }
+
+  if ( method == "AutoSpectral" & calculate.error ) {
+    RMSE <- unmixed.data$RMSE
+    unmixed.data <- unmixed.data$unmixed.data
+  }
+
+  # remove imaging parameters
+  if ( asp$cytometer == "FACSDiscover S8" | asp$cytometer == "FACSDiscover A8" &
        !include.imaging ) {
     other.exprs <- other.exprs[ , asp$time.and.scatter ]
   }
@@ -150,10 +214,12 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
 
   rm( spectral.exprs, other.exprs )
 
-  # define new fcs file
-  flow.frame <- flowFrame( unmixed.data )
-  params <- pData( parameters( flow.frame) )
-  params$maxRange[ params$name != "Time" ] <- asp$expr.data.max
+  # define new FCS file
+  flow.frame <- flowCore::flowFrame( unmixed.data )
+
+  # set max range values
+  params <- pData( parameters( flow.frame ) )
+  params$maxRange[ !( params$name %in% c( "Time", "TIME" ) ) ] <- asp$expr.data.max
 
   # add antigen labels based on match between param name and fluorophore
   fluor.match.idx <- match( params$name, flow.control$fluorophore )
@@ -171,8 +237,35 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
   keyword( flow.frame ) <- fcs.keywords
   keyword( flow.frame )[[ "$FIL" ]] <- file.name
   keyword( flow.frame )[[ "$UNMIXINGMETHOD" ]] <- method
-  keyword( flow.frame )[[ "$AUTOSPECTRAL" ]] <- packageVersion( "AutoSpectral" )
+  keyword( flow.frame )[[ "$AUTOSPECTRAL" ]] <- as.character( packageVersion( "AutoSpectral" ) )
 
+  # add RMSE as a keyword
+  if ( calculate.error & !is.null( RMSE ) )
+    keyword( flow.frame )[[ "$RMSE" ]] <- RMSE
+
+  # add weighting values as a keyword
+  if ( !is.null( weights ) ) {
+        weights <- paste( c( length( flow.control$spectral.channel ),
+                             flow.control$spectral.channel,
+            formatC( weights, digits = 8, format = "fg" ) ), collapse = "," )
+
+        keyword( flow.frame )[[ "$WEIGHTS" ]] <- weights
+  }
+
+  # write spectral matrix to FCS file
+  fluor.n <- nrow( spectra )
+  detector.n <- ncol( spectra )
+  vals <- as.vector( t( spectra ) )
+  formatted.vals <- formatC( vals, digits = 8, format = "fg", flag = "#" )
+  spill.string <- paste(
+    c( fluor.n, detector.n, rownames( spectra ), colnames( spectra ), formatted.vals ),
+    collapse = ","
+  )
+
+  keyword( flow.frame )[[ "$SPECTRA" ]] <- spill.string
+  keyword( flow.frame )[[ "$FLUOROCHROMES" ]] <- paste( rownames( spectra ), collapse = "," )
+
+  # write parameter names
   for ( i in seq_along( colnames( unmixed.data ) ) ) {
     keyword( flow.frame )[[ paste0( "$P", i, "N" ) ]] <- colnames( unmixed.data )[ i ]
     keyword( flow.frame )[[ paste0( "$P", i, "S" ) ]] <- colnames( unmixed.data )[ i ]

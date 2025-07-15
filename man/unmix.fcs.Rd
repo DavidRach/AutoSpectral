@@ -9,7 +9,7 @@ unmix.fcs(
   spectra,
   asp,
   flow.control,
-  method = "OLS",
+  method = "Automatic",
   weighted = FALSE,
   weights = NULL,
   af.spectra = NULL,
@@ -17,6 +17,7 @@ unmix.fcs(
   file.suffix = NULL,
   include.raw = FALSE,
   include.imaging = FALSE,
+  calculate.error = TRUE,
   divergence.threshold = 10000,
   divergence.handling = "Balance",
   balance.weight = 0.5
@@ -33,7 +34,12 @@ Prepare using \code{get.autospectral.param}}
 \item{flow.control}{A list containing flow cytometry control parameters.}
 
 \item{method}{A character string specifying the unmixing method to use.
-Options are \code{OLS}, \code{WLS}, \code{AutoSpectral}, \code{Poisson} and \code{FastPoisson}.
+The default is \code{Automatic}, which uses \code{AutoSpectral} for AF extraction if
+af.spectra are provided and automatically selects \code{OLS} or \code{WLS} depending
+on which is normal for the given cytometer in \code{asp$cytometer}. This means
+that files from the ID7000, A8 and S8 will be unmixed using \code{WLS} while
+others will be unmixed with \code{OLS}. Any option can be set manually.
+Manual options are \code{OLS}, \code{WLS}, \code{AutoSpectral}, \code{Poisson} and \code{FastPoisson}.
 Default is \code{OLS}. \code{FastPoisson} requires installation of \code{AutoSpectralRcpp}.}
 
 \item{weighted}{Logical, whether to use ordinary or weighted least squares
@@ -60,6 +66,9 @@ expression data in the written FCS file. Default is \code{FALSE}.}
 
 \item{include.imaging}{A logical value indicating whether to include imaging
 parameters in the written FCS file. Default is \code{FALSE}.}
+
+\item{calculate.error}{Logical, whether to calculate the RMSE unmixing model
+accuracy and include it as a keyword in the FCS file.}
 
 \item{divergence.threshold}{Numeric. Used for \code{FastPoisson} only.
 Threshold to trigger reversion towards WLS unmixing when Poisson result
