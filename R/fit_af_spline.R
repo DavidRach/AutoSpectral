@@ -1,4 +1,4 @@
- # fit_af_spline.r
+# fit_af_spline.r
 
 #' @title Fit Spline to Autofluorescence Data
 #'
@@ -11,87 +11,100 @@
 #' @importFrom MASS rlm
 #' @importFrom tripack tri.mesh convex.hull
 #' @importFrom stats predict
+#' @importFrom sp point.in.polygon
 #'
-#' @param af.data A matrix containing the autofluorescence data.
-#' @param af.gate.idx A vector of indexes indicating the gate.
+#' @param af.cells A matrix containing the autofluorescence data.
+#' @param non.af.cells A matrix containing the low autofluorescence data.
 #' @param asp The AutoSpectral parameter list.
 #' Prepare using `get.autospectral.param`
 #'
-#' @return A list with the boundaries of the events within the specified number
-#' of standard deviations from the spline.
+#' @return The boundaries of the events within the specified number of standard
+#' deviations from the spline.
 #'
 #' @export
 
-fit.af.spline <- function( af.data, af.gate.idx, asp ){
+fit.af.spline <- function( af.cells, non.af.cells, asp ) {
 
-  af.cells <- af.data[ -af.gate.idx, ]
-
-  af.cells.upper <- af.cells[ af.cells[ , 2 ] > 0, ]
-  af.cells.lower <- af.cells[ af.cells[ , 2 ] < 0, ]
-
-  # make y-values in lower positive to allow bounds to be set equally far from zero
-  af.cells.lower[ , 2 ] <- af.cells.lower[ , 2 ] * -1
-
-  af.split <- list(
-    lower = af.cells.lower,
-    upper = af.cells.upper
+  # set up boundaries structure for two gates
+  af.boundaries <- list(
+    upper = NULL,
+    lower = NULL
   )
 
-  af.remove.bounds <- lapply( af.split, function( af ) {
+  # set lower bound based on non-AF cells
+  x.bound.low <- max( non.af.cells[ , 1 ] ) * ( 1 + asp$af.spline.x.bound.factor.low )
+  y.bound.low <- max( non.af.cells[ , 2 ] ) * ( 1 + asp$af.spline.y.bound.factor.low )
 
-    # trim data to remove extreme events and low (less AF) events
-    x.range <- range( af[ , 1 ] )
-    x.range <- abs( x.range[ 1 ] - x.range[ 2 ] )
-    y.range <- range( af[ , 2 ] )
-    y.range <- abs( y.range[ 1 ] - y.range[ 2 ] )
+  # fit a spline using rlm
+  model.data <- data.frame( rbind( af.cells, non.af.cells ) )
 
-    x.bound.low <- min( af[ , 1 ] ) + ( x.range * asp$af.spline.x.bound.factor.low )
-    x.bound.high <- max( af[ , 1 ] ) * asp$af.spline.x.bound.factor.high
-    y.bound.low <- min( af[ , 2 ] ) + ( y.range * asp$af.spline.y.bound.factor.low )
-    y.bound.high <- max( af[ , 2 ] ) * asp$af.spline.y.bound.factor.high
+  if ( nrow( model.data ) < 10 )
+    stop( "Failed to identify autofluorescence" )
 
-    # fit a spline using rlm
-    model.data <- data.frame( af[
-        af[ , 1 ] > x.bound.low & af[ , 1 ] < x.bound.high &
-        af[ , 2 ] > y.bound.low & af[ , 2 ] < y.bound.high , ] )
+  rlm.fit <- rlm( PC2 ~ PC1, data = model.data, maxit = asp$af.spline.maxit )
+
+  if ( !rlm.fit$converged )
+    warning( "The IRLS algorithm employed in 'rlm' did not converge." )
+
+  # define events within n standard deviations of the spline
+  predicted <- predict( rlm.fit, newdata = model.data )
+  model.data$predicted <- predicted
+  model.data$residuals <- model.data$PC2 - predicted
+
+  sd.residuals <- sd( model.data$residuals )
+
+  model.fit <- model.data[ abs( model.data$residuals ) <= asp$af.spline.sd.n * sd.residuals, ]
+  model.fit <- model.fit[ which( model.fit$PC1 > x.bound.low ), ]
+
+  # get the boundary of those events
+  af.remove.boundary <- convex.hull( tri.mesh( model.fit$PC1, model.fit$PC2 ) )
+
+  if ( length( af.remove.boundary ) == 1 )
+    stop( "Failed to identify autofluorescence" )
+  else
+    af.boundaries$upper <- af.remove.boundary
+
+  if ( asp$af.remove.pop == 1 ) {
+    return( af.boundaries )
+
+  } else {
+    # gate out first AF population and repeat to find a second AF population
+    gate.population.pip <- point.in.polygon(
+      model.data[ , 1 ], model.data[ , 2 ],
+      af.remove.boundary$x, af.remove.boundary$y )
+
+    gate.population.idx <- which( gate.population.pip == 0 )
+
+    model.data <- model.data[ gate.population.idx, ]
 
     if ( nrow( model.data ) < 10 )
-      return( 0 )
+      return( af.boundaries )
 
-    rlm.fit <- rlm( PC2 ~ PC1, data = model.data, maxit = asp$af.spline.maxit )
+    rlm.fit <- rlm( PC1 ~ PC2, data = model.data, maxit = asp$af.spline.maxit )
 
     if ( !rlm.fit$converged )
       warning( "The IRLS algorithm employed in 'rlm' did not converge." )
 
-    # define events within n standard deviations of the spline
-    predicted <- predict( rlm.fit, newdata = model.data )
+    predicted <- predict( rlm.fit, newdata = model.data[ , c( "PC1", "PC2" ) ] )
     model.data$predicted <- predicted
-    model.data$residuals <- model.data$PC2 - predicted
+    model.data$residuals <- model.data$PC1 - predicted
 
     sd.residuals <- sd( model.data$residuals )
 
     model.fit <- model.data[ abs( model.data$residuals ) <= asp$af.spline.sd.n * sd.residuals, ]
+    model.fit <- model.fit[ which( model.fit$PC2 > y.bound.low ), ]
 
-    # get the boundary of those events
+    if ( nrow( model.fit ) < 10 )
+      return( af.boundaries )
+
+    # get the boundary of second AF pop
     af.remove.boundary <- convex.hull( tri.mesh( model.fit$PC1, model.fit$PC2 ) )
 
-    af.remove.boundary
-  } )
-
-  # re-convert lower y to negative values
-  names( af.remove.bounds ) <- c( "lower", "upper" )
-
-  if ( length( af.remove.bounds$lower ) != 1 ) {
-    af.remove.bounds$lower$y <- af.remove.bounds$lower$y * -1
-  } else {
-    af.remove.bounds$lower <- af.remove.bounds$upper
+    if ( length( af.remove.boundary ) == 1 ) {
+      return( af.boundaries )
+    } else {
+      af.boundaries$lower <- af.remove.boundary
+      return( af.boundaries )
+    }
   }
-
-  if ( length( af.remove.bounds$upper ) == 1 )
-    af.remove.bounds$upper <- af.remove.bounds$lower
-
-  if ( length( af.remove.bounds$upper ) == 1 & length( af.remove.bounds$lower ) == 1 )
-    stop( "Failed to identify autofluorescence" )
-
-  return( af.remove.bounds )
 }

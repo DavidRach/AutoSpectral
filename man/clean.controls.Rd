@@ -16,8 +16,7 @@ clean.controls(
   negative.n = asp$negative.n,
   positive.n = asp$positive.n,
   scatter.match = TRUE,
-  refactor = TRUE,
-  return.separately = FALSE
+  scrub = TRUE
 )
 }
 \arguments{
@@ -58,17 +57,12 @@ positive population. Default is \code{asp$positive.n}.}
 events based on scatter profiles matching the positive events. Defines a
 region of FSC and SSC based on the distribution of selected positive events.}
 
-\item{refactor}{Logical, default is \code{TRUE}. Reassigns event indices after
-cleaning steps to ensure consistent indexing.}
-
-\item{return.separately}{Logical, default is \code{FALSE}. If \code{TRUE}, returns the
-cleaned expression data as output in addition to storing it in
-\code{flow.control}.}
+\item{scrub}{Logical, if \code{TRUE} allows for re-cleaning of already cleaned
+data, provided there are clean data in \code{flow.control}.}
 }
 \value{
-If \code{return.separately = TRUE}, returns the cleaned expression data.
-Otherwise, no return value; the cleaned data is stored in \code{flow.control} for
-downstream use.
+Returns a modified \code{flow.control} with the original data intact. New, cleaned
+data and corresponding factors are stored in new slots.
 }
 \description{
 A four-part function to clean single-color controls in order to extract

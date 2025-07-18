@@ -79,22 +79,22 @@ get.autospectral.param.minimal <- function()
       af.figure.gate.scale.expand = 0.01,
 
       af.gate.target.max = 1,
-      af.gate.density.bw.factor = 3,
+      af.gate.density.bw.factor = 1,
       af.gate.bound.density.neigh.size = 3,
-      af.gate.bound.density.grid.n = 150,
+      af.gate.bound.density.grid.n = 100,
       af.gate.bound.strict = TRUE,
 
-      af.spline.x.bound.factor.low = 0.05,
-      af.spline.x.bound.factor.high = 0.95,
-      af.spline.y.bound.factor.low = 0.10,
-      af.spline.y.bound.factor.high = 0.95,
-      af.spline.maxit = 100,
+      af.spline.x.bound.factor.low = 0.2,
+      af.spline.x.bound.factor.high = 0.99,
+      af.spline.y.bound.factor.low = 0.2,
+      af.spline.y.bound.factor.high = 0.99,
+      af.spline.maxit = 20,
       af.spline.sd.n = 2,
 
       af.remove.pop = 1,
 
-      af.plot.bw.factor = 5,
-      af.plot.density.grid.n = 200,
+      af.plot.bw.factor = 1,
+      af.plot.density.grid.n = 100,
       af.plot.define.filename = "AF identification",
       af.plot.filename = "AF removal",
 

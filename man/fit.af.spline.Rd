@@ -4,19 +4,19 @@
 \alias{fit.af.spline}
 \title{Fit Spline to Autofluorescence Data}
 \usage{
-fit.af.spline(af.data, af.gate.idx, asp)
+fit.af.spline(af.cells, non.af.cells, asp)
 }
 \arguments{
-\item{af.data}{A matrix containing the autofluorescence data.}
+\item{af.cells}{A matrix containing the autofluorescence data.}
 
-\item{af.gate.idx}{A vector of indexes indicating the gate.}
+\item{non.af.cells}{A matrix containing the low autofluorescence data.}
 
 \item{asp}{The AutoSpectral parameter list.
 Prepare using \code{get.autospectral.param}}
 }
 \value{
-A list with the boundaries of the events within the specified number
-of standard deviations from the spline.
+The boundaries of the events within the specified number of standard
+deviations from the spline.
 }
 \description{
 This function fits a spline to autofluorescence data, removing extreme events

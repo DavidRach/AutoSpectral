@@ -9,9 +9,9 @@
 #' @importFrom ggplot2 ggplot aes scale_x_continuous scale_y_continuous
 #' @importFrom ggplot2 scale_color_gradientn theme_bw theme element_line
 #' @importFrom ggplot2 element_text element_rect margin expansion ggsave
-#' @importFrom ggplot2 guide_colorbar geom_text
+#' @importFrom ggplot2 guide_colorbar geom_text geom_point
 #' @importFrom scattermore geom_scattermore
-#' @importFrom KernSmooth bkde2D dpik
+#' @importFrom MASS kde2d bandwidth.nrd
 #' @importFrom fields interp.surface
 #' @importFrom rlang .data
 #'
@@ -35,32 +35,28 @@ gate.sample.plot <- function( samp, gate.data, gate.marker, gate.boundary,
 
   if ( control.type == "beads" ){
 
-    gate.bound.density.bw.factor <- asp$plot.gate.factor * asp$gate.bound.density.bw.factor.beads
+    gate.bound.density.bw.factor <- asp$gate.bound.density.bw.factor.beads
     gate.bound.density.grid.n <- asp$plot.gate.factor * asp$gate.bound.density.grid.n.beads
 
-    } else {
+  } else {
 
-    gate.bound.density.bw.factor <- asp$plot.gate.factor * asp$gate.bound.density.bw.factor.cells
+    gate.bound.density.bw.factor <- asp$gate.bound.density.bw.factor.cells
     gate.bound.density.grid.n <- asp$plot.gate.factor * asp$gate.bound.density.grid.n.cells
 
-    }
+  }
 
-  bandwidth.x <- gate.bound.density.bw.factor * dpik( gate.data[ , 1 ] )
-  bandwidth.y <- gate.bound.density.bw.factor * dpik( gate.data[ , 2 ] )
-
-  gate.bound.density <- suppressMessages( suppressWarnings(
-    bkde2D( gate.data, bandwidth = c( bandwidth.x, bandwidth.y ),
-    gridsize = c( gate.bound.density.grid.n, gate.bound.density.grid.n ) ) ) )
-
-  names( gate.bound.density ) <- c( "x", "y", "z" )
+  gate.bound.density <- MASS::kde2d( gate.data[ , 1 ], gate.data[ , 2 ],
+                                     gate.bound.density.bw.factor *
+                                       apply( gate.data, 2, bandwidth.nrd ),
+                                     n = gate.bound.density.grid.n )
 
   gate.data.ggp <- data.frame(
     x = gate.data[ , 1 ],
     y = gate.data[ , 2 ],
     z = interp.surface( gate.bound.density, gate.data ) )
 
-  gate.boundary$x[gate.boundary$x > asp$scatter.data.max.x] <- asp$scatter.data.max.x
-  gate.boundary$y[gate.boundary$y > asp$scatter.data.max.y] <- asp$scatter.data.max.y
+  gate.boundary$x[ gate.boundary$x > asp$scatter.data.max.x ] <- asp$scatter.data.max.x
+  gate.boundary$y[ gate.boundary$y > asp$scatter.data.max.y ] <- asp$scatter.data.max.y
 
   gate.boundary.ggp <- data.frame(
     x = c( gate.boundary$x,
@@ -77,7 +73,7 @@ gate.sample.plot <- function( samp, gate.data, gate.marker, gate.boundary,
   y.lab <- names( scatter.and.channel.label[ y.lab.idx ] )
 
   gate.plot <- ggplot( gate.data.ggp, aes( .data$x, .data$y,
-        color = .data$z ) ) +
+                                           color = .data$z ) ) +
     scale_x_continuous(
       name = x.lab,
       breaks = seq( asp$scatter.data.min.x,
@@ -97,10 +93,10 @@ gate.sample.plot <- function( samp, gate.data, gate.marker, gate.boundary,
                   asp$scatter.data.max.y ),
       expand = expansion( asp$figure.gate.scale.expand ) ) +
     geom_scattermore( pointsize = asp$figure.gate.point.size,
-                stroke = 0.1 * asp$figure.gate.point.size, alpha = 1, na.rm = TRUE ) +
+                      stroke = 0.1 * asp$figure.gate.point.size, alpha = 1, na.rm = TRUE ) +
     scale_color_gradientn( "", labels = NULL, colors = density.palette,
-        guide = guide_colorbar( barwidth = asp$figure.gate.bar.width,
-            barheight = asp$figure.gate.bar.height ) ) +
+                           guide = guide_colorbar( barwidth = asp$figure.gate.bar.width,
+                                                   barheight = asp$figure.gate.bar.height ) ) +
     geom_path( aes( .data$x, .data$y, color = NULL ),
                data = gate.boundary.ggp, linewidth = asp$figure.gate.line.size ) +
     theme_bw() +
@@ -119,4 +115,3 @@ gate.sample.plot <- function( samp, gate.data, gate.marker, gate.boundary,
           height = asp$figure.height )
 
 }
-

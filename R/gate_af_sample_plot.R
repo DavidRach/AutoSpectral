@@ -12,7 +12,7 @@
 #' @importFrom ggplot2 element_text element_rect margin expansion ggsave
 #' @importFrom ggplot2 guide_colorbar
 #' @importFrom scattermore geom_scattermore
-#' @importFrom KernSmooth bkde2D dpik
+#' @importFrom MASS kde2d bandwidth.nrd
 #' @importFrom fields interp.surface
 #' @importFrom rlang .data
 #'
@@ -31,16 +31,11 @@ gate.af.sample.plot <- function( samp, af.data,
                                  af.boundary.lower, af.boundary.upper,
                                  asp ) {
 
-  bandwidth.x <- suppressWarnings( asp$af.plot.bw.factor * dpik( af.data[ , 1 ] ) )
-  bandwidth.y <- suppressWarnings( asp$af.plot.bw.factor * dpik( af.data[ , 2 ] ) )
-
-
-  af.bound.density <- suppressMessages( suppressWarnings(
-    bkde2D( af.data, bandwidth = c( bandwidth.x, bandwidth.y ),
-      gridsize = c( asp$af.plot.density.grid.n, asp$af.plot.density.grid.n ) )
-  ) )
-
-  names( af.bound.density ) <- c( "x", "y", "z" )
+  # get density for plotting
+  af.bound.density <- MASS::kde2d(
+    af.data[ , 1 ], af.data[ , 2 ],
+    asp$af.gate.density.bw.factor * apply( af.data, 2, bandwidth.nrd ),
+    n = asp$af.plot.density.grid.n )
 
   af.data.ggp <- data.frame(
     x = af.data[ , 1 ],
@@ -79,7 +74,7 @@ gate.af.sample.plot <- function( samp, af.data,
   y.breaks <- round( seq( y.min, y.max, length.out = 10 ) )
 
   gate.plot <- ggplot( af.data.ggp, aes( .data$x, .data$y,
-                                           color = .data$z ) ) +
+                                         color = .data$z ) ) +
     scale_x_continuous(
       name = axes.labels[ 1 ],
       breaks = x.breaks,

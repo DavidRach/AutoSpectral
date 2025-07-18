@@ -95,7 +95,7 @@ unmix.autospectral <- function( raw.data, spectra, af.spectra,
 
   # calculate average per cell error
   if ( calculate.error ) {
-    residual <- model.residuals[, af.idx ]
+    residual <- model.residuals[ cbind( 1:nrow( model.residuals ), af.idx ) ]
     RMSE <- sqrt( mean( residual ) )
   }
 

@@ -133,14 +133,16 @@ check.control.file <- function( control.dir, control.def.file, asp,
   missing.marker.1 <- is.na( control.table$marker )
   missing.marker.2 <- control.table$fluorophore[ control.table$marker == "" ]
 
-  acceptable.missing <- c( "AF", "Negative" )
+  acceptable.missing <- c( "AF", ".*negative.*" )
 
   if ( any( missing.marker.1 ) || length( missing.marker.2 ) > 0 ) {
     missing.marker <- control.table$filename[ missing.marker.1 ]
     missing.marker.fluor <- control.table$fluorophore[ missing.marker.1 ]
 
+    #problem.missing.marker <- !sapply( missing.marker.fluor, function( x )
+    #  any( x == acceptable.missing ) )
     problem.missing.marker <- !sapply( missing.marker.fluor, function( x )
-      any( x == acceptable.missing ) )
+      any( grepl( paste( acceptable.missing, collapse = "|" ), x, ignore.case = TRUE ) ) )
     problem.missing.marker <- names( problem.missing.marker )[ problem.missing.marker ]
     problem.missing.marker <- control.table$filename[ control.table$fluorophore %in% problem.missing.marker ]
 
@@ -164,7 +166,7 @@ check.control.file <- function( control.dir, control.def.file, asp,
     missing.channel.fluor <- control.table$fluorophore[ missing.channel.1 ]
 
     problem.missing.channel <- !sapply( missing.channel.fluor, function( x )
-      any( x == acceptable.missing ) )
+      any( grepl( paste( acceptable.missing, collapse = "|" ), x, ignore.case = TRUE ) ) )
     problem.missing.channel <- names( problem.missing.channel )[ problem.missing.channel ]
     problem.missing.channel <- control.table$filename[ control.table$fluorophore %in% problem.missing.channel ]
 
@@ -370,7 +372,7 @@ check.control.file <- function( control.dir, control.def.file, asp,
         any( grepl( paste( patterns, collapse = "|" ), p ) ) ) ]
     }
 
-    non.spectral <- asp$non.spectral.channel[ 4:length(asp$non.spectral.channel ) ]
+    non.spectral <- asp$non.spectral.channel[ 4:length( asp$non.spectral.channel ) ]
 
     param.names.list <- lapply( param.names.list, remove.non.spectral,
                                         patterns = non.spectral )
@@ -437,7 +439,7 @@ check.control.file <- function( control.dir, control.def.file, asp,
       warning( "Critical errors found in control file" )
     }
   } else {
-    message( "\033[34mNo critical errors found in control file.\033[0m" )
+    message( "\033[34m No critical errors found in control file.\033[0m" )
     errors <- "No Errors Found"
   }
 

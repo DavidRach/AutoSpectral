@@ -7,6 +7,7 @@
 #' the specified parameters and settings.
 #'
 #' @importFrom sp point.in.polygon
+#' @importFrom flowWorkspace flowjo_biexp
 #'
 #' @param clean.expr.data List containing cleaned expression data.
 #' @param samp Sample identifier.
@@ -27,7 +28,7 @@ remove.af <- function( clean.expr.data, samp, af.artefact, spectral.channel,
 
   if ( asp$verbose )
     message( paste( "\033[34m", "Removing autofluorescence contamination in", samp,
-                "\033[0m" ) )
+                    "\033[0m" ) )
 
   # match universal negative
   matching.negative <- universal.negative[[ samp ]]
@@ -44,9 +45,17 @@ remove.af <- function( clean.expr.data, samp, af.artefact, spectral.channel,
   # unmix with the autofluorescence signatures only
   gate.data <- unmix.ols( expr.data, af.components )
 
-  # apply af boundary gates
-  if ( length( af.boundaries ) == 2 ){
+  biexp.transform <- flowjo_biexp( channelRange = asp$default.transformation.param$length,
+                                   maxValue = asp$default.transformation.param$max.range,
+                                   pos = asp$default.transformation.param$pos,
+                                   neg = asp$default.transformation.param$neg,
+                                   widthBasis = asp$default.transformation.param$width,
+                                   inverse = FALSE )
 
+  gate.data <- apply( gate.data, 2, biexp.transform )
+
+  # apply af boundary gates
+  if ( asp$af.remove.pop != 1 & !is.null( af.boundaries$lower ) ) {
     gate.population.pip.lower <- point.in.polygon(
       gate.data[ , 1 ], gate.data[ , 2 ],
       af.boundaries$lower$x, af.boundaries$lower$y )
@@ -57,28 +66,23 @@ remove.af <- function( clean.expr.data, samp, af.artefact, spectral.channel,
 
     gate.population.idx <- which( gate.population.pip.lower == 0 &
                                     gate.population.pip.upper == 0 )
-
   } else {
-
     gate.population.pip <- point.in.polygon(
       gate.data[ , 1 ], gate.data[ , 2 ],
       af.boundaries$upper$x, af.boundaries$upper$y )
 
     gate.population.idx <- which( gate.population.pip == 0 )
-
   }
 
-
+  # plotting
   if ( asp$figures ) {
 
-    if ( length( af.boundaries ) == 2 ){
-
+    if ( asp$af.remove.pop != 1 & !is.null( af.boundaries$lower ) ) {
       gate.af.sample.plot( samp, af.data = gate.data,
-                           af.boundaries$lower, af.boundaries$upper,
+                           af.boundaries$lower,
+                           af.boundaries$upper,
                            asp )
-
     } else {
-
       gate.af.sample.plot( samp, af.data = gate.data,
                            af.boundary.lower = NULL,
                            af.boundary.upper = af.boundaries$upper,

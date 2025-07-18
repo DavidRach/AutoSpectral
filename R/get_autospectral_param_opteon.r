@@ -48,7 +48,7 @@ get.autospectral.param.opteon <- function( autosp.param )
 
   # spectral parameters
 
-  autosp.param$plot.gate.factor <- 2
+  autosp.param$plot.gate.factor <- 0.25
 
   autosp.param$af.density.threshold <- 0.75
 

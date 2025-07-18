@@ -7,7 +7,7 @@
 #' control for a given sample, including scatter matching and plotting.
 #'
 #' @importFrom stats quantile median mad
-#' @importFrom KernSmooth bkde2D dpik
+#' @importFrom MASS kde2d bandwidth.nrd
 #' @importFrom sp point.in.polygon Polygon Polygons SpatialPolygons
 #' @importFrom grDevices contourLines
 #'
@@ -68,7 +68,7 @@ get.universal.negative <- function( clean.expr.data, samp,
   # warn if few events in positive
   if ( length( pos.above.threshold ) < asp$min.cell.warning.n ){
     warning( paste( "\033[31m", "Warning! Fewer than",  asp$min.cell.warning.n,
-    "gated events in", samp ),  "\033[0m", "\n"  )
+                    "gated events in", samp ),  "\033[0m", "\n"  )
   }
 
   # stop if fewer than minimum acceptable events, returning original data
@@ -78,7 +78,7 @@ get.universal.negative <- function( clean.expr.data, samp,
 
   check.critical( length( pos.above.threshold > asp$min.cell.stop.n ),
                   paste( "\033[31m", "Error! Fewer than", asp$min.cell.warning.n,
-                  "events remain in", samp, "\033[0m", "\n" ) )
+                         "events remain in", samp, "\033[0m", "\n" ) )
 
   # select only brightest positive.n events
   if ( length( pos.above.threshold ) >= positive.n ){
@@ -87,7 +87,7 @@ get.universal.negative <- function( clean.expr.data, samp,
     pos.selected <- pos.above.threshold
   }
 
-  # scatter-match negative
+  ## scatter-match negative
   # recover full data
   pos.selected.expr <- pos.control.expr[ names( pos.selected ), ]
 
@@ -103,21 +103,16 @@ get.universal.negative <- function( clean.expr.data, samp,
 
     pos.scatter.coord <- pos.selected.expr[ , scatter.param ]
 
-    bdw.x <- asp$gate.bound.density.bw.factor.cells * dpik( pos.scatter.coord[ , 1 ] )
-    bdw.y <- asp$gate.bound.density.bw.factor.cells * dpik( pos.scatter.coord[ , 2 ] )
+    pos.bound.density <- MASS::kde2d(
+      pos.scatter.coord[ , 1 ],
+      pos.scatter.coord[ , 2 ],
+      asp$gate.bound.density.bw.factor.cells * apply( pos.scatter.coord, 2, bandwidth.nrd ),
+      n = asp$plot.gate.factor * asp$gate.bound.density.grid.n.cells )
 
-    pos.bound.density <- suppressMessages( suppressWarnings(
-      bkde2D( pos.scatter.coord,
-              bandwidth = c( bdw.x, bdw.y ),
-              gridsize = c( asp$gate.bound.density.grid.n.cells,
-                            asp$gate.bound.density.grid.n.cells ) ) ) )
-
-    names( pos.bound.density ) <- c( "x", "y", "z" )
-
-    contour.levels <- contourLines(pos.bound.density$x, pos.bound.density$y,
-                                   pos.bound.density$z,
-                                   levels = quantile(pos.bound.density$z,
-                                                     probs = asp$scatter.match.threshold ))
+    contour.levels <- contourLines( pos.bound.density$x, pos.bound.density$y,
+                                    pos.bound.density$z,
+                                    levels = quantile(pos.bound.density$z,
+                                                      probs = asp$scatter.match.threshold ) )
 
     contour.coords <- cbind( contour.levels[[ 1 ]]$x, contour.levels[[ 1 ]]$y )
 
@@ -129,7 +124,6 @@ get.universal.negative <- function( clean.expr.data, samp,
                                                                   pos.scatter.coord[ , 2 ],
                                                                   contour.levels[[ 1 ]]$x,
                                                                   contour.levels[[ 1 ]]$y ) == 1, ]
-
 
     pos.scatter.gate <- convex.hull( tri.mesh(
       points.within.contour[ , 1 ],
@@ -145,14 +139,14 @@ get.universal.negative <- function( clean.expr.data, samp,
     # warn if few events in negative
     if ( length( neg.population.idx ) < asp$min.cell.warning.n ){
       warning( paste( "\033[31m", "Warning! Fewer than",  asp$min.cell.warning.n,
-                  "scatter-matched negative events for", samp,  "\033[0m", "\n" )  )
+                      "scatter-matched negative events for", samp,  "\033[0m", "\n" )  )
     }
 
     # stop if fewer than minimum acceptable events, returning original negative
     if ( length( neg.population.idx ) < asp$min.cell.stop.n ){
       warning( paste( "\033[31m", "Warning! Fewer than",  asp$min.cell.stop.n,
-                  "scatter-matched negative events for", samp, "\n",
-                  "Reverting to original negative. \n",  "\033[0m" )  )
+                      "scatter-matched negative events for", samp, "\n",
+                      "Reverting to original negative. \n",  "\033[0m" )  )
 
       # downsample original negative
       if ( nrow( neg.control.expr ) > negative.n ) {
@@ -176,7 +170,7 @@ get.universal.negative <- function( clean.expr.data, samp,
 
   if ( asp$figures ){
     spectral.ribbon.plot( pos.selected.expr, neg.scatter.matched,
-                               spectral.channel, asp, samp )
+                          spectral.channel, asp, samp )
     scatter.match.plot( pos.selected.expr, neg.scatter.matched, samp,
                         scatter.param, asp )
   }

@@ -74,7 +74,7 @@ get.gated.flow.expression.data <- function( samp, file.name, control.dir,
     )
   }
 
-  expr.data[ gate.population.idx, ]
+  return( expr.data[ gate.population.idx, ] )
 
 }
 

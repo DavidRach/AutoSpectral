@@ -115,7 +115,7 @@ flow.control <- define.flow.control( control.dir, control.def.file, asp )
 # using separate (universal) negative samples for both beads and cells.
 # In doing so, we select cells with matching autofluorescent background and
 # restrict the calculations to the brightest events.
-clean.controls( flow.control, asp, universal.negative = TRUE, downsample = TRUE,
+flow.control <- clean.controls( flow.control, asp, universal.negative = TRUE, downsample = TRUE,
                 scatter.match = TRUE )
 
 # Extract the clean spectra

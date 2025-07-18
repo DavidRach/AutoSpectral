@@ -68,7 +68,7 @@ get.autospectral.param.a8 <- function( autosp.param )
 
   # spectral parameters
 
-  autosp.param$plot.gate.factor <- 5
+  autosp.param$plot.gate.factor <- 0.5
 
   autosp.param$af.density.threshold <- 0.75
 

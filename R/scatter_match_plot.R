@@ -6,7 +6,7 @@
 #' This function generates scatter plots for matching positive and negative
 #' expression data, selected based on scatter parameters gates.
 #'
-#' @importFrom KernSmooth bkde2D dpik
+#' @importFrom MASS kde2d bandwidth.nrd
 #' @importFrom ggplot2 ggplot aes scale_color_gradientn facet_wrap
 #' @importFrom ggplot2 xlab ylab scale_x_continuous scale_y_continuous theme_bw
 #' @importFrom ggplot2 theme element_rect element_text margin ggsave guide_colorbar
@@ -37,16 +37,13 @@ scatter.match.plot <- function( pos.expr.data, neg.expr.data, fluor.name,
   neg.scatter.plot$group <- "Negative"
 
   scatter.plot.data <- rbind( pos.scatter.plot, neg.scatter.plot )
+  scatter.plot.data$group <- factor( scatter.plot.data$group, levels = c( "Negative", fluor.name ) )
 
-  bandwidth.x <- asp$gate.bound.density.bw.factor.cells * dpik( scatter.plot.data[ , 1 ] )
-  bandwidth.y <- asp$gate.bound.density.bw.factor.cells * dpik( scatter.plot.data[ , 2 ] )
-
-  scatter.density <- suppressMessages( suppressWarnings(
-    bkde2D( scatter.plot.data, bandwidth = c( bandwidth.x, bandwidth.y ),
-    gridsize = c( asp$gate.bound.density.grid.n.cells,
-                  asp$gate.bound.density.grid.n.cells ) ) ) )
-
-  names( scatter.density ) <- c( "x", "y", "z" )
+  scatter.density <- MASS::kde2d(
+    scatter.plot.data[ , 1 ],
+    scatter.plot.data[ , 2 ],
+    asp$gate.bound.density.bw.factor.cells * apply( scatter.plot.data[ , 1:2 ], 2, bandwidth.nrd ),
+    n = asp$plot.gate.factor * asp$gate.bound.density.grid.n.cells )
 
   data.ggp <- data.frame(
     x = scatter.plot.data[ , 1 ],
@@ -57,12 +54,12 @@ scatter.match.plot <- function( pos.expr.data, neg.expr.data, fluor.name,
   density.palette <- get.density.palette( data.ggp$z, asp )
 
   ggplot( data.ggp, aes( .data$x, .data$y, color = .data$z, group ) ) +
-    geom_scattermore( pointsize = asp$figure.gate.point.size,
+    geom_scattermore( pointsize = asp$figure.gate.point.size * 3,
                       stroke = asp$figure.gate.point.size, alpha = 1, na.rm = TRUE ) +
 
     scale_color_gradientn( "", labels = NULL, colors = density.palette,
-          guide = guide_colorbar( barwidth = asp$figure.gate.bar.width,
-          barheight = asp$figure.gate.bar.height ) ) +
+                           guide = guide_colorbar( barwidth = asp$figure.gate.bar.width,
+                                                   barheight = asp$figure.gate.bar.height ) ) +
     facet_wrap( ~ group, ncol = 2 ) +
     xlab( scatter.param[ 1 ] ) +
     ylab( scatter.param[ 2 ] ) +

@@ -59,7 +59,7 @@ Control cleaning is always recommended. The default option downsamples and sets
 universal negatives, provided these are specified in the control file. More 
 detail on this in a separate article.
 ```{r, eval=FALSE}
-clean.controls(flow.control, asp)
+flow.control <- clean.controls(flow.control, asp)
 ```
 
 This generates scatter-matching plots showing the FSC/SSC of the positive events

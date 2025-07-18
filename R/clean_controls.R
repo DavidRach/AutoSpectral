@@ -40,19 +40,14 @@
 #' @param scatter.match Logical, default is `TRUE`. Whether to select negative
 #' events based on scatter profiles matching the positive events. Defines a
 #' region of FSC and SSC based on the distribution of selected positive events.
-#' @param refactor Logical, default is `TRUE`. Reassigns event indices after
-#' cleaning steps to ensure consistent indexing.
-#' @param return.separately Logical, default is `FALSE`. If `TRUE`, returns the
-#' cleaned expression data as output in addition to storing it in
-#' `flow.control`.
+#' @param scrub Logical, if `TRUE` allows for re-cleaning of already cleaned
+#' data, provided there are clean data in `flow.control`.
 #'
 #' @return
-#' If `return.separately = TRUE`, returns the cleaned expression data.
-#' Otherwise, no return value; the cleaned data is stored in `flow.control` for
-#' downstream use.
+#' Returns a modified `flow.control` with the original data intact. New, cleaned
+#' data and corresponding factors are stored in new slots.
 #'
 #' @export
-
 
 clean.controls <- function( flow.control, asp,
                             time.clean = FALSE,
@@ -60,32 +55,34 @@ clean.controls <- function( flow.control, asp,
                             af.remove = FALSE,
                             universal.negative = TRUE, downsample = TRUE,
                             negative.n = asp$negative.n, positive.n = asp$positive.n,
-                            scatter.match = TRUE,
-                            refactor = TRUE,
-                            return.separately = FALSE ) {
-
-  clean.expr <- flow.control$expr.data
+                            scatter.match = TRUE, scrub = TRUE ) {
 
   flow.sample <- flow.control$sample
-
   flow.sample.n <- length( flow.sample )
-
-  clean.event.sample <- flow.control$event.sample
-
-  flow.negative <- flow.control$universal.negative
-
   flow.control.type <- flow.control$control.type
+  clean.event.type <- flow.control$event.type
 
-  clean.universal.negative <<- NULL
+  if ( scrub & !is.null( flow.control$clean.expr ) ) {
+
+    clean.expr <- flow.control$clean.expr
+    clean.event.sample <- flow.control$clean.event.sample
+    flow.negative <- flow.control$clean.universal.negative
+    clean.universal.negative <- flow.control$clean.universal.negative
+
+  } else {
+
+    clean.expr <- flow.control$expr.data
+    clean.event.sample <- flow.control$event.sample
+    flow.negative <- flow.control$universal.negative
+    clean.universal.negative <- NULL
+  }
 
   # split expression data by sample into a list
   clean.expr <- lapply( flow.sample, function( fs ) {
     clean.expr[ clean.event.sample == fs, ]
-  })
+  } )
 
   names( clean.expr ) <- flow.sample
-
-  clean.event.type <- flow.control$event.type
 
   spectral.channel <- flow.control$spectral.channel
 
@@ -100,7 +97,7 @@ clean.controls <- function( flow.control, asp,
       dir.create( asp$figure.peacoqc.dir )
 
     clean.expr <- run.peacoQC( clean.expr, spectral.channel,
-                                         all.channels, asp )
+                               all.channels, asp )
   }
 
   ### Stage 2: Trimming -----------------
@@ -125,7 +122,7 @@ clean.controls <- function( flow.control, asp,
     trim.sample.data <- clean.expr[ trim.sample ]
 
     trimmed.expr <- run.trim.events( trim.sample.data, trim.sample,
-                                        trim.peak.channels, trim.factor, asp )
+                                     trim.peak.channels, trim.factor, asp )
 
     rm( trim.sample.data )
 
@@ -159,7 +156,7 @@ clean.controls <- function( flow.control, asp,
                     To perform autofluorescence removal, you must specify a universal negative in the fcs_control_file." )
 
     univ.neg.sample <- flow.control$sample[ flow.control.type == "cells" &
-                                                   flow.sample %in% univ.neg ]
+                                              flow.sample %in% univ.neg ]
 
     check.critical( length( univ.neg.sample ) > 0,
                     "No cell-based universal negative samples could be identified.
@@ -190,23 +187,24 @@ clean.controls <- function( flow.control, asp,
                                        asp )
 
     # if AF is among cleaned controls, rename AF in cleaned controls to AF cleaned
-    names( af.removed.expr )[ names( af.removed.expr ) == "AF" ] <- "AF cleaned"
+    # names( af.removed.expr )[ names( af.removed.expr ) == "AF" ] <- "AF cleaned"
 
     # replace AF in universal negative with AF cleaned
     clean.universal.negative <- flow.negative
-    clean.universal.negative[ clean.universal.negative == "AF" ] <- "AF cleaned"
+    # clean.universal.negative[ clean.universal.negative == "AF" ] <- "AF cleaned"
 
-    flow.control$clean.universal.negative <<- clean.universal.negative
+    flow.control$clean.universal.negative <- clean.universal.negative
 
     # store in all except AF and AF cleaned
     # get names in case of only cleaning certain samples
-    cleaned.samples <- names( af.removed.expr )[ names( af.removed.expr ) != "AF cleaned" ]
+    # cleaned.samples <- names( af.removed.expr )[ names( af.removed.expr ) != "AF cleaned" ]
 
+    cleaned.samples <- names( af.removed.expr )
     clean.expr[ cleaned.samples ] <- af.removed.expr[ cleaned.samples ]
 
     # store AF cleaned in a new slot
-    clean.expr[ "AF cleaned" ] <- af.removed.expr[ names( af.removed.expr )
-                                                      == "AF cleaned" ]
+    #clean.expr[ "AF cleaned" ] <- af.removed.expr[ names( af.removed.expr )
+    #                                                  == "AF cleaned" ]
   }
 
   ### Stage 4: Universal Negatives and Downsampling -----------------
@@ -253,6 +251,7 @@ clean.controls <- function( flow.control, asp,
 
   }
 
+  # downsample only
   if ( !universal.negative & downsample ) {
     if ( !dir.exists( asp$figure.scatter.dir.base ) )
       dir.create( asp$figure.scatter.dir.base )
@@ -265,82 +264,73 @@ clean.controls <- function( flow.control, asp,
                                                             ignore.case = TRUE ) ]
 
     downsample.peak.channels <- flow.control$channel[ flow.control$fluorophore
-                                                %in% downsample.sample ]
+                                                      %in% downsample.sample ]
 
     downsample.expr <- run.downsample( clean.expr, downsample.sample,
                                        downsample.peak.channels,
-                                       negative.n, positive.n, asp )
+                                       negative.n, positive.n, asp$verbose )
 
     # merge in cleaned data
     clean.expr[ names( downsample.expr ) ] <- downsample.expr
   }
 
-  if ( refactor ) {
+  # merge data and re-establish corresponding factors
+  names( clean.expr ) <- flow.sample
 
-    # merge data and re-establish corresponding factors
-    names( clean.expr ) <- flow.sample
+  # get maximum number of events per sample to adjust event numbering
+  flow.sample.event.number.max <- 0
 
-    # get maximum number of events per sample to adjust event numbering
-    flow.sample.event.number.max <- 0
+  for ( fs.idx in 1 : flow.sample.n )
+  {
+    flow.sample.event.number <- nrow( clean.expr[[ fs.idx ]]  )
 
-    for ( fs.idx in 1 : flow.sample.n )
-    {
-      flow.sample.event.number <- nrow( clean.expr[[ fs.idx ]]  )
+    rownames( clean.expr[[ fs.idx ]] ) <- paste( flow.sample[ fs.idx ],
+                                                 seq_len( flow.sample.event.number ),
+                                                 sep = "_")
 
-      rownames( clean.expr[[ fs.idx ]] ) <- paste( flow.sample[ fs.idx ],
-                                                   seq_len( flow.sample.event.number ),
-                                                   sep = "_")
+    if ( flow.sample.event.number < asp$min.cell.warning.n )
+      warning( paste( "\033[31m", "Fewer than", asp$min.cell.warning.n,
+                      "gated events in",
+                      names( clean.expr )[ fs.idx ], "\033[0m", "\n" ) )
 
-      if ( flow.sample.event.number < asp$min.cell.warning.n )
-        warning( paste( "\033[31m", "Fewer than", asp$min.cell.warning.n,
-                        "gated events in",
-                        names( clean.expr )[ fs.idx ], "\033[0m", "\n" ) )
-
-      if ( flow.sample.event.number > flow.sample.event.number.max )
-        flow.sample.event.number.max <- flow.sample.event.number
-    }
-
-    flow.event.number.width <-
-      floor( log10( flow.sample.event.number.max ) ) + 1
-    flow.event.regexp <- sprintf( "\\.[0-9]{%d}$", flow.event.number.width )
-
-    # set rownames
-    for ( fs.idx in 1 : flow.sample.n )
-    {
-      flow.sample.event.number <- nrow( clean.expr[[ fs.idx ]]  )
-      flow.the.sample <- flow.sample[ fs.idx ]
-
-      flow.the.event <- sprintf( "%s.%0*d", flow.the.sample,
-                                 flow.event.number.width, 1 : flow.sample.event.number )
-      rownames( clean.expr[[ fs.idx ]] ) <- flow.the.event
-    }
-
-    clean.expr <- do.call( rbind, clean.expr )
-
-    # set events
-    flow.event <- rownames( clean.expr )
-
-    flow.event.n <- length( flow.event )
-
-    flow.event.sample <- sub( flow.event.regexp, "", flow.event )
-    flow.event.sample <- factor( flow.event.sample, levels = flow.sample )
-
-    event.type.factor <- flow.sample
-    names( event.type.factor ) <- flow.control$control.type
-    flow.event.type <- factor( flow.event.sample,
-                               levels = event.type.factor,
-                               labels = names( event.type.factor ) )
-
-    # store in flow.control
-    # yes, this is storing in a global variable from within a function
-    # easier for user
-    flow.control$clean.expr <<- clean.expr
-
-    flow.control$clean.event.sample <<- flow.event.sample
-
-    flow.control$clean.event.type <<- flow.event.type
+    if ( flow.sample.event.number > flow.sample.event.number.max )
+      flow.sample.event.number.max <- flow.sample.event.number
   }
 
-  if ( return.separately )
-    return( clean.expr )
+  flow.event.number.width <-
+    floor( log10( flow.sample.event.number.max ) ) + 1
+  flow.event.regexp <- sprintf( "\\.[0-9]{%d}$", flow.event.number.width )
+
+  # set rownames
+  for ( fs.idx in 1 : flow.sample.n )
+  {
+    flow.sample.event.number <- nrow( clean.expr[[ fs.idx ]]  )
+    flow.the.sample <- flow.sample[ fs.idx ]
+
+    flow.the.event <- sprintf( "%s.%0*d", flow.the.sample,
+                               flow.event.number.width, 1 : flow.sample.event.number )
+    rownames( clean.expr[[ fs.idx ]] ) <- flow.the.event
+  }
+
+  clean.expr <- do.call( rbind, clean.expr )
+
+  # set events
+  flow.event <- rownames( clean.expr )
+  flow.event.n <- length( flow.event )
+
+  flow.event.sample <- sub( flow.event.regexp, "", flow.event )
+  flow.event.sample <- factor( flow.event.sample, levels = flow.sample )
+
+  event.type.factor <- flow.sample
+  names( event.type.factor ) <- flow.control$control.type
+  flow.event.type <- factor( flow.event.sample,
+                             levels = event.type.factor,
+                             labels = names( event.type.factor ) )
+
+  # store in flow.control
+  flow.control$clean.expr <- clean.expr
+  flow.control$clean.event.sample <- flow.event.sample
+  flow.control$clean.event.type <- flow.event.type
+
+  return( flow.control )
 }

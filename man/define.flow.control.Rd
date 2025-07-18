@@ -15,8 +15,10 @@ fluorophores they represent, marker names, peak channels, and gating requirement
 \item{asp}{The AutoSpectral parameter list defined
 using \code{get.autospectral.param}.}
 
-\item{gate}{Logical, default is \code{TRUE}. Not currently in use. To be implemented
-to allow pre-gated data to be read in without applying additional gating here.}
+\item{gate}{Logical, default is \code{TRUE}, in which case, automated gating will
+be performed. If \code{FALSE}, the FCS files will be imported without automatically
+generated gates applied. That is, all data in the files will be used. This is
+intended to allow the user to pre-gate the files in commercial software.}
 }
 \value{
 A list (\code{flow.control}) with the following components:

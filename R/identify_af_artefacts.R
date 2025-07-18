@@ -10,6 +10,7 @@
 #'
 #' @importFrom stats prcomp median mad
 #' @importFrom sp point.in.polygon
+#' @importFrom flowWorkspace flowjo_biexp
 #'
 #' @param clean.expr List containing cleaned expression data.
 #' @param universal.neg Name of the universal negative control.
@@ -25,9 +26,15 @@ id.af.artefacts <- function( clean.expr, universal.neg, spectral.channel,
 
   if ( asp$verbose )
     message( paste( "\033[34m", "Identifying autofluorescence contamination in",
-                universal.neg, "\033[0m" ) )
+                    universal.neg, "\033[0m" ) )
 
   expr.data.neg <- clean.expr[[ universal.neg ]][ , spectral.channel ]
+
+  if ( nrow( expr.data.neg ) > asp$gate.downsample.n.cells ) {
+    set.seed( asp$gate.downsample.seed )
+    downsample.idx <- sample( nrow( expr.data.neg ), asp$gate.downsample.n.cells )
+    expr.data.neg <- expr.data.neg[ downsample.idx, ]
+  }
 
   expr.data.center <- apply( expr.data.neg, 2, median )
   expr.data.scale <- apply( expr.data.neg, 2, mad )
@@ -44,54 +51,55 @@ id.af.artefacts <- function( clean.expr, universal.neg, spectral.channel,
   # unmix using first two components
   gate.data <- unmix.ols( expr.data.neg, af.components )
 
+  biexp.transform <- flowjo_biexp( channelRange = asp$default.transformation.param$length,
+                                   maxValue = asp$default.transformation.param$max.range,
+                                   pos = asp$default.transformation.param$pos,
+                                   neg = asp$default.transformation.param$neg,
+                                   widthBasis = asp$default.transformation.param$width,
+                                   inverse = FALSE )
+
+  # transform for easier visualization and faster gating
+  gate.data <- apply( gate.data, 2, biexp.transform )
+
   # get gate defining low AF region
   af.gate.idx <- do.gate.af( gate.data, universal.neg, asp )
 
   af.cells <- gate.data[ -af.gate.idx, ]
 
-  af.boundaries <- fit.af.spline( gate.data, af.gate.idx, asp )
+  # include up to 500 non-AF cells
+  if ( length( af.gate.idx ) > 500 ) {
+    set.seed( asp$gate.downsample.seed )
+    sample.idx <- sample( af.gate.idx, 500 )
+    non.af.cells <- gate.data[ sample.idx, ]
+  } else {
+    non.af.cells <- gate.data[ af.gate.idx, ]
+  }
 
-  gate.population.pip.lower <- point.in.polygon(
-    gate.data[ , 1 ], gate.data[ , 2 ],
-    af.boundaries$lower$x, af.boundaries$lower$y )
+  af.boundaries <- fit.af.spline( af.cells, non.af.cells, asp )
 
   gate.population.pip.upper <- point.in.polygon(
     gate.data[ , 1 ], gate.data[ , 2 ],
     af.boundaries$upper$x, af.boundaries$upper$y )
 
-  if ( asp$af.remove.pop != 1 ) {
-    # return both boundaries
+  if ( asp$af.remove.pop != 1 & !is.null( af.boundaries$lower ) ) {
+    # exclude both AF pops
+    gate.population.pip.lower <- point.in.polygon(
+      gate.data[ , 1 ], gate.data[ , 2 ],
+      af.boundaries$lower$x, af.boundaries$lower$y )
+
     gate.population.idx <- which( gate.population.pip.lower == 0 &
                                     gate.population.pip.upper == 0 )
 
   } else {
-    # return boundary that excludes more cells
-    pip.lower.sum <- sum( gate.population.pip.lower )
-
-    pip.upper.sum <- sum( gate.population.pip.upper )
-
-    if ( pip.upper.sum >= pip.lower.sum ) {
-
-      gate.population.idx <- which( gate.population.pip.upper == 0 )
-
-      af.boundaries <- af.boundaries[ "upper" ]
-
-    } else {
-
-      gate.population.idx <- which( gate.population.pip.lower == 0 )
-
-      af.boundaries <- af.boundaries[ "lower" ]
-      # rename for ease of tracking later
-      names( af.boundaries ) <- gsub( "lower", "upper", names( af.boundaries ) )
-
-    }
+    gate.population.idx <- which( gate.population.pip.upper == 0 )
   }
 
   if ( asp$figures ) {
 
-    if ( length( af.boundaries ) == 2 ){
+    if ( asp$af.remove.pop != 1 & !is.null( af.boundaries$lower ) ){
       gate.af.sample.plot( universal.neg, af.data = gate.data,
-                           af.boundaries$lower, af.boundaries$upper,
+                           af.boundaries$lower,
+                           af.boundaries$upper,
                            asp )
     } else {
       gate.af.sample.plot( universal.neg, af.data = gate.data,
