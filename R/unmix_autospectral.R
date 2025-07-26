@@ -41,9 +41,8 @@ unmix.autospectral <- function( raw.data, spectra, af.spectra,
 
   fluorophores <- rownames( spectra )
   af.n <- nrow( af.spectra )
-  cell.n <- nrow(raw.data)
-  fluorophore.n <- nrow(spectra)
-  detector.n <- ncol(spectra)
+  fluorophore.n <- nrow( spectra )
+  detector.n <- ncol( spectra )
 
   # initial no AF unmixing
   if ( weighted )
@@ -60,7 +59,7 @@ unmix.autospectral <- function( raw.data, spectra, af.spectra,
   model.unmixings <- vector( "list", length = af.n + 1 )
   model.residuals <- vector( "list", length = af.n + 1 )
 
-  combined.spectra <- matrix( NA_real_, nrow = fluorophore.n + 1, ncol = detector.n)
+  combined.spectra <- matrix( NA_real_, nrow = fluorophore.n + 1, ncol = detector.n )
 
   for ( af in seq_len( af.n ) ) {
     af.spectrum <- af.spectra[ af, , drop = FALSE ]

@@ -26,6 +26,11 @@
 #' @param weights Optional numeric vector of weights: one per fluorescent
 #' detector. Default is `NULL`, in which case weighting will be done by
 #' channel means. Only used for `WLS`
+#' @param af.spectra Spectral signatures of autofluorescences, normalized
+#' between 0 and 1, with fluorophores in rows and detectors in columns. Prepare
+#' using `get.af.spectra`. Required for `AutoSpectral` unmixing. Default is
+#' `NULL` and will thus provoke failure if no spectra are provided and
+#' `AutoSpectral` is selected.
 #' @param output.dir Directory to save the unmixed FCS files
 #' (default is asp$unmixed.fcs.dir).
 #' @param file.suffix A character string to append to the output file name.
@@ -51,6 +56,7 @@
 unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
                           method = "Automatic",
                           weights = NULL,
+                          af.spectra = NULL,
                           output.dir = NULL,
                           file.suffix = NULL,
                           include.raw = FALSE,
@@ -75,8 +81,7 @@ unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
   }
 
   lapply.function( files.to.unmix, FUN = unmix.fcs, spectra, asp, flow.control,
-                   method, weights, output.dir, file.suffix, include.raw,
+                   method, weights, af.spectra, output.dir, file.suffix, include.raw,
                    include.imaging, divergence.threshold, divergence.handling,
                    balance.weight )
-
 }

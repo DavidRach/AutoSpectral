@@ -11,6 +11,7 @@ unmix.folder(
   flow.control,
   method = "Automatic",
   weights = NULL,
+  af.spectra = NULL,
   output.dir = NULL,
   file.suffix = NULL,
   include.raw = FALSE,
@@ -42,6 +43,12 @@ Default is \code{OLS}. \code{FastPoisson} requires installation of \code{AutoSpe
 \item{weights}{Optional numeric vector of weights: one per fluorescent
 detector. Default is \code{NULL}, in which case weighting will be done by
 channel means. Only used for \code{WLS}}
+
+\item{af.spectra}{Spectral signatures of autofluorescences, normalized
+between 0 and 1, with fluorophores in rows and detectors in columns. Prepare
+using \code{get.af.spectra}. Required for \code{AutoSpectral} unmixing. Default is
+\code{NULL} and will thus provoke failure if no spectra are provided and
+\code{AutoSpectral} is selected.}
 
 \item{output.dir}{Directory to save the unmixed FCS files
 (default is asp$unmixed.fcs.dir).}

@@ -12,7 +12,9 @@ spectral.ribbon.plot(
   fluor.name,
   plot.prefix = NULL,
   af = FALSE,
-  removed.data = NULL
+  removed.data = NULL,
+  figure.dir = NULL,
+  factor.names = NULL
 )
 }
 \arguments{
@@ -33,7 +35,15 @@ Default is \code{NULL}}
 being performed. Default is \code{FALSE}}
 
 \item{removed.data}{A matrix containing the removed data, if applicable.
-Default is \code{NULL}.}
+Default is \code{NULL}. If omitted, only two groups (facets) are plotted.}
+
+\item{figure.dir}{Output folder where the figures will be created. Default is
+\code{NULL}, enabling automatic selection inside AutoSpectral.}
+
+\item{factor.names}{Optional titles for the facets on the plot. Default is
+\code{NULL}, enabling automatic selection inside AutoSpectral. A character vector
+containing three elements should be provided unless \code{af} is set to \code{TRUE} and
+\code{removed.data} is \code{NULL}, in which case two labels must be provided.}
 }
 \value{
 None. The function saves the generated spectral ribbon plot to

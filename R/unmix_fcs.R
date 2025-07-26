@@ -32,7 +32,8 @@
 #' @param af.spectra Spectral signatures of autofluorescences, normalized
 #' between 0 and 1, with fluorophores in rows and detectors in columns. Prepare
 #' using `get.af.spectra`. Required for `AutoSpectral` unmixing. Default is
-#' `NULL` and will thus provoke failure if no spectra are provided.
+#' `NULL` and will thus provoke failure if no spectra are provided and
+#' `AutoSpectral` is selected.
 #' @param output.dir A character string specifying the directory to save the
 #' unmixed FCS file. Default is `NULL`.
 #' @param file.suffix A character string to append to the output file name.

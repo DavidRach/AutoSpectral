@@ -23,7 +23,13 @@
 #' @param af A logical value indicating whether autofluorescence removal is
 #' being performed. Default is `FALSE`
 #' @param removed.data A matrix containing the removed data, if applicable.
-#' Default is `NULL`.
+#' Default is `NULL`. If omitted, only two groups (facets) are plotted.
+#' @param figure.dir Output folder where the figures will be created. Default is
+#' `NULL`, enabling automatic selection inside AutoSpectral.
+#' @param factor.names Optional titles for the facets on the plot. Default is
+#' `NULL`, enabling automatic selection inside AutoSpectral. A character vector
+#' containing three elements should be provided unless `af` is set to `TRUE` and
+#' `removed.data` is `NULL`, in which case two labels must be provided.
 #'
 #' @return None. The function saves the generated spectral ribbon plot to
 #' a file.
@@ -31,17 +37,18 @@
 #' @export
 
 spectral.ribbon.plot <- function( pos.expr.data, neg.expr.data,
-                                       spectral.channel,
-                                       asp, fluor.name, plot.prefix = NULL,
-                                       af = FALSE, removed.data = NULL ){
+                                  spectral.channel, asp, fluor.name,
+                                  plot.prefix = NULL, af = FALSE,
+                                  removed.data = NULL, figure.dir = NULL,
+                                  factor.names = NULL ){
 
   if ( !af ) {
 
-    if ( is.null( plot.prefix ) ){
+    if ( is.null( plot.prefix ) )
       plot.prefix <- "Scatter match"
-    }
 
-    figure.dir <- asp$figure.spectral.ribbon.dir
+    if ( is.null( figure.dir ) )
+      figure.dir <- asp$figure.spectral.ribbon.dir
 
     neg.mfi <- apply( neg.expr.data[ , spectral.channel ], 2, median )
 
@@ -56,23 +63,39 @@ spectral.ribbon.plot <- function( pos.expr.data, neg.expr.data,
     neg.data  <- data.frame( neg.expr.data[ , spectral.channel ],
                              check.names = FALSE )
 
-    pos.background.subtracted$group <- fluor.name
-    pos.data.plot$group <- paste( "Raw", fluor.name )
-    neg.data$group <- "Negative"
+    if ( is.null( factor.names ) ) {
+      pos.background.subtracted$group <- fluor.name
+      pos.data.plot$group <- paste( "Raw", fluor.name )
+      neg.data$group <- "Negative"
 
-    ribbon.plot.data <- rbind( pos.background.subtracted, pos.data.plot, neg.data )
+      ribbon.plot.data <- rbind( pos.background.subtracted, pos.data.plot, neg.data )
 
-    ribbon.plot.data$group <- factor( ribbon.plot.data$group,
-                                      levels = c( "Negative",
-                                                  paste( "Raw", fluor.name ),
-                                                  fluor.name ) )
-  } else {
+      ribbon.plot.data$group <- factor( ribbon.plot.data$group,
+                                        levels = c( "Negative",
+                                                    paste( "Raw", fluor.name ),
+                                                    fluor.name ) )
+    } else {
 
-    if ( is.null( plot.prefix ) ){
-      plot.prefix <- "AF removal"
+      if ( length( factor.names ) != 3 )
+        stop( "Three labels must be provided via `factor.names` if used." )
+
+      pos.background.subtracted$group <- factor.names[ 1 ]
+      pos.data.plot$group <- factor.names[ 2 ]
+      neg.data$group <- factor.names[ 3 ]
+
+      ribbon.plot.data <- rbind( pos.background.subtracted, pos.data.plot, neg.data )
+
+      ribbon.plot.data$group <- factor( ribbon.plot.data$group,
+                                        levels = factor.names )
     }
 
-    figure.dir <- asp$figure.clean.control.dir
+  } else {
+
+    if ( is.null( plot.prefix ) )
+      plot.prefix <- "AF removal"
+
+    if ( is.null( figure.dir ) )
+      figure.dir <- asp$figure.clean.control.dir
 
     original.data <- data.frame( pos.expr.data[ , spectral.channel ],
                                  check.names = FALSE )
@@ -80,21 +103,42 @@ spectral.ribbon.plot <- function( pos.expr.data, neg.expr.data,
     cleaned.data <- data.frame( neg.expr.data[ , spectral.channel ],
                                 check.names = FALSE )
 
-    if ( !is.null( removed.data ) ){
+    if ( !is.null( removed.data ) )
       removed.data <- data.frame( removed.data[ , spectral.channel ],
                                   check.names = FALSE )
+
+    if ( is.null( factor.names ) ) {
+      original.data$group <- paste( "Original", fluor.name )
+      cleaned.data$group <- paste( "Cleaned", fluor.name )
+      removed.data$group <- "Removed events"
+
+      ribbon.plot.data <- rbind( original.data, cleaned.data, removed.data )
+
+      ribbon.plot.data$group <- factor( ribbon.plot.data$group,
+                                        levels = c( paste( "Original", fluor.name ),
+                                                    paste( "Cleaned", fluor.name ),
+                                                    "Removed events" ) )
+    } else {
+
+      if ( !is.null( removed.data ) & length( factor.names ) != 3 )
+        stop( "Three labels must be provided via `factor.names` if used with 3 groups." )
+      if ( !is.null( removed.data ) & length( factor.names ) != 2 )
+        stop( "Two labels must be provided via `factor.names` if used with 2 groups." )
+
+      original.data$group <- factor.names[ 1 ]
+      cleaned.data$group <- factor.names[ 2 ]
+
+      if ( !is.null( removed.data ) ) {
+        removed.data$group <- factor.names[ 3 ]
+        ribbon.plot.data <- rbind( original.data, cleaned.data, removed.data )
+      } else {
+        ribbon.plot.data <- rbind( original.data, cleaned.data )
+      }
+
+      ribbon.plot.data$group <- factor( ribbon.plot.data$group,
+                                        levels = factor.names )
     }
 
-    original.data$group <- paste( "Original", fluor.name )
-    cleaned.data$group <- paste( "Cleaned", fluor.name )
-    removed.data$group <- "Removed events"
-
-    ribbon.plot.data <- rbind( original.data, cleaned.data, removed.data )
-
-    ribbon.plot.data$group <- factor( ribbon.plot.data$group,
-                                      levels = c( paste( "Original", fluor.name ),
-                                                  paste( "Cleaned", fluor.name ),
-                                                  "Removed events" ) )
   }
 
   ribbon.plot.long <- tidyr::pivot_longer( ribbon.plot.data,

@@ -53,7 +53,8 @@ channel means (Poisson variance). Only used for \code{WLS}.}
 \item{af.spectra}{Spectral signatures of autofluorescences, normalized
 between 0 and 1, with fluorophores in rows and detectors in columns. Prepare
 using \code{get.af.spectra}. Required for \code{AutoSpectral} unmixing. Default is
-\code{NULL} and will thus provoke failure if no spectra are provided.}
+\code{NULL} and will thus provoke failure if no spectra are provided and
+\code{AutoSpectral} is selected.}
 
 \item{output.dir}{A character string specifying the directory to save the
 unmixed FCS file. Default is \code{NULL}.}
