@@ -47,7 +47,7 @@ similarity.matrix.plot <- function( spectra,
     dir.create( output.dir )
 
   # similarity matrix
-  similarity.matrix <- cosine.similarity( t( spectra ) )
+  similarity.matrix <- cosine.similarity( spectra )
 
   complexity.index <- calculate.complexity.index( spectra )
 

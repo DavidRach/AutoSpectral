@@ -4,11 +4,11 @@
 \alias{cosine.similarity}
 \title{Calculate cosine similarity}
 \usage{
-cosine.similarity(spectra.t)
+cosine.similarity(spectra)
 }
 \arguments{
-\item{spectra.t}{The transposed spectral matrix (or dataframe), represented as
-detectors in rows and fluorophores in columns.}
+\item{spectra}{The spectral matrix (or dataframe), represented as
+fluorophores in rows and detectors in columns.}
 }
 \value{
 The cosine similarity matrix in fluorophores x fluorophores.

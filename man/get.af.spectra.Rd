@@ -6,11 +6,13 @@
 \usage{
 get.af.spectra(
   unstained.sample,
+  asp,
   spectral.channels = flow.control$spectral.channel,
-  threads = asp$worker.process.n,
-  n.spectra = 20,
+  similarity = 0.99,
+  max.spectra = 20,
+  min.spectra = 5,
   figures = TRUE,
-  plot.dir = asp$figure.af.dir,
+  plot.dir = NULL,
   plot.title = "Autofluorescence spectra"
 )
 }
@@ -19,21 +21,26 @@ get.af.spectra(
 The sample type and processing (protocol) method should match the fully
 stained samples to which the AF will be applied, ideally.}
 
+\item{asp}{The AutoSpectral parameter list.}
+
 \item{spectral.channels}{The fluorescence detector channels that will be used
 to identify the autofluorescence. These should match the channels used for
 subsequent unmixing and should normally be all fluorescent area measurements.
-Default is \code{flow.control$spectral.channel}}
+Default is \code{flow.control$spectral.channel}.}
 
-\item{threads}{Numeric. Number of threads to use for parallel processing in
-the creation of the SOM. Default is \code{asp$worker.process.n}.}
+\item{similarity}{Numeric between 0 and 1, default is \code{0.99}. The cosine
+similarity value that will trigger merging of FlowSOM nodes to create
+metaclusters that define the autofluorescence signatures.}
 
-\item{n.spectra}{Number of AF signatures to look for. Default is \code{20}.}
+\item{max.spectra}{Maximum number of AF signatures to return. Default is \code{20}.}
+
+\item{min.spectra}{Minimum number of AF signatures to return. Default is \code{5}.}
 
 \item{figures}{Logical, whether to plot the spectral traces and heatmap for
 the AF signatures. Default is \code{TRUE}.}
 
 \item{plot.dir}{Directory (folder) where the plots will be saved. Default is
-\code{asp$figure.af.dir}.}
+\code{NULL}, which inherits from \code{asp$figure.af.dir}.}
 
 \item{plot.title}{Title for the output spectral plots. Default is
 \verb{Autofluorescence spectra}.}

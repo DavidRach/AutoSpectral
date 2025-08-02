@@ -122,7 +122,7 @@ spectral.ribbon.plot <- function( pos.expr.data, neg.expr.data,
 
       if ( !is.null( removed.data ) & length( factor.names ) != 3 )
         stop( "Three labels must be provided via `factor.names` if used with 3 groups." )
-      if ( !is.null( removed.data ) & length( factor.names ) != 2 )
+      if ( is.null( removed.data ) & length( factor.names ) != 2 )
         stop( "Two labels must be provided via `factor.names` if used with 2 groups." )
 
       original.data$group <- factor.names[ 1 ]

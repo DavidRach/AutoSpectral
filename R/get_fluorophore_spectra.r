@@ -191,7 +191,7 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
                             figure.width = asp$figure.width,
                             figure.height = asp$figure.height )
 
-  similarity.matrix <- cosine.similarity( t( fluorophore.spectra.plot ) )
+  similarity.matrix <- cosine.similarity( fluorophore.spectra.plot )
 
   unique.similarity <- similarity.matrix * lower.tri( similarity.matrix )
 
