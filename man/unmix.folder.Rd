@@ -10,12 +10,14 @@ unmix.folder(
   asp,
   flow.control,
   method = "Automatic",
+  weighted = FALSE,
   weights = NULL,
   af.spectra = NULL,
   output.dir = NULL,
   file.suffix = NULL,
   include.raw = FALSE,
   include.imaging = FALSE,
+  calculate.error = TRUE,
   divergence.threshold = 10000,
   divergence.handling = "Balance",
   balance.weight = 0.5
@@ -40,6 +42,10 @@ others will be unmixed with \code{OLS}. Any option can be set manually.
 Manual options are \code{OLS}, \code{WLS}, \code{AutoSpectral}, \code{Poisson} and \code{FastPoisson}.
 Default is \code{OLS}. \code{FastPoisson} requires installation of \code{AutoSpectralRcpp}.}
 
+\item{weighted}{Logical, whether to use ordinary or weighted least squares
+unmixing as the base algorithm in AutoSpectral unmixing.
+Default is \code{FALSE} and will use OLS.}
+
 \item{weights}{Optional numeric vector of weights: one per fluorescent
 detector. Default is \code{NULL}, in which case weighting will be done by
 channel means. Only used for \code{WLS}}
@@ -61,6 +67,9 @@ written FCS file. Default is \code{FALSE}}
 
 \item{include.imaging}{Logical indicating whether to include imaging data in
 the written FCS file: relevant for S8 and A8. Default is \code{FALSE}}
+
+\item{calculate.error}{Logical, whether to calculate the RMSE unmixing model
+accuracy and include it as a keyword in the FCS file.}
 
 \item{divergence.threshold}{Numeric. Used for \code{FastPoisson} only. Threshold
 to trigger reversion towards WLS unmixing when Poisson result diverges.

@@ -25,6 +25,8 @@
 #' metaclusters that define the autofluorescence signatures.
 #' @param max.spectra Maximum number of AF signatures to return. Default is `20`.
 #' @param min.spectra Minimum number of AF signatures to return. Default is `5`.
+#' @param biexp Logical, whether to use a biexponential transform on the data
+#' prior to clustering. Default is `TRUE`.
 #' @param figures Logical, whether to plot the spectral traces and heatmap for
 #' the AF signatures. Default is `TRUE`.
 #' @param plot.dir Directory (folder) where the plots will be saved. Default is
@@ -40,6 +42,7 @@ get.af.spectra <- function( unstained.sample, asp,
                             spectral.channels = flow.control$spectral.channel,
                             similarity = 0.99,
                             max.spectra = 20, min.spectra = 5,
+                            biexp = TRUE,
                             figures = TRUE, plot.dir = NULL,
                             plot.title = "Autofluorescence spectra" ) {
 
@@ -47,30 +50,32 @@ get.af.spectra <- function( unstained.sample, asp,
   if ( is.null( plot.dir ) )
     plot.dir <- asp$figure.af.dir
 
-  if ( is.null( threads ) )
-    threads <- asp$worker.process.n
-
   stopifnot( similarity > 0, similarity < 1 )
 
   # import unstained sample
   if ( asp$verbose )
     message( paste( "Reading FCS file", unstained.sample ) )
 
-  unstained.ff <- flowCore::read.FCS( unstained.sample, transformation = FALSE,
-                                      truncate_max_range = FALSE, emptyValue = FALSE )
+  unstained.ff <- suppressWarnings( flowCore::read.FCS( unstained.sample,
+                                                        transformation = FALSE,
+                                      truncate_max_range = FALSE, emptyValue = FALSE ) )
 
   unstained.exprs <- flowCore::exprs( unstained.ff )[ , spectral.channels ]
 
-  biexp.transform <- flowWorkspace::flowjo_biexp(
-    channelRange = asp$default.transformation.param$length,
-    maxValue = asp$default.transformation.param$max.range,
-    pos = asp$default.transformation.param$pos,
-    neg = asp$default.transformation.param$neg,
-    widthBasis = asp$default.transformation.param$width,
-    inverse = FALSE
-  )
+  if ( biexp ) {
+    biexp.transform <- flowWorkspace::flowjo_biexp(
+      channelRange = asp$default.transformation.param$length,
+      maxValue = asp$default.transformation.param$max.range,
+      pos = asp$default.transformation.param$pos,
+      neg = asp$default.transformation.param$neg,
+      widthBasis = asp$default.transformation.param$width,
+      inverse = FALSE
+    )
 
-  unstained.trans <- apply( unstained.exprs, 2, biexp.transform )
+    unstained.trans <- apply( unstained.exprs, 2, biexp.transform )
+  } else {
+    unstained.trans <- unstained.exprs
+  }
 
   # get cluster of AF from unstained unmixed
   if ( asp$verbose )
@@ -100,7 +105,6 @@ get.af.spectra <- function( unstained.sample, asp,
     metaclusters <- cutree( hclust( cluster.dist, method = "complete" ),
                             h = ( 1 - similarity ) )
     n.clusters <- length( unique( metaclusters ) )
-    print( n.clusters )
 
     if ( n.clusters > max.spectra ) {
       message( paste0( "More than ", max.spectra,

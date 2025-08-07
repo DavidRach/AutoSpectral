@@ -292,7 +292,7 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
                       asp$figure.spectra.point.size )
 
       # plot similarity matrix heatmap
-      similarity.matrix.plot( spectra.update.reverted,
+      cosine.similarity.plot( spectra.update.reverted,
                               filename = asp$similarity.heatmap.file.name,
                               plot.prefix,
                               output.dir = asp$figure.similarity.heatmap.dir,

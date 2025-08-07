@@ -23,6 +23,9 @@
 #' others will be unmixed with `OLS`. Any option can be set manually.
 #' Manual options are `OLS`, `WLS`, `AutoSpectral`, `Poisson` and `FastPoisson`.
 #' Default is `OLS`. `FastPoisson` requires installation of `AutoSpectralRcpp`.
+#' @param weighted Logical, whether to use ordinary or weighted least squares
+#' unmixing as the base algorithm in AutoSpectral unmixing.
+#' Default is `FALSE` and will use OLS.
 #' @param weights Optional numeric vector of weights: one per fluorescent
 #' detector. Default is `NULL`, in which case weighting will be done by
 #' channel means. Only used for `WLS`
@@ -39,6 +42,8 @@
 #' written FCS file. Default is `FALSE`
 #' @param include.imaging Logical indicating whether to include imaging data in
 #' the written FCS file: relevant for S8 and A8. Default is `FALSE`
+#' @param calculate.error Logical, whether to calculate the RMSE unmixing model
+#' accuracy and include it as a keyword in the FCS file.
 #' @param divergence.threshold Numeric. Used for `FastPoisson` only. Threshold
 #' to trigger reversion towards WLS unmixing when Poisson result diverges.
 #' Default is `1e4`
@@ -55,12 +60,14 @@
 
 unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
                           method = "Automatic",
+                          weighted = FALSE,
                           weights = NULL,
                           af.spectra = NULL,
                           output.dir = NULL,
                           file.suffix = NULL,
                           include.raw = FALSE,
                           include.imaging = FALSE,
+                          calculate.error = TRUE,
                           divergence.threshold = 1e4,
                           divergence.handling = "Balance",
                           balance.weight = 0.5 ){
@@ -81,7 +88,7 @@ unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
   }
 
   lapply.function( files.to.unmix, FUN = unmix.fcs, spectra, asp, flow.control,
-                   method, weights, af.spectra, output.dir, file.suffix, include.raw,
-                   include.imaging, divergence.threshold, divergence.handling,
-                   balance.weight )
+                   method, weighted, weights, af.spectra, output.dir, file.suffix,
+                   include.raw,include.imaging, calculate.error,
+                   divergence.threshold, divergence.handling, balance.weight )
 }

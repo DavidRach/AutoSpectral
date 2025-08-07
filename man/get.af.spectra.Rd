@@ -11,6 +11,7 @@ get.af.spectra(
   similarity = 0.99,
   max.spectra = 20,
   min.spectra = 5,
+  biexp = TRUE,
   figures = TRUE,
   plot.dir = NULL,
   plot.title = "Autofluorescence spectra"
@@ -35,6 +36,9 @@ metaclusters that define the autofluorescence signatures.}
 \item{max.spectra}{Maximum number of AF signatures to return. Default is \code{20}.}
 
 \item{min.spectra}{Minimum number of AF signatures to return. Default is \code{5}.}
+
+\item{biexp}{Logical, whether to use a biexponential transform on the data
+prior to clustering. Default is \code{TRUE}.}
 
 \item{figures}{Logical, whether to plot the spectral traces and heatmap for
 the AF signatures. Default is \code{TRUE}.}

@@ -216,7 +216,7 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
   rm( spectral.exprs, other.exprs )
 
   # define new FCS file
-  flow.frame <- flowCore::flowFrame( unmixed.data )
+  flow.frame <- suppressWarnings( flowCore::flowFrame( unmixed.data ) )
 
   # set max range values
   params <- pData( parameters( flow.frame ) )
@@ -272,6 +272,6 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
     keyword( flow.frame )[[ paste0( "$P", i, "S" ) ]] <- colnames( unmixed.data )[ i ]
   }
 
-  suppressWarnings( write.FCS( flow.frame, filename = file.path( output.dir, file.name ) ) )
+  write.FCS( flow.frame, filename = file.path( output.dir, file.name ) )
 
 }

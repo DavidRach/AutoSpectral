@@ -184,7 +184,7 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
 
   # cosine similarity QC for controls
   if ( asp$figures )
-    similarity.matrix.plot( fluorophore.spectra.plot,
+    cosine.similarity.plot( fluorophore.spectra.plot,
                             filename = asp$similarity.heatmap.file.name,
                             plot.prefix,
                             output.dir = asp$figure.similarity.heatmap.dir,

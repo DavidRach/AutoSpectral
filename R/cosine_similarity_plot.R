@@ -1,11 +1,11 @@
-# similarity_matrix_plot.r
+# cosine_similarity_plot.r
 
-#' @title Similarity Matrix Plot
+#' @title Cosine Similarity Plot
 #'
 #' @description
-#' This function plots the similarity matrix (cosine similarity) as a heatmap
-#' and saves it as a JPEG file. It also calculates and displays the complexity
-#' index (condition number) of the matrix.
+#' This function plots the matrix of cosine similarities (AKA "Similarity Matrix")
+#' as a heatmap and saves it as a JPEG file. It also calculates and displays the
+#' mixing matrix condition number (AKA "Complexity Index") of the matrix.
 #'
 #' @importFrom ggplot2 ggplot aes geom_tile scale_fill_viridis_c theme_minimal
 #' @importFrom ggplot2 coord_fixed element_text labs ggsave
@@ -30,7 +30,7 @@
 #'
 #' @export
 
-similarity.matrix.plot <- function( spectra,
+cosine.similarity.plot <- function( spectra,
                                     filename = "autospectral_similarity_matrix",
                                     plot.prefix = NULL,
                                     output.dir = "figure_similarity_heatmap",
@@ -46,11 +46,12 @@ similarity.matrix.plot <- function( spectra,
   if ( !dir.exists( output.dir ) )
     dir.create( output.dir )
 
-  # similarity matrix
+  # calculations
   similarity.matrix <- cosine.similarity( spectra )
 
-  complexity.index <- calculate.complexity.index( spectra )
+  condition.number <- calculate.condition.number( spectra )
 
+  # reorganization
   similarity.df <- as.data.frame( similarity.matrix )
 
   similarity.df <- similarity.df %>%
@@ -59,13 +60,14 @@ similarity.matrix.plot <- function( spectra,
     tidyr::pivot_longer( cols = -Fluor1, names_to = "Fluor2", values_to = "value" ) %>%
     mutate( Fluor2 = factor( Fluor2, levels = rev( colnames( similarity.matrix ) ) ) )
 
+  # plotting
   similarity.heatmap <- ggplot( similarity.df, aes( Fluor1, Fluor2, fill = value ) ) +
     geom_tile() +
     scale_fill_viridis_c( option = color.palette ) +
     theme_minimal() +
     coord_fixed( ratio = 1 ) +
     theme( axis.text.x = element_text( angle = 90, hjust = 1 ) ) +
-    labs( x = paste( "Complexity Index", complexity.index ),
+    labs( x = paste( "Condition Number", condition.number ),
           y = NULL, fill = "Cosine Similarity" )
 
   ggsave( filename = file.path( output.dir, similarity.heatmap.filename ),

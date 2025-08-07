@@ -14,7 +14,7 @@
 #'
 #' @param matrix Matrix or dataframe containing spectral data.
 #' @param number.labels Logical indicating whether to add number labels to
-#' the heatmap.
+#' the heatmap. Default is `FALSE`.
 #' @param plot.prefix Optional prefix for the plot filename. Default is `NULL`,
 #' in which case the file will just be called `heatmap.jpg`
 #' @param legend.label Character string that will appear on the heatmap legend.
@@ -42,7 +42,9 @@
 #'
 #' @export
 
-create.heatmap <- function( matrix, number.labels, plot.prefix = NULL,
+create.heatmap <- function( matrix,
+                            number.labels = FALSE,
+                            plot.prefix = NULL,
                             legend.label = "heatmap",
                             triangular = FALSE,
                             output.dir = NULL,
@@ -71,11 +73,10 @@ create.heatmap <- function( matrix, number.labels, plot.prefix = NULL,
     mutate( Fluor1 = factor( Fluor1, levels = row.levels ),
             Fluor2 = factor( Fluor2, levels = col.levels ) )
 
-
   if ( triangular ){
     heatmap.long <- heatmap.long %>%
-      dplyr::filter( as.integer( Fluor1 ) >= as.integer( Fluor2 ) ) %>%
-      mutate( Fluor1 = factor( Fluor1, levels = rev( row.levels ) ) )
+      dplyr::filter( as.integer( Fluor1 ) <= as.integer( Fluor2 ) ) %>%
+      mutate( Fluor2 = factor( Fluor2, levels = rev( col.levels ) ) )
   } else {
     heatmap.long <- heatmap.long %>%
       mutate( Fluor1 = factor( Fluor1, levels = rev( row.levels ) ) )

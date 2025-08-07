@@ -6,7 +6,7 @@
 \usage{
 create.heatmap(
   matrix,
-  number.labels,
+  number.labels = FALSE,
   plot.prefix = NULL,
   legend.label = "heatmap",
   triangular = FALSE,
@@ -23,7 +23,7 @@ create.heatmap(
 \item{matrix}{Matrix or dataframe containing spectral data.}
 
 \item{number.labels}{Logical indicating whether to add number labels to
-the heatmap.}
+the heatmap. Default is \code{FALSE}.}
 
 \item{plot.prefix}{Optional prefix for the plot filename. Default is \code{NULL},
 in which case the file will just be called \code{heatmap.jpg}}
