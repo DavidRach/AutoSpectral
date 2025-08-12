@@ -7,7 +7,8 @@
 read.spectroflo.expt(
   expt.file,
   output.dir,
-  output.filename = "SpectroFlo_spillover_matrix.csv"
+  output.filename = "SpectroFlo_spillover_matrix.csv",
+  fcs.file = NULL
 )
 }
 \arguments{
@@ -16,7 +17,11 @@ read.spectroflo.expt(
 \item{output.dir}{Directory where the spillover .csv file will be written.}
 
 \item{output.filename}{Name for the output spillover file. Default is
-\code{"SpectroFlo_spillover_matrix.csv"}.#'}
+\code{"SpectroFlo_spillover_matrix.csv"}.}
+
+\item{fcs.file}{File name and path to an FCS file to be read. Optional, but
+inclusion of an FCS file will allow for the detector names (channels) to be
+added to the returned spillover matrix.}
 }
 \value{
 Spillover matrix (fluorophores x detectors). Fluorophore names will
