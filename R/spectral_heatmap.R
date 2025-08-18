@@ -13,7 +13,7 @@
 #'
 #' @param spectra Matrix or dataframe containing spectral data
 #' format: fluorophores x detectors.
-#' @param plot.prefix Optional prefix for the plot filename.
+#' @param title Optional prefix for the plot filename.
 #' @param legend.label Character string that will appear on the heatmap legend.
 #' @param output.dir Optional output directory. Default is NULL, in which case
 #' the spectra figure folder will be used.
@@ -26,12 +26,12 @@
 #'
 #' @export
 
-spectral.heatmap <- function( spectra, plot.prefix = NULL,
+spectral.heatmap <- function( spectra, title = NULL,
                               legend.label = "Intensity", output.dir = NULL,
                               color.palette = "viridis" ) {
 
-  if ( !is.null( plot.prefix ) ) {
-    heatmap.filename <- paste( plot.prefix, "spectral_heatmap.jpg" )
+  if ( !is.null( title ) ) {
+    heatmap.filename <- paste( title, "spectral_heatmap.jpg" )
   } else {
     heatmap.filename <- "spectral_heatmap.jpg"
   }
@@ -41,7 +41,7 @@ spectral.heatmap <- function( spectra, plot.prefix = NULL,
 
   heatmap.df <- data.frame( spectra, check.names = FALSE )
 
-  plot.width <- ( ncol( heatmap.df ) - 1 ) / 64 * 12
+  plot.width <- max( ( ( ncol( heatmap.df ) - 1 ) / 64 * 12 ), 3 )
   plot.height <- 5 + round( nrow( heatmap.df ) / 8, 0 )
 
   row.levels <- rownames( heatmap.df )

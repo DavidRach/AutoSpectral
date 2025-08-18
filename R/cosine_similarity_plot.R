@@ -15,7 +15,7 @@
 #' @param spectra Data frame or matrix containing spectral data.
 #' @param filename Character string for the output file. Default is
 #' `autospectral_similarity_matrix`.
-#' @param plot.prefix Optional prefix for the plot filename. Default is `NULL`
+#' @param title Optional prefix for the plot filename. Default is `NULL`
 #' @param output.dir File path where the plot will be created. Default is
 #' `figure_similarity_heatmap`. The directory will be created if it does not
 #' already exist.
@@ -32,13 +32,13 @@
 
 cosine.similarity.plot <- function( spectra,
                                     filename = "autospectral_similarity_matrix",
-                                    plot.prefix = NULL,
+                                    title = NULL,
                                     output.dir = "figure_similarity_heatmap",
                                     figure.width = 8, figure.height = 6,
                                     color.palette = "viridis" ){
 
-  if ( !is.null( plot.prefix ) ){
-    similarity.heatmap.filename <- paste0( plot.prefix, " ", filename, ".jpg" )
+  if ( !is.null( title ) ){
+    similarity.heatmap.filename <- paste0( title, " ", filename, ".jpg" )
   } else {
     similarity.heatmap.filename <- paste0( filename, ".jpg" )
   }

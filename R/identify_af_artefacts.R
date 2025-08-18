@@ -110,7 +110,7 @@ id.af.artefacts <- function( clean.expr, universal.neg, spectral.channel,
 
     spectral.ribbon.plot( expr.data.neg, expr.data.neg[ gate.population.idx, ],
                           spectral.channel, asp, universal.neg,
-                          plot.prefix = asp$af.plot.filename,
+                          title = asp$af.plot.filename,
                           af = TRUE,
                           removed.data = expr.data.neg[ -gate.population.idx, ] )
   }

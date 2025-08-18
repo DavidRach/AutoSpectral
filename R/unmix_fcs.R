@@ -215,6 +215,10 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
 
   rm( spectral.exprs, other.exprs )
 
+  # fix any NA values (e.g., plate location with S8)
+  if ( anyNA( unmixed.data ) )
+    unmixed.data[ is.na( unmixed.data ) ] <- 0
+
   # define new FCS file
   flow.frame <- suppressWarnings( flowCore::flowFrame( unmixed.data ) )
 

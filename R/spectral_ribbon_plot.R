@@ -18,7 +18,7 @@
 #' @param spectral.channel A character vector specifying the spectral channels.
 #' @param asp The AutoSpectral parameter list. Prepare using get.autospectral.param.
 #' @param fluor.name A character string specifying the fluorophore name.
-#' @param plot.prefix A character string to prefix the plot file name.
+#' @param title A character string to prefix the plot file name.
 #' Default is `NULL`
 #' @param af A logical value indicating whether autofluorescence removal is
 #' being performed. Default is `FALSE`
@@ -38,14 +38,14 @@
 
 spectral.ribbon.plot <- function( pos.expr.data, neg.expr.data,
                                   spectral.channel, asp, fluor.name,
-                                  plot.prefix = NULL, af = FALSE,
+                                  title = NULL, af = FALSE,
                                   removed.data = NULL, figure.dir = NULL,
                                   factor.names = NULL ){
 
   if ( !af ) {
 
-    if ( is.null( plot.prefix ) )
-      plot.prefix <- "Scatter match"
+    if ( is.null( title ) )
+      title <- "Scatter match"
 
     if ( is.null( figure.dir ) )
       figure.dir <- asp$figure.spectral.ribbon.dir
@@ -91,8 +91,8 @@ spectral.ribbon.plot <- function( pos.expr.data, neg.expr.data,
 
   } else {
 
-    if ( is.null( plot.prefix ) )
-      plot.prefix <- "AF removal"
+    if ( is.null( title ) )
+      title <- "AF removal"
 
     if ( is.null( figure.dir ) )
       figure.dir <- asp$figure.clean.control.dir
@@ -194,7 +194,7 @@ spectral.ribbon.plot <- function( pos.expr.data, neg.expr.data,
                                       face = asp$ribbon.plot.strip.text.face ) )
   )
 
-  ribbon.plot.filename <- paste( plot.prefix, fluor.name, asp$ribbon.plot.filename )
+  ribbon.plot.filename <- paste( title, fluor.name, asp$ribbon.plot.filename )
 
   suppressWarnings(
     ggsave( ribbon.plot.filename, plot = ribbon.plot,

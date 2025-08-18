@@ -15,14 +15,14 @@
 #' @param asp The AutoSpectral parameter list.
 #' Prepare using `get.autospectral.param`
 #' @param clean.expr Logical indicating whether to clean expression data.
-#' @param plot.prefix Optional prefix for the plot title.
+#' @param title Optional prefix for the plot title.
 #'
 #' @return The refined spectra matrix.
 #'
 #' @export
 
 refine.unmixing <- function( spectra.initial, flow.control, asp,
-                             clean.expr = FALSE, plot.prefix = "Refined" )
+                             clean.expr = FALSE, title = "Refined" )
 {
   if ( !dir.exists( asp$figure.slope.error.dir ) )
     dir.create( asp$figure.slope.error.dir )
@@ -39,10 +39,10 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
   if ( !dir.exists( asp$figure.similarity.heatmap.dir ) )
     dir.create( asp$figure.similarity.heatmap.dir )
 
-  if ( !is.null( plot.prefix ) ) {
-    plot.title <- paste( plot.prefix, asp$spectra.file.name )
+  if ( !is.null( title ) ) {
+    title <- paste( title, asp$spectra.file.name )
   } else {
-    plot.title <- asp$spectra.file.name
+    title <- asp$spectra.file.name
   }
 
     fluorophores <- rownames( spectra.initial )
@@ -252,7 +252,7 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
                  row.names = FALSE )
 
     # save spectral matrix
-    table.spectra.file.name <- sprintf( "%s.csv", plot.title )
+    table.spectra.file.name <- sprintf( "%s.csv", title )
 
     write.csv( spectra.update.reverted,
                  file = file.path( asp$table.spectra.dir,
@@ -285,7 +285,7 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
 
       # plot spectra
       spectral.trace( spectral.matrix = spectra.update.reverted,
-                      plot.title = plot.title,
+                      title = title,
                       plot.dir = asp$figure.spectra.dir,
                       split.lasers = TRUE,
                       asp$figure.spectra.line.size,
@@ -294,7 +294,7 @@ refine.unmixing <- function( spectra.initial, flow.control, asp,
       # plot similarity matrix heatmap
       cosine.similarity.plot( spectra.update.reverted,
                               filename = asp$similarity.heatmap.file.name,
-                              plot.prefix,
+                              title,
                               output.dir = asp$figure.similarity.heatmap.dir,
                               figure.width = asp$figure.width,
                               figure.height = asp$figure.height )

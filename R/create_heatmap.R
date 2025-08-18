@@ -15,7 +15,7 @@
 #' @param matrix Matrix or dataframe containing spectral data.
 #' @param number.labels Logical indicating whether to add number labels to
 #' the heatmap. Default is `FALSE`.
-#' @param plot.prefix Optional prefix for the plot filename. Default is `NULL`,
+#' @param title Optional prefix for the plot filename. Default is `NULL`,
 #' in which case the file will just be called `heatmap.jpg`
 #' @param legend.label Character string that will appear on the heatmap legend.
 #' Default is `heatmap`
@@ -44,7 +44,7 @@
 
 create.heatmap <- function( matrix,
                             number.labels = FALSE,
-                            plot.prefix = NULL,
+                            title = NULL,
                             legend.label = "heatmap",
                             triangular = FALSE,
                             output.dir = NULL,
@@ -53,8 +53,8 @@ create.heatmap <- function( matrix,
                             color.palette = "viridis",
                             figure.width = 8, figure.height = 6 ) {
 
-  if ( !is.null( plot.prefix ) ) {
-    heatmap.filename <- paste( plot.prefix, "heatmap.jpg" )
+  if ( !is.null( title ) ) {
+    heatmap.filename <- paste( title, "heatmap.jpg" )
   } else {
     heatmap.filename <- "heatmap.jpg"
   }

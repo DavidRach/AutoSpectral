@@ -31,7 +31,7 @@
 #' the AF signatures. Default is `TRUE`.
 #' @param plot.dir Directory (folder) where the plots will be saved. Default is
 #' `NULL`, which inherits from `asp$figure.af.dir`.
-#' @param plot.title Title for the output spectral plots. Default is
+#' @param title Title for the output spectral plots. Default is
 #' `Autofluorescence spectra`.
 #'
 #' @return A matrix of autofluorescence spectra.
@@ -44,7 +44,7 @@ get.af.spectra <- function( unstained.sample, asp,
                             max.spectra = 20, min.spectra = 5,
                             biexp = TRUE,
                             figures = TRUE, plot.dir = NULL,
-                            plot.title = "Autofluorescence spectra" ) {
+                            title = "Autofluorescence spectra" ) {
 
   # set defaults
   if ( is.null( plot.dir ) )
@@ -139,10 +139,10 @@ get.af.spectra <- function( unstained.sample, asp,
     if ( !dir.exists( plot.dir ) )
       dir.create( plot.dir )
 
-    spectral.trace( af.spectra, plot.title = plot.title,
+    spectral.trace( af.spectra, title = title,
                     plot.dir = plot.dir, split.lasers = FALSE )
 
-    spectral.heatmap( af.spectra, plot.prefix = plot.title,
+    spectral.heatmap( af.spectra, title = title,
                       output.dir = plot.dir )
   }
 

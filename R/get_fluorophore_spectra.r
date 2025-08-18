@@ -18,7 +18,9 @@
 #' @param biexp Logical indicating whether to apply biexponential
 #' transformation, default is `FALSE`
 #' @param af.spectra Optional autofluorescence spectra to include.
-#' @param plot.prefix Optional prefix for plot titles, default is `Initial`.
+#' @param title Optional prefix for plot titles, default is `NULL`, which gives
+#' "Initial" when `use.clean.expr` is `FALSE` and "Clean" when `use.clean.expr`
+#' is `TRUE`.
 #'
 #' @return A matrix with the fluorophore spectra.
 #'
@@ -26,15 +28,17 @@
 
 get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
                                      biexp = FALSE, af.spectra = NULL,
-                                     plot.prefix = "Initial" )
+                                     title = NULL )
 {
   spectra.zero <- rep( 0, flow.control$spectral.channel.n )
   names( spectra.zero ) <- flow.control$spectral.channel
 
-  if ( !is.null( plot.prefix ) ) {
-    plot.title <- paste( plot.prefix, asp$spectra.file.name )
+  if ( !is.null( title ) ) {
+    title <- paste( title, asp$spectra.file.name )
+  } else if ( use.clean.expr ) {
+    title <- paste( "Clean", asp$spectra.file.name )
   } else {
-    plot.title <- asp$spectra.file.name
+    title <- paste( "Initial", asp$spectra.file.name )
   }
 
   if ( biexp ) {
@@ -168,25 +172,25 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
     }
 
     spectral.trace( spectral.matrix = fluorophore.spectra.plot,
-                    plot.title = plot.title, plot.dir = asp$figure.spectra.dir,
+                    title = title, plot.dir = asp$figure.spectra.dir,
                     split.lasers = TRUE,
                     asp$figure.spectra.line.size,
                     asp$figure.spectra.point.size )
-    spectral.heatmap( fluorophore.spectra.plot, plot.prefix,
+    spectral.heatmap( fluorophore.spectra.plot, title,
                       output.dir = asp$figure.spectra.dir )
   }
 
   if ( !is.null( asp$table.spectra.dir ) ) {
     write.csv( fluorophore.spectra.plot,
               file = file.path( asp$table.spectra.dir,
-                               sprintf( "%s.csv", plot.title ) ) )
+                               sprintf( "%s.csv", title ) ) )
   }
 
   # cosine similarity QC for controls
   if ( asp$figures )
     cosine.similarity.plot( fluorophore.spectra.plot,
                             filename = asp$similarity.heatmap.file.name,
-                            plot.prefix,
+                            title,
                             output.dir = asp$figure.similarity.heatmap.dir,
                             figure.width = asp$figure.width,
                             figure.height = asp$figure.height )

@@ -36,8 +36,12 @@ read.channel <- function( control.dir, control.def.file, asp )
     check.critical( anyDuplicated( control$file.name ) == 0,
                     "duplicated filenames in fcs data" )
 
-    flow.set.channel <- colnames( suppressWarnings( flowCore::exprs( flowCore::read.FCS( file.path( control.dir,
-                                                               control$filename[ 1 ] ) ) ) ) )
+   flow.set.channel <- colnames(
+     suppressWarnings(
+       flowCore::exprs(
+         flowCore::read.FCS( file.path( control.dir, control$filename[ 1 ] ),
+                             truncate_max_range = FALSE,
+                             emptyValue = FALSE ) ) ) )
 
     # correct channel names
     flow.set.channel.corrected <- flow.set.channel

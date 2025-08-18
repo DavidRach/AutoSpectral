@@ -91,7 +91,7 @@ remove.af <- function( clean.expr.data, samp, af.artefact, spectral.channel,
 
     spectral.ribbon.plot( expr.data, expr.data[ gate.population.idx, ],
                           spectral.channel, asp, samp,
-                          plot.prefix = asp$af.plot.filename,
+                          title = asp$af.plot.filename,
                           af = TRUE,
                           removed.data = expr.data[ -gate.population.idx, ] )
 

@@ -15,7 +15,7 @@
 #' @param spectral.matrix Matrix or dataframe containing spectral data. This
 #' should be in format fluorophores x detectors. Row names will be used as the
 #' fluorophore names. Column names will be used as the detectors (channels).
-#' @param plot.title Title for the plot. Default is `Fluorophore Spectra`
+#' @param title Title for the plot. Default is `Fluorophore Spectra`
 #' @param plot.dir Directory to save the plot files. Default is `NULL`, in
 #' which case the current working directory will be used.
 #' @param split.lasers Logical indicating whether to create a second plot split
@@ -34,7 +34,7 @@
 #' @export
 
 spectral.trace <- function( spectral.matrix,
-                            plot.title = "Fluorophore Spectra",
+                            title = "Fluorophore Spectra",
                             plot.dir = NULL, split.lasers = TRUE,
                             figure.spectra.line.size = 1,
                             figure.spectra.point.size = 1,
@@ -67,7 +67,7 @@ spectral.trace <- function( spectral.matrix,
   fluor.spectra.plotting$Laser <- factor( fluor.spectra.plotting$Laser,
                                           levels = laser.order )
 
-  plot.width <- ( ncol( fluor.spectra.plotting ) - 1 ) / 64 * 12
+  plot.width <- max( ( ( ncol( fluor.spectra.plotting ) - 1 ) / 64 * 12 ), 3 )
   plot.height <- 5 + round( nrow( fluor.spectra.plotting ) / 8, 0 )
 
   fluor.spectra.long <- tidyr::pivot_longer( fluor.spectra.plotting,
@@ -84,7 +84,7 @@ spectral.trace <- function( spectral.matrix,
                              group = Fluorophore, color = Fluorophore ) ) +
     geom_path( linewidth = figure.spectra.line.size ) +
     geom_point( size = figure.spectra.point.size ) +
-    labs( title = plot.title,
+    labs( title = title,
          x = "Detector",
          y = "Normalized Intensity" ) +
     theme_minimal() +
@@ -96,7 +96,7 @@ spectral.trace <- function( spectral.matrix,
       scale_color_viridis_d( option = color.palette )
   }
 
-  ggsave( file.path( plot.dir, sprintf( "%s.jpg", plot.title )),
+  ggsave( file.path( plot.dir, sprintf( "%s.jpg", title )),
           spectra.plot,
           width = plot.width, height = plot.height,
           limitsize = FALSE )
@@ -114,7 +114,7 @@ spectral.trace <- function( spectral.matrix,
       geom_path( linewidth = figure.spectra.line.size ) +
       geom_point( size = figure.spectra.point.size ) +
       facet_wrap( ~ Laser, nrow = laser.n ) +
-      labs( title = plot.title,
+      labs( title = title,
             x = "Detector",
             y = "Normalized Intensity" ) +
       theme_minimal() +
@@ -126,7 +126,7 @@ spectral.trace <- function( spectral.matrix,
         scale_color_viridis_d( option = color.palette )
     }
 
-    ggsave( file.path( plot.dir, sprintf( "%s by laser.jpg", plot.title ) ),
+    ggsave( file.path( plot.dir, sprintf( "%s by laser.jpg", title ) ),
             spectra.plot.split,
             width = plot.width, height = plot.height,
             limitsize = FALSE )
