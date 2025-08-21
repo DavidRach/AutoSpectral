@@ -9,7 +9,7 @@ refine.unmixing(
   flow.control,
   asp,
   clean.expr = FALSE,
-  plot.prefix = "Refined"
+  title = "Refined"
 )
 }
 \arguments{
@@ -22,7 +22,7 @@ Prepare using \code{get.autospectral.param}}
 
 \item{clean.expr}{Logical indicating whether to clean expression data.}
 
-\item{plot.prefix}{Optional prefix for the plot title.}
+\item{title}{Optional prefix for the plot title.}
 }
 \value{
 The refined spectra matrix.

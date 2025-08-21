@@ -14,7 +14,7 @@ get.af.spectra(
   biexp = TRUE,
   figures = TRUE,
   plot.dir = NULL,
-  plot.title = "Autofluorescence spectra"
+  title = "Autofluorescence spectra"
 )
 }
 \arguments{
@@ -46,7 +46,7 @@ the AF signatures. Default is \code{TRUE}.}
 \item{plot.dir}{Directory (folder) where the plots will be saved. Default is
 \code{NULL}, which inherits from \code{asp$figure.af.dir}.}
 
-\item{plot.title}{Title for the output spectral plots. Default is
+\item{title}{Title for the output spectral plots. Default is
 \verb{Autofluorescence spectra}.}
 }
 \value{

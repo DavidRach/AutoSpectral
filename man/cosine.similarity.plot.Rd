@@ -7,7 +7,7 @@
 cosine.similarity.plot(
   spectra,
   filename = "autospectral_similarity_matrix",
-  plot.prefix = NULL,
+  title = NULL,
   output.dir = "figure_similarity_heatmap",
   figure.width = 8,
   figure.height = 6,
@@ -20,7 +20,7 @@ cosine.similarity.plot(
 \item{filename}{Character string for the output file. Default is
 \code{autospectral_similarity_matrix}.}
 
-\item{plot.prefix}{Optional prefix for the plot filename. Default is \code{NULL}}
+\item{title}{Optional prefix for the plot filename. Default is \code{NULL}}
 
 \item{output.dir}{File path where the plot will be created. Default is
 \code{figure_similarity_heatmap}. The directory will be created if it does not

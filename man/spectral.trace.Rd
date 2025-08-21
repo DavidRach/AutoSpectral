@@ -6,7 +6,7 @@
 \usage{
 spectral.trace(
   spectral.matrix,
-  plot.title = "Fluorophore Spectra",
+  title = "Fluorophore Spectra",
   plot.dir = NULL,
   split.lasers = TRUE,
   figure.spectra.line.size = 1,
@@ -19,7 +19,7 @@ spectral.trace(
 should be in format fluorophores x detectors. Row names will be used as the
 fluorophore names. Column names will be used as the detectors (channels).}
 
-\item{plot.title}{Title for the plot. Default is \verb{Fluorophore Spectra}}
+\item{title}{Title for the plot. Default is \verb{Fluorophore Spectra}}
 
 \item{plot.dir}{Directory to save the plot files. Default is \code{NULL}, in
 which case the current working directory will be used.}

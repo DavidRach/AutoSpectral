@@ -10,7 +10,7 @@ spectral.ribbon.plot(
   spectral.channel,
   asp,
   fluor.name,
-  plot.prefix = NULL,
+  title = NULL,
   af = FALSE,
   removed.data = NULL,
   figure.dir = NULL,
@@ -28,7 +28,7 @@ spectral.ribbon.plot(
 
 \item{fluor.name}{A character string specifying the fluorophore name.}
 
-\item{plot.prefix}{A character string to prefix the plot file name.
+\item{title}{A character string to prefix the plot file name.
 Default is \code{NULL}}
 
 \item{af}{A logical value indicating whether autofluorescence removal is

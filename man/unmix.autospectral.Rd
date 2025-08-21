@@ -10,7 +10,8 @@ unmix.autospectral(
   af.spectra,
   weighted = FALSE,
   weights = NULL,
-  calculate.error = FALSE
+  calculate.error = FALSE,
+  use.dist0 = FALSE
 )
 }
 \arguments{
@@ -34,6 +35,11 @@ channel means (Poisson variance). Only used if \code{weighted}.}
 
 \item{calculate.error}{Logical, whether to calculate the RMSE unmixing model
 accuracy and include it as an output.}
+
+\item{use.dist0}{Logical, controls whether the selection of the optimal AF
+signature for each cell is determined by which unmixing brings the cell
+closest to 0 (\code{use.dist0} = \code{TRUE}) or by which unmixing minimizes the
+per-cell residual (\code{use.dist0} = \code{FALSE}). Default is \code{FALSE}.}
 }
 \value{
 Unmixed data with cells in rows and fluorophores in columns.

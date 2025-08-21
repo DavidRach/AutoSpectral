@@ -10,7 +10,7 @@ get.fluorophore.spectra(
   use.clean.expr = FALSE,
   biexp = FALSE,
   af.spectra = NULL,
-  plot.prefix = "Initial"
+  title = NULL
 )
 }
 \arguments{
@@ -27,7 +27,9 @@ transformation, default is \code{FALSE}}
 
 \item{af.spectra}{Optional autofluorescence spectra to include.}
 
-\item{plot.prefix}{Optional prefix for plot titles, default is \code{Initial}.}
+\item{title}{Optional prefix for plot titles, default is \code{NULL}, which gives
+"Initial" when \code{use.clean.expr} is \code{FALSE} and "Clean" when \code{use.clean.expr}
+is \code{TRUE}.}
 }
 \value{
 A matrix with the fluorophore spectra.

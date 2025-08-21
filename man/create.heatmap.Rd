@@ -7,7 +7,7 @@
 create.heatmap(
   matrix,
   number.labels = FALSE,
-  plot.prefix = NULL,
+  title = NULL,
   legend.label = "heatmap",
   triangular = FALSE,
   output.dir = NULL,
@@ -25,7 +25,7 @@ create.heatmap(
 \item{number.labels}{Logical indicating whether to add number labels to
 the heatmap. Default is \code{FALSE}.}
 
-\item{plot.prefix}{Optional prefix for the plot filename. Default is \code{NULL},
+\item{title}{Optional prefix for the plot filename. Default is \code{NULL},
 in which case the file will just be called \code{heatmap.jpg}}
 
 \item{legend.label}{Character string that will appear on the heatmap legend.

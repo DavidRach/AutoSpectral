@@ -6,7 +6,7 @@
 \usage{
 spectral.heatmap(
   spectra,
-  plot.prefix = NULL,
+  title = NULL,
   legend.label = "Intensity",
   output.dir = NULL,
   color.palette = "viridis"
@@ -16,7 +16,7 @@ spectral.heatmap(
 \item{spectra}{Matrix or dataframe containing spectral data
 format: fluorophores x detectors.}
 
-\item{plot.prefix}{Optional prefix for the plot filename.}
+\item{title}{Optional prefix for the plot filename.}
 
 \item{legend.label}{Character string that will appear on the heatmap legend.}
 

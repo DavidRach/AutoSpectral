@@ -44,6 +44,10 @@
 #' the written FCS file: relevant for S8 and A8. Default is `FALSE`
 #' @param calculate.error Logical, whether to calculate the RMSE unmixing model
 #' accuracy and include it as a keyword in the FCS file.
+#' @param use.dist0 Logical, controls whether the selection of the optimal AF
+#' signature for each cell is determined by which unmixing brings the cell
+#' closest to 0 (`use.dist0` = `TRUE`) or by which unmixing minimizes the
+#' per-cell residual (`use.dist0` = `FALSE`). Default is `FALSE`.
 #' @param divergence.threshold Numeric. Used for `FastPoisson` only. Threshold
 #' to trigger reversion towards WLS unmixing when Poisson result diverges.
 #' Default is `1e4`
@@ -68,6 +72,7 @@ unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
                           include.raw = FALSE,
                           include.imaging = FALSE,
                           calculate.error = TRUE,
+                          use.dist0 = FALSE,
                           divergence.threshold = 1e4,
                           divergence.handling = "Balance",
                           balance.weight = 0.5 ){
@@ -89,6 +94,6 @@ unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
 
   lapply.function( files.to.unmix, FUN = unmix.fcs, spectra, asp, flow.control,
                    method, weighted, weights, af.spectra, output.dir, file.suffix,
-                   include.raw,include.imaging, calculate.error,
+                   include.raw,include.imaging, calculate.error, use.dist0,
                    divergence.threshold, divergence.handling, balance.weight )
 }

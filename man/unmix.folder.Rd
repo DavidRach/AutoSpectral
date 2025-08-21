@@ -18,6 +18,7 @@ unmix.folder(
   include.raw = FALSE,
   include.imaging = FALSE,
   calculate.error = TRUE,
+  use.dist0 = FALSE,
   divergence.threshold = 10000,
   divergence.handling = "Balance",
   balance.weight = 0.5
@@ -70,6 +71,11 @@ the written FCS file: relevant for S8 and A8. Default is \code{FALSE}}
 
 \item{calculate.error}{Logical, whether to calculate the RMSE unmixing model
 accuracy and include it as a keyword in the FCS file.}
+
+\item{use.dist0}{Logical, controls whether the selection of the optimal AF
+signature for each cell is determined by which unmixing brings the cell
+closest to 0 (\code{use.dist0} = \code{TRUE}) or by which unmixing minimizes the
+per-cell residual (\code{use.dist0} = \code{FALSE}). Default is \code{FALSE}.}
 
 \item{divergence.threshold}{Numeric. Used for \code{FastPoisson} only. Threshold
 to trigger reversion towards WLS unmixing when Poisson result diverges.
