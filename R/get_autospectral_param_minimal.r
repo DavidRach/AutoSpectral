@@ -232,7 +232,7 @@ get.autospectral.param.minimal <- function()
       figure.similarity.heatmap.dir = NULL,
 
       table.convergence.dir = NULL,
-      table.spectra.dir = NULL,
+      table.spectra.dir = "table_spectra",
       table.slope.error.dir = NULL,
 
       ### filename parameters

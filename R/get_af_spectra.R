@@ -132,6 +132,10 @@ get.af.spectra <- function( unstained.sample, asp,
   af.spectra <- t( apply( af.spectra, 2, function( x ) x / max( x ) ) )
   rownames( af.spectra ) <- paste0( "AF", 1:nrow( af.spectra ) )
 
+  # save as CSV
+  af.file.name <- paste0( asp$af.file.name, ".csv" )
+  write.csv( af.spectra, file = file.path( asp$table.spectra.dir, af.file.name ) )
+
   if ( figures ) {
     if ( asp$verbose )
       message( "Plotting spectra" )
