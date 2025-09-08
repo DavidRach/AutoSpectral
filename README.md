@@ -94,7 +94,7 @@ create.control.file( control.dir, asp )
 control.def.file <- "fcs_control_file.csv"
 
 # check the control file for errors
-control.file.errors <- check.control.file(control.dir, control.def.file, asp)
+control.file.errors <- check.control.file( control.dir, control.def.file, asp )
 
 ## Adjustments to automated gating
 # This will be covered more extensively elsewhere.
@@ -109,13 +109,12 @@ flow.control <- define.flow.control( control.dir, control.def.file, asp )
 # using separate (universal) negative samples for both beads and cells.
 # In doing so, we select cells with matching autofluorescent background and
 # restrict the calculations to the brightest events.
-flow.control <- clean.controls( flow.control, asp, universal.negative = TRUE, downsample = TRUE,
-                scatter.match = TRUE )
+flow.control <- clean.controls( flow.control, asp )
 
 # Extract the clean spectra
-univ.neg.spectra <- get.fluorophore.spectra( flow.control, asp, 
-                                            use.clean.expr = TRUE,
-                                            plot.prefix = "Universal Negative Cells" )
+univ.neg.spectra <- get.fluorophore.spectra( flow.control, asp,  
+                                             use.clean.expr = TRUE,
+                              title = "Universal Negative Cells" )
 
 # By default AutoSpectral extracts autofluorescence as a spectrum.
 # This is comparable to "Autofluorescence as a Fluorescent Tag" in SpectroFlo

@@ -5,28 +5,50 @@
 \title{Remove Autofluorescence Contamination}
 \usage{
 remove.af(
-  clean.expr.data,
+  clean.expr,
   samp,
-  af.artefact,
   spectral.channel,
+  peak.channel,
   universal.negative,
-  asp
+  asp,
+  scatter.param,
+  negative.n,
+  positive.n,
+  scatter.match = TRUE,
+  intermediate.figures = FALSE
 )
 }
 \arguments{
-\item{clean.expr.data}{List containing cleaned expression data.}
+\item{clean.expr}{List containing cleaned expression data.}
 
 \item{samp}{Sample identifier.}
 
-\item{af.artefact}{List containing autofluorescence artefacts.}
-
 \item{spectral.channel}{Vector of spectral channel names.}
 
-\item{universal.negative}{Named vector mapping samples to their
-universal negatives.}
+\item{peak.channel}{Vector of peak detection channels for fluorophores.}
+
+\item{universal.negative}{Named vector mapping samples to their matching
+negatives.}
 
 \item{asp}{The AutoSpectral parameter list.
 Prepare using \code{get.autospectral.param}}
+
+\item{scatter.param}{Vector of scatter parameters.}
+
+\item{negative.n}{Integer. Number of events to include in the downsampled
+negative population. Default is \code{asp$negative.n}.}
+
+\item{positive.n}{Integer. Number of events to include in the downsampled
+positive population. Default is \code{asp$positive.n}.}
+
+\item{scatter.match}{Logical, default is \code{TRUE}. Whether to select negative
+events based on scatter profiles matching the positive events. Defines a
+region of FSC and SSC based on the distribution of selected positive events.}
+
+\item{intermediate.figures}{Logical, if \code{TRUE} returns additional figures to
+show the inner workings of the cleaning, including definition of low-AF cell
+gates on the PCA-unmixed unstained and spectral ribbon plots of the AF
+exclusion from the unstained.}
 }
 \value{
 A matrix containing the expression data with autofluorescent events

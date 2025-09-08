@@ -20,10 +20,9 @@
 #' @param all.channels A vector of all channels to be included in the final
 #' cleaned data.
 #' @param method The PeacoQC method to use. Inherited from `PeacoQC`. Options
-#' are `all`, `MAD` or `IT`. Default is `asp$peacoqc.method`, which by default
-#' is `MAD`.
+#' are `all`, `MAD` or `IT`. Default is `MAD`.
 #' @param figures Logical. Controls whether PeacoQC plots are created. Default
-#' is `asp$figures`, for which the default is `TRUE`.
+#' is `TRUE`.
 #'
 #' @return A matrix with the cleaned expression data.
 #' @export
@@ -31,9 +30,8 @@
 do.peacoQC <- function( dirty.expr, sample.name, spectral.channel,
                         biexp.transform, transform.inv,
                         output.dir, time.param, all.channels,
-                        method = asp$peacoqc.method,
-                        figures = asp$figures
-                        ){
+                        method = "MAD",
+                        figures = TRUE ) {
 
   if ( !dir.exists( output.dir ) )
     dir.create( output.dir )

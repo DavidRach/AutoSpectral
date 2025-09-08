@@ -165,6 +165,8 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
 
   # plot spectra
   if ( asp$figures ) {
+    message( paste("\033[32m", "Plotting figures", "\033[0m" ) )
+
     fluorophore.spectra.plot <- marker.spectra
 
     if ( !is.null( af.spectra ) ) {
@@ -177,7 +179,7 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
                     asp$figure.spectra.line.size,
                     asp$figure.spectra.point.size )
     spectral.heatmap( fluorophore.spectra.plot, title,
-                      output.dir = asp$figure.spectra.dir )
+                      plot.dir = asp$figure.spectra.dir )
   }
 
   if ( !is.null( asp$table.spectra.dir ) ) {
@@ -192,8 +194,8 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
                             filename = asp$similarity.heatmap.file.name,
                             title,
                             output.dir = asp$figure.similarity.heatmap.dir,
-                            figure.width = asp$figure.width,
-                            figure.height = asp$figure.height )
+                            figure.width = asp$figure.similarity.width,
+                            figure.height = asp$figure.similarity.height )
 
   similarity.matrix <- cosine.similarity( fluorophore.spectra.plot )
 

@@ -13,8 +13,8 @@ do.peacoQC(
   output.dir,
   time.param,
   all.channels,
-  method = asp$peacoqc.method,
-  figures = asp$figures
+  method = "MAD",
+  figures = TRUE
 )
 }
 \arguments{
@@ -36,11 +36,10 @@ do.peacoQC(
 cleaned data.}
 
 \item{method}{The PeacoQC method to use. Inherited from \code{PeacoQC}. Options
-are \code{all}, \code{MAD} or \code{IT}. Default is \code{asp$peacoqc.method}, which by default
-is \code{MAD}.}
+are \code{all}, \code{MAD} or \code{IT}. Default is \code{MAD}.}
 
 \item{figures}{Logical. Controls whether PeacoQC plots are created. Default
-is \code{asp$figures}, for which the default is \code{TRUE}.}
+is \code{TRUE}.}
 }
 \value{
 A matrix with the cleaned expression data.

@@ -21,7 +21,7 @@
 #' Default is `heatmap`
 #' @param triangular Logical. Plot the lower triangle of the matrix only,
 #' diagonal included. Default is `FALSE`.
-#' @param output.dir Optional output directory. Default is `NULL`, in which case
+#' @param plot.dir Optional output directory. Default is `NULL`, in which case
 #' the working directory will be used.
 #' @param fixed.scale Logical, determines whether to use an externally supplied
 #' fixed scale (min and max) for the heatmap color scale. Useful for putting
@@ -34,8 +34,11 @@
 #' palette to be used for the fluorophore traces. Default is `viridis`. Options
 #' are the viridis color options: `magma`, `inferno`, `plasma`, `viridis`,
 #' `cividis`, `rocket`, `mako` and `turbo`.
+#' @param show.legend Logical. If `TRUE`, figure legend will be included.
 #' @param figure.width Numeric. Width of the heatmap figure. Default is `8`.
 #' @param figure.height Numeric. Height of the heatmap figure. Default is `6`.
+#' @param save Logical, if `TRUE`, saves a JPEG file to the `output.dir`.
+#' Otherwise, the plot will simply be created in the Viewer.
 #'
 #' @return Saves the heatmap plot as a JPEG file and the SSM data as a CSV file
 #' in the specified directory.
@@ -47,23 +50,24 @@ create.heatmap <- function( matrix,
                             title = NULL,
                             legend.label = "heatmap",
                             triangular = FALSE,
-                            output.dir = NULL,
+                            plot.dir = NULL,
                             fixed.scale = FALSE,
                             scale.min = NULL, scale.max = NULL,
                             color.palette = "viridis",
-                            figure.width = 8, figure.height = 6 ) {
+                            show.legend = TRUE,
+                            figure.width = 8, figure.height = 6,
+                            save = TRUE ) {
 
-  if ( !is.null( title ) ) {
+  if ( !is.null( title ) )
     heatmap.filename <- paste( title, "heatmap.jpg" )
-  } else {
+  else
     heatmap.filename <- "heatmap.jpg"
-  }
 
-  if ( is.null( output.dir ) )
-    output.dir <- getwd()
+  if ( is.null( plot.dir ) )
+    plot.dir <- getwd()
 
   # rearrange data
-  heatmap.df <- as.data.frame( matrix )
+  heatmap.df <- as.data.frame( matrix, check.names = FALSE )
   row.levels <- rownames( heatmap.df )
   col.levels <- colnames( heatmap.df )
   heatmap.df$Fluor1 <- row.levels
@@ -73,7 +77,7 @@ create.heatmap <- function( matrix,
     mutate( Fluor1 = factor( Fluor1, levels = row.levels ),
             Fluor2 = factor( Fluor2, levels = col.levels ) )
 
-  if ( triangular ){
+  if ( triangular ) {
     heatmap.long <- heatmap.long %>%
       dplyr::filter( as.integer( Fluor1 ) <= as.integer( Fluor2 ) ) %>%
       mutate( Fluor2 = factor( Fluor2, levels = rev( col.levels ) ) )
@@ -86,8 +90,8 @@ create.heatmap <- function( matrix,
   heatmap.plot <- ggplot( heatmap.long, aes( Fluor1, Fluor2, fill = value ) ) +
     geom_tile() +
     theme_classic() +
-    coord_fixed( ratio = 1) +
-    theme( axis.text.x = element_text( angle = 90, hjust = 1 ) ) +
+    coord_fixed( ratio = 1 ) +
+    theme( axis.text.x = element_text( angle = 45, hjust = 1 ) ) +
     labs( x = NULL, y = NULL, fill = legend.label )
 
   if ( fixed.scale ) {
@@ -105,8 +109,13 @@ create.heatmap <- function( matrix,
                  color = "white", size = 3 )
   }
 
-  ggsave( filename = file.path( output.dir, heatmap.filename ),
-          plot = heatmap.plot,
-          width = figure.width, height = figure.height )
+  if ( !show.legend )
+    heatmap.plot <- heatmap.plot + theme( legend.position = "none" )
 
+  if ( save )
+    ggsave( filename = file.path( plot.dir, heatmap.filename ),
+            plot = heatmap.plot,
+            width = figure.width, height = figure.height )
+  else
+    return( heatmap.plot )
 }

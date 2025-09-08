@@ -8,33 +8,46 @@
 #' define the gate boundaries and identify density maxima using numerical
 #' search and Voronoi tessellations.
 #'
-#' @importFrom deldir deldir tile.list which.tile
+#' @importFrom deldir deldir tile.list
 #' @importFrom sp point.in.polygon
-#' @importFrom tripack tri.mesh convex.hull
 #' @importFrom MASS kde2d bandwidth.nrd
 #'
 #' @param gate.data A data frame containing the gate data.
 #' @param samp A sample identifier.
 #' @param asp The AutoSpectral parameter list.
 #' Prepare using `get.autospectral.param`
+#' @param intermediate.figures Logical, if `TRUE` returns additional figures to
+#' show the inner workings of the cleaning, including definition of low-AF cell
+#' gates on the PCA-unmixed unstained and spectral ribbon plots of the AF
+#' exclusion from the unstained.
 #'
 #' @return A vector with the indexes of events inside the initial gate.
 #'
 #' @export
 
-do.gate.af <- function( gate.data, samp, asp ) {
+do.gate.af <- function( gate.data, samp, asp, intermediate.figures = FALSE ) {
 
-  gate.marker <- colnames( gate.data )
-
-  gate.bound <- NULL
-  gate.region <- NULL
-  gate.boundary <- NULL
+  # change to restrict to lower 50%
+  gate.data.trim.factor.x.min <- asp$gate.data.trim.factor.x.min.cells
+  gate.data.trim.factor.x.max <- asp$gate.data.trim.factor.x.max.cells
+  gate.data.trim.factor.y.min <- asp$gate.data.trim.factor.y.min.cells
+  gate.data.trim.factor.y.max <- asp$gate.data.trim.factor.y.max.cells
 
   gate.data.x.min <- min( gate.data[ , 1 ] )
   gate.data.x.max <- max( gate.data[ , 1 ] )
 
   gate.data.y.min <- min( gate.data[ , 2 ] )
   gate.data.y.max <- max( gate.data[ , 2 ] )
+
+  gate.data.x.min <- ( 1 - gate.data.trim.factor.x.min ) * gate.data.x.min +
+    gate.data.trim.factor.x.min * gate.data.x.max
+  gate.data.x.max <- ( 1 - gate.data.trim.factor.x.max ) * gate.data.x.min +
+    gate.data.trim.factor.x.max * gate.data.x.max
+
+  gate.data.y.min <- ( 1 - gate.data.trim.factor.y.min ) * gate.data.y.min +
+    gate.data.trim.factor.y.min * gate.data.y.max
+  gate.data.y.max <- ( 1 - gate.data.trim.factor.y.max ) * gate.data.y.min +
+    gate.data.trim.factor.y.max * gate.data.y.max
 
   grid.n <- asp$af.gate.bound.density.grid.n
 
@@ -85,23 +98,11 @@ do.gate.af <- function( gate.data, samp, asp ) {
   target.max <- gate.bound.density.max[ target.max.idx, ]
 
   gate.bound.voronoi <- deldir( gate.bound.density.max,
-                                rw = c( gate.data.x.min, gate.data.x.max, gate.data.y.min,
-                                        gate.data.y.max ), suppressMsge = TRUE )
+                                rw = c( gate.data.x.min, gate.data.x.max,
+                                        gate.data.y.min, gate.data.y.max ),
+                                suppressMsge = TRUE )
 
   tiles <- tile.list( gate.bound.voronoi )
-
-  gate.bound <- list(
-    density = gate.bound.density,
-    density.max = gate.bound.density.max,
-    density.max.n = gate.bound.density.max.n,
-    density.max.data.idx = target.max.idx,
-    density.max.target = target.max,
-    voronoi = gate.bound.voronoi,
-    x.low = gate.data.x.min,
-    x.high = gate.data.x.max,
-    y.low = gate.data.y.min,
-    y.high = gate.data.y.max
-  )
 
   # Identify points in the tile of the global maximum
   target.tile <- tiles[[ target.max.idx ]]
@@ -123,129 +124,30 @@ do.gate.af <- function( gate.data, samp, asp ) {
   gate.region.y.low <- min( gate.region.data[ , 2 ] )
   gate.region.y.high <- max( gate.region.data[ , 2 ] )
 
-  # get density maxima in region
-  gate.region.density <- MASS::kde2d(
-    gate.data[ gate.region.data.idx, 1 ], gate.data[ gate.region.data.idx, 2 ],
-    asp$af.gate.density.bw.factor * apply( gate.data[ gate.region.data.idx, ], 2,
-                                           bandwidth.nrd ),
-    n = grid.n )
-
-  gate.region.neighbor.idx <- list( x = - neighbor.n : neighbor.n,
-                                    y = - neighbor.n : neighbor.n )
-
-  gate.region.density.max.bool <- matrix( FALSE, nrow = grid.n, ncol = grid.n )
-
-  for ( x.idx in 1 : grid.n )
-    for ( y.idx in 1 : grid.n )
-      gate.region.density.max.bool[ x.idx, y.idx ] <-
-    gate.region.density$z[ x.idx, y.idx ] >=
-    max( gate.region.density$z[
-      pmax( 0, pmin( grid.n, x.idx + gate.region.neighbor.idx$x ) ),
-      pmax( 0, pmin( grid.n, y.idx + gate.region.neighbor.idx$y ) ) ] )
-
-  gate.region.density.max.idx <- which( gate.region.density.max.bool,
-                                        arr.ind = TRUE )
-
-  gate.region.density.max.n <- nrow( gate.region.density.max.idx )
-
-  check.critical( gate.region.density.max.n >= 1,
-                  paste( "gate error: no population found in sample region", samp ) )
-
-  gate.region.density.max <- data.frame(
-    x = gate.region.density$x[ gate.region.density.max.idx[ , 1 ] ],
-    y = gate.region.density$y[ gate.region.density.max.idx[ , 2 ] ],
-    z = gate.region.density$z[ gate.region.density.max.idx ] )
-
-  gate.region.density.max <- gate.region.density.max[
-    order( gate.region.density.max$z, decreasing = TRUE ), ]
-
-  row.names( gate.region.density.max ) <- NULL
-  gate.region.density.max$num.label <- paste0( " ",
-                                               row.names( gate.region.density.max ) )
-
-  if ( gate.region.density.max.n > 1 ) {
-
-    # get voronoi tesselation for density maxima
-    gate.region.voronoi <- deldir( gate.region.density.max,
-                                   rw = c( gate.region.x.low, gate.region.x.high,
-                                           gate.region.y.low, gate.region.y.high ),
-                                   suppressMsge = TRUE )
-
-    gate.region.tile <- tile.list( gate.region.voronoi )
-
-    # get data in the tile of largest maximum
-    gate.region.density.max.data.idx <- gate.region.data.idx[
-      sapply( gate.region.data.idx, function( grdi )
-        which.tile( gate.data[ grdi, 1 ], gate.data[ grdi, 2 ],
-                    gate.region.tile ) == 1 )
-    ]
-  } else {
-    gate.region.voronoi <- NULL
-    gate.region.density.max.data.idx <- gate.region.data.idx
-
-  }
-
-  gate.region <- list(
-    data.idx = gate.region.data.idx,
-    density = gate.region.density,
-    density.max = gate.region.density.max,
-    density.max.n = gate.region.density.max.n,
-    density.max.data.idx = gate.region.density.max.data.idx,
-    voronoi = gate.region.voronoi,
-    x.low = gate.region.x.low,
-    x.high = gate.region.x.high,
-    y.low = gate.region.y.low,
-    y.high = gate.region.y.high
+  # define gate.region for plotting
+  gate.region <- data.frame(
+    x = c(
+      gate.region.x.low,
+      gate.region.x.high,
+      gate.region.x.high,
+      gate.region.x.low,
+      gate.region.x.low
+    ),
+    y = c(
+      gate.region.y.low,
+      gate.region.y.low,
+      gate.region.y.high,
+      gate.region.y.high,
+      gate.region.y.low )
   )
 
-  # threshold data in region around target maximum
-  gate.region.max.density <- MASS::kde2d(
-    gate.data[ gate.region.density.max.data.idx, 1 ],
-    gate.data[ gate.region.density.max.data.idx, 2 ],
-    asp$af.gate.density.bw.factor *
-      apply( gate.data[ gate.region.density.max.data.idx, ], 2,
-             bandwidth.nrd ),
-    n = grid.n )
+  if ( asp$figures & intermediate.figures )
+    gate.af.identify.plot( gate.data, samp, gate.region, gate.bound.density, asp )
 
-  gate.region.max.density.interp <- interp.surface( gate.region.max.density,
-                                                    gate.data[ gate.region.density.max.data.idx, ] )
-
-  gate.region.max.density.threshold <-
-    ( 1 - asp$af.gate.param$density.threshold ) *
-    min( gate.region.max.density.interp ) +
-    asp$af.gate.param$density.threshold * max( gate.region.max.density.interp )
-
-  gate.population.strict.idx <- gate.region.density.max.data.idx[
-    gate.region.max.density.interp > gate.region.max.density.threshold ]
-
-  gate.population.strict.idx <- gate.population.strict.idx[
-    ! duplicated( data.frame( gate.data[ gate.population.strict.idx, ] ) ) ]
-
-  gate.population.boundary <- convex.hull( tri.mesh(
-    gate.data[ gate.population.strict.idx, 1 ],
-    gate.data[ gate.population.strict.idx, 2 ] ) )
-
-  gate.population.pip <- point.in.polygon(
-    gate.data[ , 1 ], gate.data[ , 2 ],
-    gate.population.boundary$x, gate.population.boundary$y )
-
-  gate.population <- list( boundary = gate.population.boundary )
-
-  if ( ! is.null( asp$figure.clean.control.dir ) )
-    gate.af.plot( samp, gate.data, gate.bound, gate.region,
-                  gate.population, asp )
-
-  if ( asp$af.gate.bound.strict ) {
-
-    gate.population.idx <- which( gate.population.pip != 0 )
-
-  } else {
-
-    gate.population.idx <- which( gate.data[ , 1 ] > gate.region.x.low &
-                                    gate.data[ , 1 ] < gate.region.x.high &
-                                    gate.data[ , 2 ] > gate.region.y.low &
-                                    gate.data[ , 2 ] < gate.region.y.high )
-  }
+  gate.population.idx <- which( gate.data[ , 1 ] > gate.region.x.low &
+                                  gate.data[ , 1 ] < gate.region.x.high &
+                                  gate.data[ , 2 ] > gate.region.y.low &
+                                  gate.data[ , 2 ] < gate.region.y.high )
 
   return( gate.population.idx )
 }

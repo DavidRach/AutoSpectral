@@ -7,11 +7,9 @@
 get.af.spectra(
   unstained.sample,
   asp,
-  spectral.channels = flow.control$spectral.channel,
-  similarity = 0.99,
-  max.spectra = 20,
-  min.spectra = 5,
-  biexp = TRUE,
+  spectra,
+  threads = NULL,
+  som.dim = 10,
   figures = TRUE,
   plot.dir = NULL,
   title = "Autofluorescence spectra"
@@ -24,21 +22,13 @@ stained samples to which the AF will be applied, ideally.}
 
 \item{asp}{The AutoSpectral parameter list.}
 
-\item{spectral.channels}{The fluorescence detector channels that will be used
-to identify the autofluorescence. These should match the channels used for
-subsequent unmixing and should normally be all fluorescent area measurements.
-Default is \code{flow.control$spectral.channel}.}
+\item{spectra}{Spectral signatures of fluorophores, normalized between 0
+and 1, with fluorophores in rows and detectors in columns.}
 
-\item{similarity}{Numeric between 0 and 1, default is \code{0.99}. The cosine
-similarity value that will trigger merging of FlowSOM nodes to create
-metaclusters that define the autofluorescence signatures.}
+\item{threads}{Numeric. Number of threads to use for parallel processing in
+the creation of the SOM. Default \code{NULL} reverts to \code{asp$worker.process.n}.}
 
-\item{max.spectra}{Maximum number of AF signatures to return. Default is \code{20}.}
-
-\item{min.spectra}{Minimum number of AF signatures to return. Default is \code{5}.}
-
-\item{biexp}{Logical, whether to use a biexponential transform on the data
-prior to clustering. Default is \code{TRUE}.}
+\item{som.dim}{Number of x and y dimensions for the SOM. Default is \code{10}.}
 
 \item{figures}{Logical, whether to plot the spectral traces and heatmap for
 the AF signatures. Default is \code{TRUE}.}

@@ -8,42 +8,71 @@
 #'
 #' @importFrom sp point.in.polygon
 #' @importFrom flowWorkspace flowjo_biexp
+#' @importFrom stats prcomp
 #'
-#' @param clean.expr.data List containing cleaned expression data.
+#' @param clean.expr List containing cleaned expression data.
 #' @param samp Sample identifier.
-#' @param af.artefact List containing autofluorescence artefacts.
 #' @param spectral.channel Vector of spectral channel names.
-#' @param universal.negative Named vector mapping samples to their
-#' universal negatives.
+#' @param peak.channel Vector of peak detection channels for fluorophores.
+#' @param universal.negative Named vector mapping samples to their matching
+#' negatives.
 #' @param asp The AutoSpectral parameter list.
 #' Prepare using `get.autospectral.param`
+#' @param scatter.param Vector of scatter parameters.
+#' @param negative.n Integer. Number of events to include in the downsampled
+#' negative population. Default is `asp$negative.n`.
+#' @param positive.n Integer. Number of events to include in the downsampled
+#' positive population. Default is `asp$positive.n`.
+#' @param scatter.match Logical, default is `TRUE`. Whether to select negative
+#' events based on scatter profiles matching the positive events. Defines a
+#' region of FSC and SSC based on the distribution of selected positive events.
+#' @param intermediate.figures Logical, if `TRUE` returns additional figures to
+#' show the inner workings of the cleaning, including definition of low-AF cell
+#' gates on the PCA-unmixed unstained and spectral ribbon plots of the AF
+#' exclusion from the unstained.
 #'
 #' @return A matrix containing the expression data with autofluorescent events
 #' removed for the sample.
 #'
 #' @export
 
-remove.af <- function( clean.expr.data, samp, af.artefact, spectral.channel,
-                       universal.negative, asp ) {
+remove.af <- function( clean.expr, samp, spectral.channel, peak.channel,
+                       universal.negative, asp, scatter.param,
+                       negative.n, positive.n,
+                       scatter.match = TRUE,
+                       intermediate.figures = FALSE ) {
 
   if ( asp$verbose )
-    message( paste( "\033[34m", "Removing autofluorescence contamination in", samp,
-                    "\033[0m" ) )
+    message( paste( "\033[34m", "Identifying autofluorescence contamination in",
+                    samp, "\033[0m" ) )
 
   # match universal negative
   matching.negative <- universal.negative[[ samp ]]
 
-  # extract matching af.artefact
-  matching.artefact <- af.artefact[[ matching.negative ]]
+  # get expr data for negative
+  expr.data.neg <- clean.expr[[ matching.negative ]]
 
-  af.components <- matching.artefact[[ 1 ]]
-  af.boundaries <- matching.artefact[[ 2 ]]
+  if ( nrow( expr.data.neg ) > asp$af.gate.downsample.n.cells ) {
+    set.seed( asp$gate.downsample.seed )
+    downsample.idx <- sample( nrow( expr.data.neg ), asp$af.gate.downsample.n.cells )
+    expr.data.neg <- expr.data.neg[ downsample.idx, ]
+  }
 
-  # get expr data for sample
-  expr.data <- clean.expr.data[[ samp ]][ , spectral.channel ]
+  # use PCA to project autofluorescence
+  expr.data.center <- apply( expr.data.neg[ , spectral.channel ], 2, median )
+  expr.data.scale <- apply( expr.data.neg[ , spectral.channel ], 2, mad )
 
-  # unmix with the autofluorescence signatures only
-  gate.data <- unmix.ols( expr.data, af.components )
+  scaled.data <- scale( expr.data.neg[ , spectral.channel ], center = expr.data.center,
+                        scale = expr.data.scale )
+
+  af.pca <- prcomp( scaled.data, center = FALSE, scale. = FALSE )
+
+  # use the first 2 components to identify main AF signatures to be removed
+  af.components <- apply( af.pca$rotation[ , 1:2 ], 2, function( x ) x / max( x ) )
+  af.components <- t( apply( af.components, 2, function( x ) x / max( x ) ) )
+
+  # unmix using first two components plus crude fluorophore spectrum
+  unmixed.neg <- unmix.ols( expr.data.neg[ , spectral.channel ], af.components )
 
   biexp.transform <- flowjo_biexp( channelRange = asp$default.transformation.param$length,
                                    maxValue = asp$default.transformation.param$max.range,
@@ -51,52 +80,240 @@ remove.af <- function( clean.expr.data, samp, af.artefact, spectral.channel,
                                    neg = asp$default.transformation.param$neg,
                                    widthBasis = asp$default.transformation.param$width,
                                    inverse = FALSE )
+  zero.point <- biexp.transform( 0 )
 
-  gate.data <- apply( gate.data, 2, biexp.transform )
+  # transform for easier visualization and faster gating
+  unmixed.neg <- apply( unmixed.neg, 2, biexp.transform )
+  unmixed.neg <- unmixed.neg - zero.point
 
-  # apply af boundary gates
-  if ( asp$af.remove.pop != 1 & !is.null( af.boundaries$lower ) ) {
-    gate.population.pip.lower <- point.in.polygon(
-      gate.data[ , 1 ], gate.data[ , 2 ],
-      af.boundaries$lower$x, af.boundaries$lower$y )
+  # determine which component has the most variation (intrusive AF)
+  af.sd <- apply( unmixed.neg[ , 1:2 ], 2, sd )
+  af.order <- order( af.sd, decreasing = TRUE )
 
-    gate.population.pip.upper <- point.in.polygon(
-      gate.data[ , 1 ], gate.data[ , 2 ],
-      af.boundaries$upper$x, af.boundaries$upper$y )
+  # get gate defining low AF region
+  af.gate.idx <- do.gate.af( unmixed.neg[ , af.order ], matching.negative, asp,
+                             intermediate.figures )
 
-    gate.population.idx <- which( gate.population.pip.lower == 0 &
-                                    gate.population.pip.upper == 0 )
+  # get corresponding raw data (non-PCA)
+  af.cells <- expr.data.neg[ -af.gate.idx, , drop = FALSE ]
+
+  # include up to 500 non-AF cells
+  if ( length( af.gate.idx ) > 500 ) {
+    set.seed( asp$gate.downsample.seed )
+    sample.idx <- sample( af.gate.idx, 500 )
+    non.af.cells <- expr.data.neg[ sample.idx, ]
   } else {
-    gate.population.pip <- point.in.polygon(
-      gate.data[ , 1 ], gate.data[ , 2 ],
-      af.boundaries$upper$x, af.boundaries$upper$y )
-
-    gate.population.idx <- which( gate.population.pip == 0 )
+    non.af.cells <- expr.data.neg[ af.gate.idx, ]
   }
 
-  # plotting
+  # get median channel difference as spectrum of intrusive AF
+  af.median <- apply( af.cells[ , spectral.channel ], 2, median )
+  non.af.median <- apply( non.af.cells[ , spectral.channel ], 2, median )
+  af.spectrum <- af.median - non.af.median
+  af.spectrum <- af.spectrum / max( abs( af.spectrum ) )
+
+  # flip if the non-AF and AF cells have gotten inverted
+  if ( max( abs( af.spectrum ) ) > max( af.spectrum ) )
+    af.spectrum <- af.spectrum * -1
+
+  # find peak, subpeak
+  af.peak <- which.max( af.spectrum )
+  af.subpeak <- which.max( af.spectrum[ af.spectrum < 0.5 ] )
+
+  # get peak channel for fluorophore
+  fluor.peak <- peak.channel[[ samp ]]
+
+  # get fluorophore-stained sample data
+  expr.data.pos <- clean.expr[[ samp ]]
+
+  if ( fluor.peak == "other" ) {
+    fluor.means <- colMeans( expr.data.pos[ , spectral.channel ] )
+    fluor.peak <- names( which.max( fluor.means ) )
+  }
+
+  # use AF peak if not the same as the fluorophore peak
+  if ( names( af.peak ) == fluor.peak )
+    af.peak <- af.subpeak
+
+  af.data <- data.frame(
+    x = af.cells[ , names( af.peak ) ],
+    y = af.cells[ , fluor.peak ]
+  )
+  non.af.data <- data.frame(
+    x = non.af.cells[ , names( af.peak ) ],
+    y = non.af.cells[ , fluor.peak ]
+  )
+
+  # optionally later pass af.peak, fluor.peak as variable names
+  af.boundaries <- fit.af.spline( af.data, non.af.data, asp )
+
+  if ( asp$verbose )
+    message( paste( "\033[34m", "Removing autofluorescence contamination in",
+                    samp, "\033[0m" ) )
+
+  # find events in this bound in the stained sample
+  gate.data.pos <- expr.data.pos[ , c( names( af.peak ), fluor.peak ) ]
+
+  gate.population.pip <- point.in.polygon(
+    gate.data.pos[ , 1 ], gate.data.pos[ , 2 ],
+    af.boundaries$upper$x, af.boundaries$upper$y )
+
+  gate.population.idx <- which( gate.population.pip == 0 )
+
+  # plot data pre/post-removal
   if ( asp$figures ) {
+    if ( asp$verbose )
+      message( paste( "\033[34m", "Plotting AF removal for", samp, "\033[0m" ) )
 
-    if ( asp$af.remove.pop != 1 & !is.null( af.boundaries$lower ) ) {
-      gate.af.sample.plot( samp, af.data = gate.data,
-                           af.boundaries$lower,
-                           af.boundaries$upper,
-                           asp )
-    } else {
-      gate.af.sample.plot( samp, af.data = gate.data,
-                           af.boundary.lower = NULL,
-                           af.boundary.upper = af.boundaries$upper,
-                           asp )
-    }
+    # set limit for plotting of gate
+    af.boundary.ggp <- data.frame(
+      x = c( af.boundaries$upper$x,
+             af.boundaries$upper$x[ 1 ] ),
+      y = c( af.boundaries$upper$y,
+             af.boundaries$upper$y[ 1 ] )
+    )
 
-    spectral.ribbon.plot( expr.data, expr.data[ gate.population.idx, ],
+    af.boundary.ggp[ af.boundary.ggp > asp$expr.data.max ] <- asp$expr.data.max
+    af.boundary.ggp[ af.boundary.ggp < asp$expr.data.min ] <- asp$expr.data.min
+
+    # plot stained control clean-up
+    spectral.ribbon.plot( expr.data.pos,
+                          expr.data.pos[ gate.population.idx, , drop = FALSE ],
                           spectral.channel, asp, samp,
                           title = asp$af.plot.filename,
                           af = TRUE,
-                          removed.data = expr.data[ -gate.population.idx, ] )
+                          removed.data = expr.data.pos[ -gate.population.idx,
+                                                        , drop = FALSE ] )
+
+    # plot AF removal gating on stained control
+    gate.af.sample.plot( gate.data.pos, samp, af.boundary.ggp, asp )
+
+    if ( intermediate.figures ) {
+      # define negative clean-up for plotting
+      gate.data.neg <- expr.data.neg[ , c( names( af.peak ), fluor.peak ) ]
+
+      gate.population.pip <- point.in.polygon(
+        gate.data.neg[ , 1 ], gate.data.neg[ , 2 ],
+        af.boundaries$upper$x, af.boundaries$upper$y )
+
+      gate.neg.idx <- which( gate.population.pip == 0 )
+      negative.label <- paste( samp, "negative", matching.negative )
+
+      # plot negative clean-up
+      spectral.ribbon.plot( expr.data.neg,
+                            expr.data.neg[ gate.neg.idx, , drop = FALSE ],
+                            spectral.channel, asp, negative.label,
+                            title = asp$af.plot.filename,
+                            af = TRUE,
+                            removed.data = expr.data.neg[ -gate.neg.idx,
+                                                          , drop = FALSE ] )
+
+      # plot AF removal gating on negative control
+      gate.af.sample.plot( gate.data.neg, negative.label, af.boundary.ggp, asp )
+    }
+  }
+
+  if ( scatter.match ) {
+    if ( asp$verbose )
+      message( paste( "\033[34m", "Getting scatter-matched negatives for",
+                      samp, "\033[0m" ) )
+
+    # define positive events as those above a threshold (default 99.5%) in the negative
+    if ( samp == "AF" )
+      threshold <- asp$positivity.threshold.af
+    else
+      threshold <- asp$positivity.threshold
+
+    # peak channel data
+    pos.peak.channel <- expr.data.pos[ gate.population.idx, fluor.peak ]
+    neg.peak.channel <- expr.data.neg[ gate.neg.idx, fluor.peak ]
+
+    # determine threshold for positivity based on cleaned negative
+    positivity.threshold <- quantile( neg.peak.channel, threshold )
+    pos.above.threshold <- pos.peak.channel[ pos.peak.channel > positivity.threshold ]
+
+    # warn if few events in positive
+    if ( length( pos.above.threshold ) < asp$min.cell.warning.n )
+      warning( paste( "\033[31m", "Warning! Fewer than",  asp$min.cell.warning.n,
+                      "positive events in", samp,  "\033[0m", "\n" )  )
+
+    # stop if fewer than minimum acceptable events, returning original data
+    if ( length( pos.above.threshold ) < asp$min.cell.stop.n ) {
+      warning( paste( "\033[31m", "Warning! Fewer than",  asp$min.cell.stop.n,
+                      "positive events in", samp, "\n",
+                      "Returning original data", "\033[0m", "\n" )  )
+      return( clean.expr[[ samp ]][ gate.population.idx, ] )
+    }
+
+    # select only brightest positive.n events
+    if ( length( pos.above.threshold ) >= positive.n )
+      pos.selected <- sort( pos.above.threshold, decreasing = TRUE )[ 1:positive.n ]
+    else
+      pos.selected <- pos.above.threshold
+
+    # scatter-match based on positive scatter profile
+    pos.selected.expr <- expr.data.pos[ names( pos.selected ), ]
+    pos.scatter.coord <- unique( pos.selected.expr[ , scatter.param ] )
+
+    pos.scatter.gate <- suppressWarnings(
+      convex.hull( tri.mesh(
+        pos.scatter.coord[ , 1 ],
+        pos.scatter.coord[ , 2 ]
+      ) ) )
+
+    neg.scatter.matched.pip <- point.in.polygon(
+      expr.data.neg[ , scatter.param[ 1 ] ],
+      expr.data.neg[ , scatter.param[ 2 ] ],
+      pos.scatter.gate$x, pos.scatter.gate$y )
+
+    neg.population.idx <- which( neg.scatter.matched.pip != 0 )
+
+    # warn if few events in negative
+    if ( length( neg.population.idx ) < asp$min.cell.warning.n )
+      warning( paste( "\033[31m", "Warning! Fewer than",  asp$min.cell.warning.n,
+                      "scatter-matched negative events for", samp,  "\033[0m", "\n" ) )
+
+    # stop if fewer than minimum acceptable events, returning original negative
+    if ( length( neg.population.idx ) < asp$min.cell.stop.n ) {
+      warning( paste( "\033[31m", "Warning! Fewer than",  asp$min.cell.stop.n,
+                      "scatter-matched negative events for", samp, "\n",
+                      "Reverting to original negative. \n",  "\033[0m" ) )
+
+      return( clean.expr[[ samp ]][ gate.population.idx, ] )
+    }
+
+    if ( length( neg.population.idx ) > negative.n )
+      neg.population.idx <- sample( neg.population.idx, negative.n )
+
+    neg.scatter.matched <- expr.data.neg[ neg.population.idx, ]
+
+    if ( asp$figures ) {
+      scatter.match.plot( pos.selected.expr, neg.scatter.matched, samp,
+                          scatter.param, asp )
+
+      if ( intermediate.figures )
+        spectral.ribbon.plot( pos.selected.expr, neg.scatter.matched,
+                            spectral.channel, asp, samp )
+
+    }
+
+    return( rbind( pos.selected.expr, neg.scatter.matched ) )
 
   }
 
-  return( clean.expr.data[[ samp ]][ gate.population.idx, ] )
-
+  return( clean.expr[[ samp ]][ gate.population.idx, ] )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

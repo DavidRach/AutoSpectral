@@ -15,7 +15,6 @@
 get.autospectral.param.aurora <- function( autosp.param )
 {
   # add cytometer-specific parameters
-
   autosp.param$cytometer <- "Aurora"
 
   autosp.param$scatter.data.min.x <- 0
@@ -50,8 +49,6 @@ get.autospectral.param.aurora <- function( autosp.param )
 
   autosp.param$large.gate.scaling.x <- 1.5
   autosp.param$large.gate.scaling.y <- 4.5
-
-  # spectral parameters
 
   autosp.param$plot.gate.factor <- 1
 

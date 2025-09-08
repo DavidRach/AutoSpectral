@@ -10,7 +10,7 @@ downsample.control(
   peak.channels,
   negative.n,
   positive.n,
-  verbose = asp$verbose
+  verbose = TRUE
 )
 }
 \arguments{
@@ -25,7 +25,7 @@ sample.}
 
 \item{positive.n}{The number of positive events to select.}
 
-\item{verbose}{Logical. Default inherits from \code{asp$verbose}, i.e., \code{TRUE}.}
+\item{verbose}{Logical. Default is \code{TRUE}.}
 }
 \value{
 A matrix with the selected expression data.

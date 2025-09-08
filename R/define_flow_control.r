@@ -55,8 +55,6 @@
 #'
 #' @export
 
-
-
 define.flow.control <- function( control.dir, control.def.file, asp,
                                       gate = TRUE )
 {

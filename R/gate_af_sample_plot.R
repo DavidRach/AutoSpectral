@@ -8,111 +8,130 @@
 #' lower boundaries, using ggplot2 and other necessary packages.
 #'
 #' @importFrom ggplot2 ggplot aes scale_x_continuous scale_y_continuous
-#' @importFrom ggplot2 scale_color_gradientn theme_bw theme element_line
-#' @importFrom ggplot2 element_text element_rect margin expansion ggsave
-#' @importFrom ggplot2 guide_colorbar
+#' @importFrom ggplot2 stat_density_2d theme_bw theme element_line
+#' @importFrom ggplot2 element_text element_rect margin ggsave
+#' @importFrom ggplot2 scale_fill_viridis_c geom_path
 #' @importFrom scattermore geom_scattermore
-#' @importFrom MASS kde2d bandwidth.nrd
-#' @importFrom fields interp.surface
-#' @importFrom rlang .data
 #'
+
+#' @param plot.data Matrix containing autofluorescence data points.
 #' @param samp Sample identifier.
-#' @param af.data Matrix containing autofluorescence data points.
-#' @param af.boundary.lower Matrix containing lower boundary information.
 #' @param af.boundary.upper Matrix containing upper boundary information.
 #' @param asp The AutoSpectral parameter list.
 #' Prepare using `get.autospectral.param`
+#' @param max.points Number of points to plot (speeds up plotting). Default is
+#' `1e5`.
+#' @param color.palette Optional character string defining the viridis color
+#' palette to be used for the fluorophore traces. Default is `viridis`. Options
+#' are the viridis color options: `magma`, `inferno`, `plasma`, `viridis`,
+#' `cividis`, `rocket`, `mako` and `turbo`.
 #'
 #' @return Saves the plot as a JPEG file in the specified directory.
 #'
 #' @export
 
-gate.af.sample.plot <- function( samp, af.data,
-                                 af.boundary.lower, af.boundary.upper,
-                                 asp ) {
+gate.af.sample.plot <- function( plot.data, samp, af.boundary.upper, asp,
+                                 max.points = 1e5,
+                                 color.palette = "viridis" ) {
 
-  # get density for plotting
-  af.bound.density <- MASS::kde2d(
-    af.data[ , 1 ], af.data[ , 2 ],
-    asp$af.gate.density.bw.factor * apply( af.data, 2, bandwidth.nrd ),
-    n = asp$af.plot.density.grid.n )
+  # set plot limits
+  breaks <- asp$ribbon.breaks
 
-  af.data.ggp <- data.frame(
-    x = af.data[ , 1 ],
-    y = af.data[ , 2 ],
-    z = interp.surface( af.bound.density, af.data ) )
+  axis.labels <- sapply( breaks, function( x ) {
+    if ( x == 0 ) "0" else parse( text = paste0( "10^", log10( abs( x ) ) ) )
+  } )
 
-  if ( !is.null( af.boundary.lower ) ){
-    af.boundary.lower.ggp <- data.frame(
-      x = c( af.boundary.lower$x,
-             af.boundary.lower$x[ 1 ] ),
-      y = c( af.boundary.lower$y,
-             af.boundary.lower$y[ 1 ] )
-    )
-  }
-
-  af.boundary.upper.ggp <- data.frame(
-    x = c( af.boundary.upper$x,
-           af.boundary.upper$x[ 1 ] ),
-    y = c( af.boundary.upper$y,
-           af.boundary.upper$y[ 1 ] )
-  )
-
-  density.palette <- get.density.palette( af.data.ggp$z, asp )
+  limits <- c( asp$ribbon.plot.min, asp$expr.data.max )
 
   # get axis labels
-  axes.labels <- colnames( af.data )
+  x.lab <- colnames( plot.data )[ 1 ]
+  y.lab <- colnames( plot.data )[ 2 ]
 
-  # get data range & step
-  x.min <- min( af.data[ , 1 ] )
-  x.max <- max( af.data[ , 1 ] )
+  # set transform
+  biexp.transform <- flowjo_biexp( channelRange = asp$default.transformation.param$length,
+                                     maxValue = asp$default.transformation.param$max.range,
+                                     pos = asp$default.transformation.param$pos,
+                                     neg = asp$default.transformation.param$neg,
+                                     widthBasis = asp$default.transformation.param$width,
+                                     inverse = FALSE )
+  biexp.inverse <- flowjo_biexp( channelRange = asp$default.transformation.param$length,
+                                   maxValue = asp$default.transformation.param$max.range,
+                                   pos = asp$default.transformation.param$pos,
+                                   neg = asp$default.transformation.param$neg,
+                                   widthBasis = asp$default.transformation.param$width,
+                                   inverse = TRUE )
 
-  y.min <- min( af.data[ , 2 ] )
-  y.max <- max( af.data[ , 2 ] )
+  plot.biexp.transform <- scales::trans_new(
+    name = "biexp",
+    transform = biexp.transform,
+    inverse = biexp.inverse
+  )
 
-  x.breaks <- round( seq( x.min, x.max, length.out = 10 ) )
-  y.breaks <- round( seq( y.min, y.max, length.out = 10 ) )
+  # downsample data
+  if ( nrow( plot.data ) < max.points )
+    max.points <- nrow( plot.data )
 
-  gate.plot <- ggplot( af.data.ggp, aes( .data$x, .data$y,
-                                         color = .data$z ) ) +
+  plot.data <- data.frame(
+    x = plot.data[ 1:max.points, 1 ],
+    y = plot.data[ 1:max.points, 2 ]
+  )
+
+  # transform data
+  plot.data$x.trans <- plot.biexp.transform$transform( plot.data$x )
+  plot.data$y.trans <- plot.biexp.transform$transform( plot.data$y )
+
+  gate.plot <- ggplot( plot.data, aes( x = x.trans, y = y.trans ) ) +
+    geom_scattermore(
+      aes( x = x.trans, y = y.trans ),
+      pointsize = asp$figure.gate.point.size,
+      alpha = 1,
+      na.rm = TRUE
+    ) +
+    stat_density_2d(
+      aes( fill = after_stat( level ) ),
+      geom = "polygon",
+      contour = TRUE,
+      na.rm = TRUE ) +
+    scale_fill_viridis_c( option = color.palette ) +
     scale_x_continuous(
-      name = axes.labels[ 1 ],
-      breaks = x.breaks,
-      labels = x.breaks,
-      limits = c( x.min, x.max ),
-      expand = expansion( asp$af.figure.gate.scale.expand ) ) +
+      name = x.lab,
+      breaks = plot.biexp.transform$transform( breaks ),
+      limits = plot.biexp.transform$transform( limits ),
+      labels = axis.labels
+    ) +
     scale_y_continuous(
-      name = axes.labels[ 2 ],
-      breaks = y.breaks,
-      labels = y.breaks,
-      limits = c( y.min, y.max ),
-      expand = expansion( asp$af.figure.gate.scale.expand ) ) +
-    geom_scattermore( pointsize = 1.2 * asp$figure.gate.point.size,
-                      stroke = 0.1 * asp$figure.gate.point.size, alpha = 1, na.rm = TRUE ) +
-    scale_color_gradientn( "", labels = NULL, colors = density.palette,
-                           guide = guide_colorbar( barwidth = asp$figure.gate.bar.width,
-                                                   barheight = asp$figure.gate.bar.height ) ) +
+      name = y.lab,
+      breaks = plot.biexp.transform$transform( breaks ),
+      limits = plot.biexp.transform$transform( limits ),
+      labels = axis.labels
+    ) +
     theme_bw() +
-    theme( plot.margin = margin( asp$figure.margin, asp$figure.margin,
-                                 asp$figure.margin, asp$figure.margin ),
-           legend.margin = margin( asp$figure.gate.bar.margin,
-                                   asp$figure.gate.bar.margin, asp$figure.gate.bar.margin,
-                                   asp$figure.gate.bar.margin ),
-           axis.ticks = element_line( linewidth = asp$figure.panel.line.size ),
-           axis.text = element_text( size = asp$figure.axis.text.size ),
-           axis.title = element_text( size = asp$figure.axis.title.size ),
-           panel.border = element_rect( linewidth = asp$figure.panel.line.size ),
-           panel.grid.major = element_blank(),
-           panel.grid.minor = element_blank() )
+    theme(
+      plot.margin = margin( asp$figure.margin, asp$figure.margin,
+                            asp$figure.margin, asp$figure.margin ),
+      legend.position = "none",
+      axis.ticks = element_line( linewidth = asp$figure.panel.line.size ),
+      axis.text = element_text( size = asp$figure.axis.text.size ),
+      axis.title = element_text( size = asp$figure.axis.title.size ),
+      panel.border = element_rect( linewidth = asp$figure.panel.line.size ),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank()
+    )
 
-  gate.plot <- gate.plot +
-    geom_path( aes( .data$x, .data$y, color = NULL ),
-               data = af.boundary.upper.ggp, linewidth = asp$figure.gate.line.size )
+  if ( !is.null( af.boundary.upper ) ){
+    af.boundary.upper.ggp <- data.frame(
+      x = c( af.boundary.upper$x,
+             af.boundary.upper$x[ 1 ] ),
+      y = c( af.boundary.upper$y,
+             af.boundary.upper$y[ 1 ] )
+    )
 
-  if ( !is.null( af.boundary.lower ) ){
+    af.boundary.upper.ggp$x <- plot.biexp.transform$transform( af.boundary.upper.ggp$x )
+    af.boundary.upper.ggp$y <- plot.biexp.transform$transform( af.boundary.upper.ggp$y )
+
     gate.plot <- gate.plot +
       geom_path( aes( .data$x, .data$y, color = NULL ),
-                 data = af.boundary.lower.ggp, linewidth = asp$figure.gate.line.size )
+               data = af.boundary.upper.ggp, linewidth = asp$figure.gate.line.size )
   }
 
   ggsave( file.path( asp$figure.clean.control.dir,

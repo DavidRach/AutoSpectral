@@ -70,7 +70,7 @@ get.autospectral.param.minimal <- function()
       peacoqc.method = "MAD",
 
       # Autofluorescence gating for removal
-      af.density.threshold = 0.75,
+      af.density.threshold = 0.95,
 
       af.gate.param = list(
         density.threshold = 0.001,
@@ -78,18 +78,20 @@ get.autospectral.param.minimal <- function()
 
       af.figure.gate.scale.expand = 0.01,
 
+      af.gate.downsample.n.cells = 1e4,
       af.gate.target.max = 1,
       af.gate.density.bw.factor = 1,
       af.gate.bound.density.neigh.size = 3,
       af.gate.bound.density.grid.n = 100,
       af.gate.bound.strict = TRUE,
 
-      af.spline.x.bound.factor.low = 0.2,
-      af.spline.x.bound.factor.high = 0.99,
-      af.spline.y.bound.factor.low = 0.2,
-      af.spline.y.bound.factor.high = 0.99,
-      af.spline.maxit = 20,
-      af.spline.sd.n = 2,
+      af.spline.x.bound.factor.low = 0.05,
+      af.spline.x.bound.factor.high = 1,
+      af.spline.y.bound.factor.low = 0.1,
+      af.spline.y.bound.factor.high = 1,
+      af.spline.maxit = 100,
+      af.spline.sd.n = 5,
+      af.spline.expand = 1.5,
 
       af.remove.pop = 1,
 
@@ -99,7 +101,7 @@ get.autospectral.param.minimal <- function()
       af.plot.filename = "AF removal",
 
       # universal negative selection parameters
-      positivity.threshold = 0.995,
+      positivity.threshold = 0.99,
       positivity.threshold.af = 0.95,
       scatter.match.threshold = 0.8,
       negative.n = 1000,
@@ -112,7 +114,7 @@ get.autospectral.param.minimal <- function()
 
       ### settings to control what happens if you don't have enough data
       min.cell.warning.n = 500,
-      min.cell.stop.n = 50,
+      min.cell.stop.n = 20,
 
       ### spectral ribbon plot parameters
       ribbon.plot.min = -1e3,
@@ -230,6 +232,8 @@ get.autospectral.param.minimal <- function()
       figure.spectra.dir = NULL,
       figure.slope.error.dir = NULL,
       figure.similarity.heatmap.dir = NULL,
+      figure.similarity.width = 8.0,
+      figure.similarity.height = 6.0,
 
       table.convergence.dir = NULL,
       table.spectra.dir = "table_spectra",
@@ -265,8 +269,8 @@ get.autospectral.param.minimal <- function()
       gate.downsample.seed = 5000,
 
       # parameters for main figures
-      figure.width = 8.0,
-      figure.height = 6.0,
+      figure.width = 5.0,
+      figure.height = 5.0,
       figure.margin = 4.0,
 
       figure.panel.line.size = 0.5,

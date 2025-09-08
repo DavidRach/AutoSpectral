@@ -11,7 +11,11 @@ spectral.trace(
   split.lasers = TRUE,
   figure.spectra.line.size = 1,
   figure.spectra.point.size = 1,
-  color.palette = NULL
+  color.palette = NULL,
+  show.legend = TRUE,
+  plot.width = NULL,
+  plot.height = NULL,
+  save = TRUE
 )
 }
 \arguments{
@@ -38,6 +42,17 @@ palette to be used for the fluorophore traces. Default is \code{NULL}, in which
 case default R Brewer colors will be assigned automatically. Options are the
 viridis color options: \code{magma}, \code{inferno}, \code{plasma}, \code{viridis}, \code{cividis},
 \code{rocket}, \code{mako} and \code{turbo}.}
+
+\item{show.legend}{Logical. If \code{TRUE}, figure legend will be included.}
+
+\item{plot.width}{Optional numeric to manually set the plot width. Default
+is \code{NULL}.}
+
+\item{plot.height}{Optional numeric to manually set the plot width. Default
+is \code{NULL}.}
+
+\item{save}{Logical, if \code{TRUE}, saves a JPEG file to the \code{plot.dir}.
+Otherwise, the plot will simply be created in the Viewer.}
 }
 \value{
 Saves the plot(s) as JPEG files in the specified directory.

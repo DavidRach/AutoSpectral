@@ -29,6 +29,13 @@
 #' case default R Brewer colors will be assigned automatically. Options are the
 #' viridis color options: `magma`, `inferno`, `plasma`, `viridis`, `cividis`,
 #' `rocket`, `mako` and `turbo`.
+#' @param show.legend Logical. If `TRUE`, figure legend will be included.
+#' @param plot.width Optional numeric to manually set the plot width. Default
+#' is `NULL`.
+#' @param plot.height Optional numeric to manually set the plot width. Default
+#' is `NULL`.
+#' @param save Logical, if `TRUE`, saves a JPEG file to the `plot.dir`.
+#' Otherwise, the plot will simply be created in the Viewer.
 #'
 #' @return Saves the plot(s) as JPEG files in the specified directory.
 #' @export
@@ -38,7 +45,11 @@ spectral.trace <- function( spectral.matrix,
                             plot.dir = NULL, split.lasers = TRUE,
                             figure.spectra.line.size = 1,
                             figure.spectra.point.size = 1,
-                            color.palette = NULL ) {
+                            color.palette = NULL,
+                            show.legend = TRUE,
+                            plot.width = NULL,
+                            plot.height = NULL,
+                            save = TRUE ) {
 
   fluor.spectra.plotting <- data.frame( spectral.matrix, check.names = FALSE )
   fluor.spectra.plotting$Fluorophore <- rownames( fluor.spectra.plotting )
@@ -67,8 +78,11 @@ spectral.trace <- function( spectral.matrix,
   fluor.spectra.plotting$Laser <- factor( fluor.spectra.plotting$Laser,
                                           levels = laser.order )
 
-  plot.width <- max( ( ( ncol( fluor.spectra.plotting ) - 1 ) / 64 * 12 ), 3 )
-  plot.height <- 5 + round( nrow( fluor.spectra.plotting ) / 8, 0 )
+  if ( is.null( plot.width ) )
+    plot.width <- max( ( ( ncol( fluor.spectra.plotting ) - 1 ) / 64 * 12 ), 3 )
+
+  if ( is.null( plot.height ) )
+       plot.height <- 5 + round( nrow( fluor.spectra.plotting ) / 8, 0 )
 
   fluor.spectra.long <- tidyr::pivot_longer( fluor.spectra.plotting,
                                              -c( Fluorophore, Laser ),
@@ -91,17 +105,20 @@ spectral.trace <- function( spectral.matrix,
     theme( axis.text.x = element_text( angle = 45, hjust = 1 )  ) +
     theme( legend.position = "bottom" )
 
-  if ( !is.null( color.palette ) ) {
+  if ( !is.null( color.palette ) )
     spectra.plot <- spectra.plot +
       scale_color_viridis_d( option = color.palette )
-  }
 
-  ggsave( file.path( plot.dir, sprintf( "%s.jpg", title )),
-          spectra.plot,
-          width = plot.width, height = plot.height,
-          limitsize = FALSE )
+  if ( !show.legend )
+    spectra.plot <- spectra.plot + theme( legend.position = "none" )
 
-  if ( split.lasers ){
+  if ( save )
+    ggsave( file.path( plot.dir, sprintf( "%s.jpg", title )),
+            spectra.plot,
+            width = plot.width, height = plot.height,
+            limitsize = FALSE )
+
+  if ( split.lasers ) {
     # get number of lasers used
     laser.n <- length( unique( fluor.spectra.plotting$Laser ) )
 
@@ -121,14 +138,19 @@ spectral.trace <- function( spectral.matrix,
       theme( axis.text.x = element_text( angle = 45, hjust = 1 )  ) +
       theme( legend.position = "bottom" )
 
-    if ( !is.null( color.palette ) ) {
+    if ( !is.null( color.palette ) )
       spectra.plot.split <- spectra.plot.split +
-        scale_color_viridis_d( option = color.palette )
-    }
+      scale_color_viridis_d( option = color.palette )
 
-    ggsave( file.path( plot.dir, sprintf( "%s by laser.jpg", title ) ),
-            spectra.plot.split,
-            width = plot.width, height = plot.height,
-            limitsize = FALSE )
+    if ( !show.legend )
+      spectra.plot.split <- spectra.plot.split + theme( legend.position = "none" )
+
+    if ( save )
+      ggsave( file.path( plot.dir, sprintf( "%s by laser.jpg", title ) ),
+              spectra.plot.split,
+              width = plot.width, height = plot.height,
+              limitsize = FALSE )
+    else
+      return( spectra.plot.split )
   }
 }

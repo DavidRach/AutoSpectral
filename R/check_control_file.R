@@ -403,16 +403,19 @@ check.control.file <- function( control.dir, control.def.file, asp,
     cytometer.match <- unique( cytometer.list ) == asp$cytometer
 
     if ( !cytometer.match ) {
-      warning( paste( "The name of the cytomter in your FCS files does not match the",
-               "name in the `asp` parameter list. Please ensure you have selected",
-               "the appropriate option when calling `get.autospectral.param`.",
-               sep = "\n" ) )
-      message( paste( "\033[32mThe name of the cytomter in your FCS files does not match the",
-                      "name in the `asp` parameter list. Please ensure you have selected",
-                      "the appropriate option when calling `get.autospectral.param`.\033[0m",
-                      sep = "\n" ) )
-      warning.list$cytometer.asp.match <- list( AutoSpectral = asp$cytometer,
-                                          FCS = unique( cytometer.list ) )
+      cytometer.match <- grepl( asp$cytometer, unique( cytometer.list ) )
+      if ( !cytometer.match ) {
+        warning( paste( "The name of the cytomter in your FCS files does not match the",
+                        "name in the `asp` parameter list. Please ensure you have selected",
+                        "the appropriate option when calling `get.autospectral.param`.",
+                        sep = "\n" ) )
+        message( paste( "\033[32mThe name of the cytomter in your FCS files does not match the",
+                        "name in the `asp` parameter list. Please ensure you have selected",
+                        "the appropriate option when calling `get.autospectral.param`.\033[0m",
+                        sep = "\n" ) )
+        warning.list$cytometer.asp.match <- list( AutoSpectral = asp$cytometer,
+                                                  FCS = unique( cytometer.list ) )
+      }
     }
   }
 

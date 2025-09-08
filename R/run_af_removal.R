@@ -9,24 +9,40 @@
 #' @param clean.expr List containing cleaned expression data.
 #' @param af.removal.sample Vector of sample names for which autofluorescence
 #' removal is to be performed.
-#' @param neg.artefacts.list List of negative artefacts.
 #' @param spectral.channel Vector of spectral channel names.
+#' @param peak.channel Vector of peak detection channels for fluorophores.
 #' @param universal.negative Name of the universal negative control.
 #' @param asp The AutoSpectral parameter list.
 #' Prepare using `get.autospectral.param`
+#' @param scatter.param Vector of scatter parameters.
+#' @param negative.n Integer. Number of events to include in the downsampled
+#' negative population. Default is `500`.
+#' @param positive.n Integer. Number of events to include in the downsampled
+#' positive population. Default is `1000`.
+#' @param scatter.match Logical, default is `TRUE`. Whether to select negative
+#' events based on scatter profiles matching the positive events. Defines a
+#' region of FSC and SSC based on the distribution of selected positive events.
+#' @param intermediate.figures Logical, if `TRUE` returns additional figures to
+#' show the inner workings of the cleaning, including definition of low-AF cell
+#' gates on the PCA-unmixed unstained and spectral ribbon plots of the AF
+#' exclusion from the unstained.
 #'
 #' @return A list containing the expression data with autofluorescent events
 #' removed for each sample.
 #'
 #' @export
 
-run.af.removal <- function( clean.expr, af.removal.sample, neg.artefacts.list,
-                            spectral.channel, universal.negative, asp ) {
+run.af.removal <- function( clean.expr, af.removal.sample, spectral.channel,
+                            peak.channel, universal.negative, asp, scatter.param,
+                            negative.n = 500, positive.n = 1000,
+                            scatter.match = TRUE,
+                            intermediate.figures = FALSE ) {
 
   af.remove.expr <- lapply( af.removal.sample, function( sample.name ){
 
-    remove.af( clean.expr, sample.name, neg.artefacts.list, spectral.channel,
-               universal.negative, asp )
+    remove.af( clean.expr, sample.name, spectral.channel, peak.channel,
+               universal.negative, asp, scatter.param,
+               negative.n, positive.n, scatter.match, intermediate.figures )
 
   } )
 

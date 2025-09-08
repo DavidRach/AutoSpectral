@@ -16,7 +16,8 @@ get.universal.negative(
   spectral.channel,
   asp,
   control.type,
-  scatter.match = TRUE
+  scatter.match = TRUE,
+  intermediate.figures = FALSE
 )
 }
 \arguments{
@@ -46,6 +47,11 @@ Prepare using \code{get.autospectral.param}}
 
 \item{scatter.match}{Logical indicating whether to perform scatter matching.
 Default is \code{TRUE}.}
+
+\item{intermediate.figures}{Logical, if \code{TRUE} returns additional figures to
+show the inner workings of the cleaning, including definition of low-AF cell
+gates on the PCA-unmixed unstained and spectral ribbon plots of the AF
+exclusion from the unstained. Default is \code{FALSE} to speed up processing.}
 }
 \value{
 A data frame containing the selected positive and scatter-matched

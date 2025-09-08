@@ -25,6 +25,9 @@
 #' palette to be used for the fluorophore traces. Default is `viridis`. Options
 #' are the viridis color options: `magma`, `inferno`, `plasma`, `viridis`,
 #' `cividis`, `rocket`, `mako` and `turbo`.
+#' @param show.legend Logical. If `TRUE`, figure legend will be included.
+#' @param save Logical, if `TRUE`, saves a JPEG file to the `output.dir`.
+#' Otherwise, the plot will simply be created in the Viewer.
 #'
 #' @return Saves the heatmap plot as a JPEG file in the similarity directory.
 #'
@@ -35,13 +38,14 @@ cosine.similarity.plot <- function( spectra,
                                     title = NULL,
                                     output.dir = "figure_similarity_heatmap",
                                     figure.width = 8, figure.height = 6,
-                                    color.palette = "viridis" ){
+                                    color.palette = "viridis",
+                                    show.legend = TRUE,
+                                    save = TRUE ) {
 
-  if ( !is.null( title ) ){
+  if ( !is.null( title ) )
     similarity.heatmap.filename <- paste0( title, " ", filename, ".jpg" )
-  } else {
+  else
     similarity.heatmap.filename <- paste0( filename, ".jpg" )
-  }
 
   if ( !dir.exists( output.dir ) )
     dir.create( output.dir )
@@ -70,8 +74,15 @@ cosine.similarity.plot <- function( spectra,
     labs( x = paste( "Condition Number", condition.number ),
           y = NULL, fill = "Cosine Similarity" )
 
-  ggsave( filename = file.path( output.dir, similarity.heatmap.filename ),
-          plot = similarity.heatmap,
-          width = figure.width, height = figure.height )
+  if ( !show.legend )
+    similarity.heatmap <- similarity.heatmap + theme( legend.position = "none" )
+
+  if ( save )
+    ggsave( filename = file.path( output.dir, similarity.heatmap.filename ),
+            plot = similarity.heatmap,
+            width = figure.width, height = figure.height )
+  else
+    return( similarity.heatmap )
+
 
 }

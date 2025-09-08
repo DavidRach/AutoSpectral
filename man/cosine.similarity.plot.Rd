@@ -11,7 +11,9 @@ cosine.similarity.plot(
   output.dir = "figure_similarity_heatmap",
   figure.width = 8,
   figure.height = 6,
-  color.palette = "viridis"
+  color.palette = "viridis",
+  show.legend = TRUE,
+  save = TRUE
 )
 }
 \arguments{
@@ -34,6 +36,11 @@ already exist.}
 palette to be used for the fluorophore traces. Default is \code{viridis}. Options
 are the viridis color options: \code{magma}, \code{inferno}, \code{plasma}, \code{viridis},
 \code{cividis}, \code{rocket}, \code{mako} and \code{turbo}.}
+
+\item{show.legend}{Logical. If \code{TRUE}, figure legend will be included.}
+
+\item{save}{Logical, if \code{TRUE}, saves a JPEG file to the \code{output.dir}.
+Otherwise, the plot will simply be created in the Viewer.}
 }
 \value{
 Saves the heatmap plot as a JPEG file in the similarity directory.

@@ -77,9 +77,8 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
                        divergence.handling = "Balance",
                        balance.weight = 0.5 ){
 
-  if ( is.null( output.dir ) ){
+  if ( is.null( output.dir ) )
     output.dir <- asp$unmixed.fcs.dir
-  }
 
   # logic for default unmixing with cytometer-based selection
   if ( method == "Automatic" ) {
@@ -128,6 +127,15 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
   other.channels <- setdiff( colnames( fcs.exprs ), flow.control$spectral.channel )
   other.exprs <- fcs.exprs[ , other.channels, drop = FALSE ]
 
+  if ( !include.raw )
+    rm( fcs.exprs )
+
+  # remove imaging parameters if desired
+  if ( asp$cytometer == "FACSDiscover S8" | asp$cytometer == "FACSDiscover A8" &
+       !include.imaging ) {
+    other.exprs <- other.exprs[ , asp$time.and.scatter ]
+  }
+
   # define weights if needed
   # if A8 or S8, pull detector reliability info from FCS file
   # else, use empirical Poisson variance
@@ -136,7 +144,7 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
 
       if ( asp$cytometer == "FACSDiscover S8" | asp$cytometer == "FACSDiscover A8" ) {
         qspe <- fcs.keywords[[ "BDSPECTRAL QSPE" ]]
-        qspe.values <- strsplit(qspe, ",")[[ 1 ]]
+        qspe.values <- strsplit( qspe, ",")[[ 1 ]]
         n.channels <- as.numeric( qspe.values[ 1 ] )
         channel.names <- qspe.values[ 2:( n.channels + 1 ) ]
         weights <- as.numeric( qspe.values[ ( n.channels + 2 ):( n.channels * 2 + 1 ) ] )
@@ -205,13 +213,7 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
     unmixed.data <- unmixed.data$unmixed.data
   }
 
-  # remove imaging parameters
-  if ( asp$cytometer == "FACSDiscover S8" | asp$cytometer == "FACSDiscover A8" &
-       !include.imaging ) {
-    other.exprs <- other.exprs[ , asp$time.and.scatter ]
-  }
-
-  if ( include.raw ){
+  if ( include.raw ) {
     # add back raw exprs and others
     unmixed.data <- cbind( fcs.exprs, unmixed.data )
   } else {

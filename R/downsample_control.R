@@ -12,14 +12,14 @@
 #' @param peak.channels A vector of peak channels for the samples.
 #' @param negative.n The number of negative events to select.
 #' @param positive.n The number of positive events to select.
-#' @param verbose Logical. Default inherits from `asp$verbose`, i.e., `TRUE`.
+#' @param verbose Logical. Default is `TRUE`.
 #'
 #' @return A matrix with the selected expression data.
 #' @export
 
 downsample.control <- function( clean.expr.data, samp, peak.channels,
                                 negative.n, positive.n,
-                                verbose = asp$verbose ){
+                                verbose = TRUE ){
 
   if ( verbose )
     message( paste( "\033[34m", "Downsampling", samp, "\033[0m" ) )

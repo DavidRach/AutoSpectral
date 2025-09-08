@@ -77,9 +77,8 @@ unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
                           divergence.handling = "Balance",
                           balance.weight = 0.5 ){
 
-  if ( is.null( output.dir ) ){
+  if ( is.null( output.dir ) )
     output.dir <- asp$unmixed.fcs.dir
-  }
 
   files.to.unmix <- list.files( fcs.dir, pattern = ".fcs", full.names = TRUE )
 

@@ -18,8 +18,6 @@
 #' @param title Optional prefix for the plot title.
 #'
 #' @return The refined spectra matrix.
-#'
-#' @export
 
 refine.unmixing <- function( spectra.initial, flow.control, asp,
                              clean.expr = FALSE, title = "Refined" )

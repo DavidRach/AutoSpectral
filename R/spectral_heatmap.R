@@ -15,29 +15,32 @@
 #' format: fluorophores x detectors.
 #' @param title Optional prefix for the plot filename.
 #' @param legend.label Character string that will appear on the heatmap legend.
-#' @param output.dir Optional output directory. Default is NULL, in which case
+#' @param plot.dir Optional output directory. Default is NULL, in which case
 #' the spectra figure folder will be used.
 #' @param color.palette Optional character string defining the viridis color
 #' palette to be used for the fluorophore traces. Default is `viridis`. Options
 #' are the viridis color options: `magma`, `inferno`, `plasma`, `viridis`,
 #' `cividis`, `rocket`, `mako` and `turbo`.
+#' @param save Logical, if `TRUE`, saves a JPEG file to the `plot.dir`.
+#' Otherwise, the plot will simply be created in the Viewer.
+#' @param show.legend Logical. If `TRUE`, figure legend will be included.
 #'
 #' @return Saves the heatmap plot as a JPEG file in the specified directory.
 #'
 #' @export
 
-spectral.heatmap <- function( spectra, title = NULL,
-                              legend.label = "Intensity", output.dir = NULL,
-                              color.palette = "viridis" ) {
+spectral.heatmap <- function( spectra, title = NULL, plot.dir = NULL,
+                              legend.label = "Intensity",
+                              color.palette = "viridis",
+                              save = TRUE, show.legend = TRUE ) {
 
-  if ( !is.null( title ) ) {
+  if ( !is.null( title ) )
     heatmap.filename <- paste( title, "spectral_heatmap.jpg" )
-  } else {
+  else
     heatmap.filename <- "spectral_heatmap.jpg"
-  }
 
-  if ( is.null( output.dir ) )
-    output.dir <- getwd()
+  if ( is.null( plot.dir ) )
+    plot.dir <- getwd()
 
   heatmap.df <- data.frame( spectra, check.names = FALSE )
 
@@ -61,7 +64,13 @@ spectral.heatmap <- function( spectra, title = NULL,
     labs( x = NULL, y = NULL, fill = legend.label )+
     scale_fill_viridis_c( option = color.palette )
 
-  ggsave( filename = file.path( output.dir, heatmap.filename ),
-    plot = heatmap.plot,
-    width = plot.width, height = plot.height )
+  if ( !show.legend )
+    heatmap.plot <- heatmap.plot + theme( legend.position = "none" )
+
+  if ( save )
+    ggsave( filename = file.path( plot.dir, heatmap.filename ),
+            plot = heatmap.plot,
+            width = plot.width, height = plot.height )
+  else
+    return( heatmap.plot )
 }

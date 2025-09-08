@@ -13,8 +13,6 @@
 #' @param asp List with AutoSpectral parameters.
 #'
 #' @return None. The function saves the generated convergence plot to a file.
-#'
-#' @export
 
 convergence.plot <- function( convergence.log, asp )
 {

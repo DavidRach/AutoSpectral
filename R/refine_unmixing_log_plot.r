@@ -19,8 +19,6 @@
 #' Prepare using `get.autospectral.param`
 #'
 #' @return Saves the plot as a JPEG file in the specified directory.
-#'
-#' @export
 
 refine.unmixing.log.plot <- function( x.data, x.label, plot.file.path, asp )
 {

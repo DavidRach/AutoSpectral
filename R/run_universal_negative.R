@@ -22,6 +22,10 @@
 #' type of control: `beads` or `cells`
 #' @param scatter.match A logical value indicating whether scatter matching
 #' is performed.
+#' @param intermediate.figures Logical, if `TRUE` returns additional figures to
+#' show the inner workings of the cleaning, including definition of low-AF cell
+#' gates on the PCA-unmixed unstained and spectral ribbon plots of the AF
+#' exclusion from the unstained. Default is `FALSE` to speed up processing.
 #'
 #' @return A list containing the processed expression data for each universal
 #' negative sample.
@@ -35,18 +39,19 @@ run.universal.negative <- function( clean.expr, univ.sample,
                                     negative.n, positive.n,
                                     spectral.channel, asp,
                                     control.type,
-                                    scatter.match ){
+                                    scatter.match,
+                                    intermediate.figures = FALSE ) {
 
-  univ.expr <- lapply( univ.sample, function( sample.name ){
+  univ.expr <- lapply( univ.sample, function( sample.name ) {
 
     get.universal.negative( clean.expr, sample.name, universal.negatives,
-                                 scatter.param,
-                                 peak.channels, downsample,
-                                 negative.n, positive.n,
-                                 spectral.channel, asp,
-                                 control.type,
-                                 scatter.match )
-
+                            scatter.param,
+                            peak.channels, downsample,
+                            negative.n, positive.n,
+                            spectral.channel, asp,
+                            control.type,
+                            scatter.match,
+                            intermediate.figures )
   } )
 
   names( univ.expr ) <- univ.sample

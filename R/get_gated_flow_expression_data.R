@@ -47,7 +47,7 @@ get.gated.flow.expression.data <- function( samp, file.name, control.dir,
 
   # remove any out-of-range events
   below.resolution.limit <- apply( expr.data[ , spectral.channel ], 1,
-                                   function( flow.event ){
+                                   function( flow.event ) {
     all( flow.event < set.resolution ) } )
 
   expr.data <- expr.data[ below.resolution.limit, ]
@@ -67,10 +67,11 @@ get.gated.flow.expression.data <- function( samp, file.name, control.dir,
 
   # plot gate applied to sample
   if ( ! is.null( asp$figure.gate.dir ) ) {
+    message( paste( "\033[34m", "Plotting gate for", samp, "\033[0m" ) )
     suppressWarnings(
       gate.sample.plot( samp, gate.data, scatter.param,
-                             gate.population.boundary, scatter.and.channel.label,
-                             "cells", asp )
+                        gate.population.boundary, scatter.and.channel.label,
+                        "cells", asp )
     )
   }
 

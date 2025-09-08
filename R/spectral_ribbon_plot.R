@@ -52,15 +52,15 @@ spectral.ribbon.plot <- function( pos.expr.data, neg.expr.data,
 
     neg.mfi <- apply( neg.expr.data[ , spectral.channel ], 2, median )
 
-    pos.background.subtracted <- data.frame( pos.expr.data[ , spectral.channel ],
+    pos.background.subtracted <- data.frame( pos.expr.data[ , spectral.channel, drop = FALSE ],
                                              check.names = FALSE )
     pos.background.subtracted <- sweep( pos.background.subtracted, 2, neg.mfi,
                                         FUN = "-" )
 
-    pos.data.plot <- data.frame( pos.expr.data[ , spectral.channel ],
+    pos.data.plot <- data.frame( pos.expr.data[ , spectral.channel, drop = FALSE ],
                                  check.names = FALSE )
 
-    neg.data  <- data.frame( neg.expr.data[ , spectral.channel ],
+    neg.data  <- data.frame( neg.expr.data[ , spectral.channel, drop = FALSE ],
                              check.names = FALSE )
 
     if ( is.null( factor.names ) ) {
@@ -97,14 +97,14 @@ spectral.ribbon.plot <- function( pos.expr.data, neg.expr.data,
     if ( is.null( figure.dir ) )
       figure.dir <- asp$figure.clean.control.dir
 
-    original.data <- data.frame( pos.expr.data[ , spectral.channel ],
+    original.data <- data.frame( pos.expr.data[ , spectral.channel, drop = FALSE ],
                                  check.names = FALSE )
 
-    cleaned.data <- data.frame( neg.expr.data[ , spectral.channel ],
+    cleaned.data <- data.frame( neg.expr.data[ , spectral.channel, drop = FALSE ],
                                 check.names = FALSE )
 
     if ( !is.null( removed.data ) )
-      removed.data <- data.frame( removed.data[ , spectral.channel ],
+      removed.data <- data.frame( removed.data[ , spectral.channel, drop = FALSE ],
                                   check.names = FALSE )
 
     if ( is.null( factor.names ) ) {

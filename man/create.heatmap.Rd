@@ -10,13 +10,15 @@ create.heatmap(
   title = NULL,
   legend.label = "heatmap",
   triangular = FALSE,
-  output.dir = NULL,
+  plot.dir = NULL,
   fixed.scale = FALSE,
   scale.min = NULL,
   scale.max = NULL,
   color.palette = "viridis",
+  show.legend = TRUE,
   figure.width = 8,
-  figure.height = 6
+  figure.height = 6,
+  save = TRUE
 )
 }
 \arguments{
@@ -34,7 +36,7 @@ Default is \code{heatmap}}
 \item{triangular}{Logical. Plot the lower triangle of the matrix only,
 diagonal included. Default is \code{FALSE}.}
 
-\item{output.dir}{Optional output directory. Default is \code{NULL}, in which case
+\item{plot.dir}{Optional output directory. Default is \code{NULL}, in which case
 the working directory will be used.}
 
 \item{fixed.scale}{Logical, determines whether to use an externally supplied
@@ -52,9 +54,14 @@ palette to be used for the fluorophore traces. Default is \code{viridis}. Option
 are the viridis color options: \code{magma}, \code{inferno}, \code{plasma}, \code{viridis},
 \code{cividis}, \code{rocket}, \code{mako} and \code{turbo}.}
 
+\item{show.legend}{Logical. If \code{TRUE}, figure legend will be included.}
+
 \item{figure.width}{Numeric. Width of the heatmap figure. Default is \code{8}.}
 
 \item{figure.height}{Numeric. Height of the heatmap figure. Default is \code{6}.}
+
+\item{save}{Logical, if \code{TRUE}, saves a JPEG file to the \code{output.dir}.
+Otherwise, the plot will simply be created in the Viewer.}
 }
 \value{
 Saves the heatmap plot as a JPEG file and the SSM data as a CSV file

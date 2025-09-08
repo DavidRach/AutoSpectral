@@ -7,9 +7,11 @@
 spectral.heatmap(
   spectra,
   title = NULL,
+  plot.dir = NULL,
   legend.label = "Intensity",
-  output.dir = NULL,
-  color.palette = "viridis"
+  color.palette = "viridis",
+  save = TRUE,
+  show.legend = TRUE
 )
 }
 \arguments{
@@ -18,15 +20,20 @@ format: fluorophores x detectors.}
 
 \item{title}{Optional prefix for the plot filename.}
 
-\item{legend.label}{Character string that will appear on the heatmap legend.}
-
-\item{output.dir}{Optional output directory. Default is NULL, in which case
+\item{plot.dir}{Optional output directory. Default is NULL, in which case
 the spectra figure folder will be used.}
+
+\item{legend.label}{Character string that will appear on the heatmap legend.}
 
 \item{color.palette}{Optional character string defining the viridis color
 palette to be used for the fluorophore traces. Default is \code{viridis}. Options
 are the viridis color options: \code{magma}, \code{inferno}, \code{plasma}, \code{viridis},
 \code{cividis}, \code{rocket}, \code{mako} and \code{turbo}.}
+
+\item{save}{Logical, if \code{TRUE}, saves a JPEG file to the \code{plot.dir}.
+Otherwise, the plot will simply be created in the Viewer.}
+
+\item{show.legend}{Logical. If \code{TRUE}, figure legend will be included.}
 }
 \value{
 Saves the heatmap plot as a JPEG file in the specified directory.

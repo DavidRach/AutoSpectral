@@ -16,7 +16,8 @@ clean.controls(
   negative.n = asp$negative.n,
   positive.n = asp$positive.n,
   scatter.match = TRUE,
-  scrub = TRUE
+  scrub = TRUE,
+  intermediate.figures = FALSE
 )
 }
 \arguments{
@@ -59,6 +60,11 @@ region of FSC and SSC based on the distribution of selected positive events.}
 
 \item{scrub}{Logical, if \code{TRUE} allows for re-cleaning of already cleaned
 data, provided there are clean data in \code{flow.control}.}
+
+\item{intermediate.figures}{Logical, if \code{TRUE} returns additional figures to
+show the inner workings of the cleaning, including definition of low-AF cell
+gates on the PCA-unmixed unstained and spectral ribbon plots of the AF
+exclusion from the unstained. Default is \code{FALSE} to speed up processing.}
 }
 \value{
 Returns a modified \code{flow.control} with the original data intact. New, cleaned

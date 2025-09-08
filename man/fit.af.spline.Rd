@@ -15,7 +15,7 @@ fit.af.spline(af.cells, non.af.cells, asp)
 Prepare using \code{get.autospectral.param}}
 }
 \value{
-The boundaries of the events within the specified number of standard
+The boundary of the events within the specified number of standard
 deviations from the spline.
 }
 \description{

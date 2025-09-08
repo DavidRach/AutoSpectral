@@ -2,7 +2,8 @@
 
 #' @title Get Autospectral Parameters for ID7000 Cytometer
 #'
-#' @description Returns parameters for running a calculation of unmixing with
+#' @description
+#' Returns parameters for running a calculation of unmixing with
 #' AutoSpectral for the ID7000, without creating any figures or tables.
 #'
 #' @param autosp.param A list of initial AutoSpectral parameters.
@@ -46,33 +47,12 @@ get.autospectral.param.id7000 <- function( autosp.param )
 
   autosp.param$data.step <- 1e5
 
-  # spectral parameters
+  autosp.param$large.gate.scaling.x <- 3
+  autosp.param$large.gate.scaling.y <- 6
 
-  autosp.param$plot.gate.factor <- 0.5
+  autosp.param$plot.gate.factor <- 1
 
-  autosp.param$af.density.threshold <- 0.75
-
-  autosp.param$af.gate.param <- list(
-    density.threshold = 0.001,
-    region.auto = TRUE
-  )
-
-  autosp.param$af.figure.gate.scale.expand <- 0.01
-
-  autosp.param$af.gate.bound.density.neigh.size <- 3
-
-  autosp.param$af.gate.bound.density.grid.n <- 200
-
-  autosp.param$af.lower.quantile <- c( 0.01, 0.15 )
-  autosp.param$af.upper.quantile <- c( 0.85, 0.99 )
-  autosp.param$af.bound.margin <- 2
-
-  # autosp.param$gate.bound.density.grid.n.cells <- 200
-  # autosp.param$gate.region.density.grid.n.cells <- 200
-  # autosp.param$gate.region.max.density.grid.n.cells <- 200
-  # autosp.param$gate.bound.density.grid.n.beads <- 200
-  # autosp.param$gate.region.density.grid.n.beads <- 200
-  # autosp.param$gate.region.max.density.grid.n.beads <- 200
+  autosp.param$ribbon.breaks <- c( -1e3, 0, 1e3, 1e4, 1e5, 1e6 )
 
   autosp.param
 

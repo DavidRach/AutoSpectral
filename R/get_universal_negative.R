@@ -26,6 +26,10 @@
 #' @param control.type Named vector mapping samples to their control types.
 #' @param scatter.match Logical indicating whether to perform scatter matching.
 #' Default is `TRUE`.
+#' @param intermediate.figures Logical, if `TRUE` returns additional figures to
+#' show the inner workings of the cleaning, including definition of low-AF cell
+#' gates on the PCA-unmixed unstained and spectral ribbon plots of the AF
+#' exclusion from the unstained. Default is `FALSE` to speed up processing.
 #'
 #' @return A data frame containing the selected positive and scatter-matched
 #' negative events.
@@ -39,53 +43,46 @@ get.universal.negative <- function( clean.expr.data, samp,
                                     negative.n, positive.n,
                                     spectral.channel, asp,
                                     control.type,
-                                    scatter.match = TRUE ){
+                                    scatter.match = TRUE,
+                                    intermediate.figures = FALSE ) {
 
   if ( asp$verbose )
     message( paste( "\033[34m", "Getting universal negative for", samp, "\033[0m" ) )
 
   pos.control.expr <- clean.expr.data[[ samp ]]
-
   neg.control.expr <- clean.expr.data[[ universal.negatives[ samp ] ]]
 
   peak.channel <- peak.channels[ samp ]
-
   pos.peak.channel <- pos.control.expr[ , peak.channel ]
-
   neg.peak.channel <- neg.control.expr[ , peak.channel ]
 
   # define positive events as those above a threshold (default 99.5%) in the negative
-  if ( samp == "AF" ) {
+  if ( samp == "AF" )
     threshold <- asp$positivity.threshold.af
-  } else {
+  else
     threshold <- asp$positivity.threshold
-  }
 
   positivity.threshold <- quantile( neg.peak.channel, threshold )
-
   pos.above.threshold <- pos.peak.channel[ pos.peak.channel > positivity.threshold ]
 
   # warn if few events in positive
-  if ( length( pos.above.threshold ) < asp$min.cell.warning.n ){
+  if ( length( pos.above.threshold ) < asp$min.cell.warning.n )
     warning( paste( "\033[31m", "Warning! Fewer than",  asp$min.cell.warning.n,
-                    "gated events in", samp ),  "\033[0m", "\n"  )
-  }
+                    "positive events in", samp,  "\033[0m", "\n" )  )
 
   # stop if fewer than minimum acceptable events, returning original data
-  if ( length( pos.above.threshold ) < asp$min.cell.stop.n ){
+  if ( length( pos.above.threshold ) < asp$min.cell.stop.n ) {
+    warning( paste( "\033[31m", "Warning! Fewer than",  asp$min.cell.stop.n,
+                    "positive events in", samp, "\n",
+                    "Returning original data", "\033[0m", "\n" )  )
     return( rbind( pos.control.expr, neg.control.expr ) )
   }
 
-  check.critical( length( pos.above.threshold > asp$min.cell.stop.n ),
-                  paste( "\033[31m", "Error! Fewer than", asp$min.cell.warning.n,
-                         "events remain in", samp, "\033[0m", "\n" ) )
-
   # select only brightest positive.n events
-  if ( length( pos.above.threshold ) >= positive.n ){
+  if ( length( pos.above.threshold ) >= positive.n )
     pos.selected <- sort( pos.above.threshold, decreasing = TRUE )[ 1:positive.n ]
-  } else {
+  else
     pos.selected <- pos.above.threshold
-  }
 
   ## scatter-match negative
   # recover full data
@@ -95,39 +92,17 @@ get.universal.negative <- function( clean.expr.data, samp,
   # if using beads, default to no matching
   sample.control.type <- control.type[[ samp ]]
 
-  if ( sample.control.type == "beads" ) {
+  if ( sample.control.type == "beads" )
     scatter.match <- FALSE
-  }
 
   if ( scatter.match ) {
 
-    pos.scatter.coord <- pos.selected.expr[ , scatter.param ]
-
-    pos.bound.density <- MASS::kde2d(
+    pos.scatter.coord <- unique( pos.selected.expr[ , scatter.param ] )
+    pos.scatter.gate <- suppressWarnings(
+      convex.hull( tri.mesh(
       pos.scatter.coord[ , 1 ],
-      pos.scatter.coord[ , 2 ],
-      asp$gate.bound.density.bw.factor.cells * apply( pos.scatter.coord, 2, bandwidth.nrd ),
-      n = asp$plot.gate.factor * asp$gate.bound.density.grid.n.cells )
-
-    contour.levels <- contourLines( pos.bound.density$x, pos.bound.density$y,
-                                    pos.bound.density$z,
-                                    levels = quantile(pos.bound.density$z,
-                                                      probs = asp$scatter.match.threshold ) )
-
-    contour.coords <- cbind( contour.levels[[ 1 ]]$x, contour.levels[[ 1 ]]$y )
-
-    contour.polygon <- Polygon( contour.coords )
-    contour.polygon <- Polygons( list( contour.polygon ), ID = "density contour" )
-    contour.polygon <- SpatialPolygons( list( contour.polygon ) )
-
-    points.within.contour <- pos.scatter.coord[ point.in.polygon( pos.scatter.coord[ , 1 ],
-                                                                  pos.scatter.coord[ , 2 ],
-                                                                  contour.levels[[ 1 ]]$x,
-                                                                  contour.levels[[ 1 ]]$y ) == 1, ]
-
-    pos.scatter.gate <- convex.hull( tri.mesh(
-      points.within.contour[ , 1 ],
-      points.within.contour[ , 2 ] ) )
+      pos.scatter.coord[ , 2 ]
+    ) ) )
 
     neg.scatter.matched.pip <- point.in.polygon(
       neg.control.expr[ , scatter.param[ 1 ] ],
@@ -143,10 +118,10 @@ get.universal.negative <- function( clean.expr.data, samp,
     }
 
     # stop if fewer than minimum acceptable events, returning original negative
-    if ( length( neg.population.idx ) < asp$min.cell.stop.n ){
+    if ( length( neg.population.idx ) < asp$min.cell.stop.n ) {
       warning( paste( "\033[31m", "Warning! Fewer than",  asp$min.cell.stop.n,
                       "scatter-matched negative events for", samp, "\n",
-                      "Reverting to original negative. \n",  "\033[0m" )  )
+                      "Reverting to original negative. \n",  "\033[0m" ) )
 
       # downsample original negative
       if ( nrow( neg.control.expr ) > negative.n ) {
@@ -168,11 +143,12 @@ get.universal.negative <- function( clean.expr.data, samp,
   }
 
 
-  if ( asp$figures ){
-    spectral.ribbon.plot( pos.selected.expr, neg.scatter.matched,
-                          spectral.channel, asp, samp )
+  if ( asp$figures ) {
     scatter.match.plot( pos.selected.expr, neg.scatter.matched, samp,
                         scatter.param, asp )
+    if ( intermediate.figures )
+      spectral.ribbon.plot( pos.selected.expr, neg.scatter.matched,
+                            spectral.channel, asp, samp )
   }
 
   rbind( pos.selected.expr, neg.scatter.matched )

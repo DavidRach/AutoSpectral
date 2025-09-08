@@ -7,10 +7,15 @@
 run.af.removal(
   clean.expr,
   af.removal.sample,
-  neg.artefacts.list,
   spectral.channel,
+  peak.channel,
   universal.negative,
-  asp
+  asp,
+  scatter.param,
+  negative.n = 500,
+  positive.n = 1000,
+  scatter.match = TRUE,
+  intermediate.figures = FALSE
 )
 }
 \arguments{
@@ -19,14 +24,31 @@ run.af.removal(
 \item{af.removal.sample}{Vector of sample names for which autofluorescence
 removal is to be performed.}
 
-\item{neg.artefacts.list}{List of negative artefacts.}
-
 \item{spectral.channel}{Vector of spectral channel names.}
+
+\item{peak.channel}{Vector of peak detection channels for fluorophores.}
 
 \item{universal.negative}{Name of the universal negative control.}
 
 \item{asp}{The AutoSpectral parameter list.
 Prepare using \code{get.autospectral.param}}
+
+\item{scatter.param}{Vector of scatter parameters.}
+
+\item{negative.n}{Integer. Number of events to include in the downsampled
+negative population. Default is \code{500}.}
+
+\item{positive.n}{Integer. Number of events to include in the downsampled
+positive population. Default is \code{1000}.}
+
+\item{scatter.match}{Logical, default is \code{TRUE}. Whether to select negative
+events based on scatter profiles matching the positive events. Defines a
+region of FSC and SSC based on the distribution of selected positive events.}
+
+\item{intermediate.figures}{Logical, if \code{TRUE} returns additional figures to
+show the inner workings of the cleaning, including definition of low-AF cell
+gates on the PCA-unmixed unstained and spectral ribbon plots of the AF
+exclusion from the unstained.}
 }
 \value{
 A list containing the expression data with autofluorescent events

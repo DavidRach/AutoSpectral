@@ -20,8 +20,6 @@
 #'
 #' @return A list containing the unmixing correction matrices for intercept,
 #' coefficient and slope.
-#'
-#' @export
 
 get.unmixing.error <- function( expr.data.unmix, fluorophores,
                                 scale.untransformed, transform.inv,

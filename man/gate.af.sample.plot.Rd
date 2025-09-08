@@ -4,19 +4,32 @@
 \alias{gate.af.sample.plot}
 \title{Plot Gate Autofluorescence Sample}
 \usage{
-gate.af.sample.plot(samp, af.data, af.boundary.lower, af.boundary.upper, asp)
+gate.af.sample.plot(
+  plot.data,
+  samp,
+  af.boundary.upper,
+  asp,
+  max.points = 1e+05,
+  color.palette = "viridis"
+)
 }
 \arguments{
+\item{plot.data}{Matrix containing autofluorescence data points.}
+
 \item{samp}{Sample identifier.}
-
-\item{af.data}{Matrix containing autofluorescence data points.}
-
-\item{af.boundary.lower}{Matrix containing lower boundary information.}
 
 \item{af.boundary.upper}{Matrix containing upper boundary information.}
 
 \item{asp}{The AutoSpectral parameter list.
 Prepare using \code{get.autospectral.param}}
+
+\item{max.points}{Number of points to plot (speeds up plotting). Default is
+\code{1e5}.}
+
+\item{color.palette}{Optional character string defining the viridis color
+palette to be used for the fluorophore traces. Default is \code{viridis}. Options
+are the viridis color options: \code{magma}, \code{inferno}, \code{plasma}, \code{viridis},
+\code{cividis}, \code{rocket}, \code{mako} and \code{turbo}.}
 }
 \value{
 Saves the plot as a JPEG file in the specified directory.

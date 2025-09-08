@@ -4,7 +4,7 @@
 \alias{do.gate.af}
 \title{Perform Gating on Autofluorescence Parameters}
 \usage{
-do.gate.af(gate.data, samp, asp)
+do.gate.af(gate.data, samp, asp, intermediate.figures = FALSE)
 }
 \arguments{
 \item{gate.data}{A data frame containing the gate data.}
@@ -13,6 +13,11 @@ do.gate.af(gate.data, samp, asp)
 
 \item{asp}{The AutoSpectral parameter list.
 Prepare using \code{get.autospectral.param}}
+
+\item{intermediate.figures}{Logical, if \code{TRUE} returns additional figures to
+show the inner workings of the cleaning, including definition of low-AF cell
+gates on the PCA-unmixed unstained and spectral ribbon plots of the AF
+exclusion from the unstained.}
 }
 \value{
 A vector with the indexes of events inside the initial gate.

@@ -11,8 +11,6 @@
 #' @param spectra The spectral matrix, dimensions fluorophores x detectors.
 #'
 #' @return The estimated spread matrix
-#'
-#' @export
 
 estimate.spread <- function( spectra ) {
   fluorophore.n <- nrow( spectra )

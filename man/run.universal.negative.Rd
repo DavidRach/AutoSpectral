@@ -16,7 +16,8 @@ run.universal.negative(
   spectral.channel,
   asp,
   control.type,
-  scatter.match
+  scatter.match,
+  intermediate.figures = FALSE
 )
 }
 \arguments{
@@ -48,6 +49,11 @@ type of control: \code{beads} or \code{cells}}
 
 \item{scatter.match}{A logical value indicating whether scatter matching
 is performed.}
+
+\item{intermediate.figures}{Logical, if \code{TRUE} returns additional figures to
+show the inner workings of the cleaning, including definition of low-AF cell
+gates on the PCA-unmixed unstained and spectral ribbon plots of the AF
+exclusion from the unstained. Default is \code{FALSE} to speed up processing.}
 }
 \value{
 A list containing the processed expression data for each universal

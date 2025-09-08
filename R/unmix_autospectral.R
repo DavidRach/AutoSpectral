@@ -38,7 +38,7 @@ unmix.autospectral <- function( raw.data, spectra, af.spectra,
   # check for AF in spectra, remove if present
   if ( "AF" %in% rownames( spectra ) ) {
     message( "Removing default AF channel" )
-    spectra <- spectra[ rownames( spectra ) != "AF", ]
+    spectra <- spectra[ rownames( spectra ) != "AF", , drop = FALSE ]
   }
 
   if ( is.null( af.spectra ) )
@@ -55,7 +55,7 @@ unmix.autospectral <- function( raw.data, spectra, af.spectra,
   else
     no.af.unmixed <- unmix.ols( raw.data, spectra )
 
-  no.af.residual <- rowSums( ( raw.data - ( no.af.unmixed %*% spectra  ) )^2 )
+  no.af.residual <- rowSums( ( raw.data - ( no.af.unmixed %*% spectra ) )^2 )
   no.af.unmixed <- cbind( no.af.unmixed, no.af.residual/1e3 )
 
   # unmix for each af.spectrum
@@ -93,7 +93,7 @@ unmix.autospectral <- function( raw.data, spectra, af.spectra,
     model.dist0 <- vapply( seq_along( model.unmixings ), function( i ) {
       non.af <- model.unmixings[[ i ]][ , fluorophores, drop = FALSE ]
       rowSums( abs( non.af ) )
-    }, FUN.VALUE = numeric( nrow(model.unmixings[[ 1 ]] ) ) )
+    }, FUN.VALUE = numeric( nrow( model.unmixings[[ 1 ]] ) ) )
 
     af.idx <- apply( model.dist0, 1, which.min )
 
@@ -117,7 +117,12 @@ unmix.autospectral <- function( raw.data, spectra, af.spectra,
     RMSE <- sqrt( mean( residual ) )
   }
 
+  rm( model.residuals )
+
   colnames( unmixed.data ) <- c( fluorophores, "AF", "AF Index" )
+
+  # set value of AF Index to 0 for cells best fit by spectra without AF
+  #unmixed.data[ , "AF Index" == ( af.n + 1 ) ] <- 0
 
   if ( calculate.error )
     return( list(

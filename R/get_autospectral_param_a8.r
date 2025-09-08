@@ -16,7 +16,6 @@
 get.autospectral.param.a8 <- function( autosp.param )
 {
   # add cytometer-specific parameters
-
   autosp.param$cytometer <- "FACSDiscover A8"
 
   autosp.param$scatter.data.min.x <- 0
@@ -30,10 +29,6 @@ get.autospectral.param.a8 <- function( autosp.param )
   autosp.param$expr.data.min <- -111
 
   autosp.param$expr.data.max <- 24140237
-
-  autosp.param$large.gate.quantile <- 0.25
-  autosp.param$large.gate.scaling.x <- 2.5
-  autosp.param$large.gate.scaling.y <- 6
 
   autosp.param$default.scatter.parameter <- c( "FSC-A", "SSC (Violet)-A" )
 
@@ -66,26 +61,12 @@ get.autospectral.param.a8 <- function( autosp.param )
 
   autosp.param$data.step <- 5e6
 
-  # spectral parameters
+  autosp.param$large.gate.scaling.x <- 2.5
+  autosp.param$large.gate.scaling.y <- 6
 
-  autosp.param$plot.gate.factor <- 0.5
+  autosp.param$plot.gate.factor <- 1
 
-  autosp.param$af.density.threshold <- 0.75
-
-  autosp.param$af.gate.param <- list(
-    density.threshold = 0.001,
-    region.auto = TRUE
-  )
-
-  autosp.param$af.figure.gate.scale.expand <- 0.01
-
-  autosp.param$af.gate.bound.density.neigh.size <- 3
-
-  autosp.param$af.gate.bound.density.grid.n <- 100
-
-  autosp.param$af.lower.quantile <- c( 0.01, 0.15 )
-  autosp.param$af.upper.quantile <- c( 0.85, 0.99 )
-  autosp.param$af.bound.margin <- 2
+  autosp.param$ribbon.breaks <- c( -1e3, 0, 1e3, 1e4, 1e5, 1e6, 1e7 )
 
   autosp.param
 
