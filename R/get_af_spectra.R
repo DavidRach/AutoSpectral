@@ -25,7 +25,9 @@
 #' the AF signatures. Default is `TRUE`.
 #' @param plot.dir Directory (folder) where the plots will be saved. Default is
 #' `NULL`, which inherits from `asp$figure.af.dir`.
-#' @param title Title for the output spectral plots. Default is
+#' @param table.dir Directory (folder) where the spectra csv file will be saved.
+#' Default is `NULL`, which inherits from `asp$table.af.dir`.
+#' @param title Title for the output spectral plots and csv file. Default is
 #' `Autofluorescence spectra`.
 #'
 #' @return A matrix of autofluorescence spectra.
@@ -38,7 +40,8 @@ get.af.spectra <- function( unstained.sample,
                             som.dim = 10,
                             figures = TRUE,
                             plot.dir = NULL,
-                            title = "Autofluorescence spectra" ) {
+                            table.dir = NULL,
+                            title = NULL ) {
 
   # set defaults
   if ( is.null( plot.dir ) )
@@ -82,8 +85,15 @@ get.af.spectra <- function( unstained.sample,
   af.spectra <- as.matrix( na.omit( af.spectra ) )
 
   # save as CSV
-  af.file.name <- paste0( asp$af.file.name, ".csv" )
-  write.csv( af.spectra, file = file.path( asp$table.spectra.dir, af.file.name ) )
+  if ( is.null( title ) )
+    af.file.name <- paste0( asp$af.file.name, ".csv" )
+  else
+    af.file.name <- paste0( title, ".csv" )
+
+  if ( is.null( table.dir ) )
+    table.dir <- asp$table.spectra.dir
+
+  write.csv( af.spectra, file = file.path( table.dir, af.file.name ) )
 
   if ( figures ) {
     if ( asp$verbose )

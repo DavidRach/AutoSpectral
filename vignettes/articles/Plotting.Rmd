@@ -16,7 +16,7 @@ library( AutoSpectral )
 ```
 
 Let's load in some spectra, here from OMIP-102.
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 s8.fcs <- "~/AutoSpectral_data/S8_data/BP0323502_1.fcs"
 chorus.spectra <- read.bd.spectra( s8.fcs )
 chorus.spectra[ 1:6, 1:5 ]
@@ -24,23 +24,46 @@ chorus.spectra[ 1:6, 1:5 ]
 The basic tools are `spectral.trace`, which gives line graphs of the spectra for each fluorophore in the matrix, and `spectral.heatmap`, which gives the same information as a heatmap.
 
 ```{r, eval=FALSE}
-spectral.heatmap( chorus.spectra, title = "OMIP-102", color.palette = "mako",
-                  save = FALSE, show.legend = FALSE )
+spectral.heatmap( chorus.spectra, title = "OMIP102", color.palette = "mako",
+                  show.legend = FALSE )
 ```
+OMIP-102 spectra:
+![OMIP102 spectra](figures/OMIP102_spectral_heatmap.jpg)
+Note that you can set `save = FALSE` to just have the plots appear in the Viewer, but the saved versions are scaled automatically to try to adjust for the amount of data present.
+
+The other option is a set of traces for each fluorophore.
 
 ```{r, eval=FALSE}
-spectral.trace( chorus.spectra, title = "OMIP-102", split.lasers = FALSE,
-                save = FALSE, show.legend = FALSE )
+spectral.trace( chorus.spectra, title = "OMIP102", split.lasers = FALSE,
+                show.legend = FALSE )
 ```
-This works a lot better if you save it. Then you can add the legend in so you can see which fluorophore is which. It's also better to split it up by laser:
 
-![Unsplit](figures/OMIP102.jpg)
+![Spectral Trace without legend](figures/OMIP102_trace_noLegend.jpg)
+
+You can add the legend back:
+
+```{r, eval=FALSE}
+spectral.trace( chorus.spectra, title = "OMIP102", split.lasers = FALSE,
+                show.legend = FALSE )
+```
+![Spectral Trace](figures/OMIP102.jpg)
+
+It's also better to split it up by laser when there are many fluorophores:
+
+```{r, eval=FALSE}
+spectral.trace( chorus.spectra, title = "OMIP102", split.lasers = TRUE )
+```
+![Spectral Trace](figures/OMIP102_by_laser.jpg)
+In this case, the laser data are out of order because OMIP-102 was produced on an early version of the BD FACSDiscoverS8.
 
 We can create a cosine similarity matrix plot in one of two ways.
 
 ```{r, eval=FALSE}
-cosine.similarity.plot( chorus.spectra, save = FALSE )
+cosine.similarity.plot( chorus.spectra, title = "Cosine_OMIP102", 
+                        output.dir = getwd() )
 ```
+![Cosine Similarity](figures/Cosine_OMIP102.jpg)
+
 This way generates a square matrix (duplicated info across the diagonal) showing the cosine similarity values between each pair. The mixing matrix condition number is listed below for reference.
 
 We can also call `create.heatmap` which is a more general purpose function that's more useful for things like plotting the "hotspot matrix". This gives you a bit more control, but there are aspects that still need some work (sorry).
@@ -51,9 +74,10 @@ For this, let's look at a small subset of the matrix (the first five fluorophore
 matrix.subset <- chorus.spectra[ 1:5, ]
 small.cosine.matrix <- cosine.similarity( matrix.subset )
 create.heatmap( small.cosine.matrix, number.labels = TRUE,
-                color.palette = "turbo",
-                save = FALSE )
+                color.palette = "turbo", plot.dir = getwd() )
 ```
+![Cosine heatmap1](figures/heatmap.jpg)
+
 
 Let's change a couple of things.
 ```{r, eval=FALSE}
@@ -62,20 +86,23 @@ create.heatmap( small.cosine.matrix,
                 legend.label = "Cosine Similarity",
                 triangular = TRUE,
                 color.palette = "mako",
-                save = FALSE )
+                plot.dir = getwd() )
 ```
+![Cosine heatmap2](figures/heatmap1.jpg)
 
 We have the option to pass min and max scale settings, which is useful for comparing multiple sets of data on the same scale (not really relevant in this case, though).
 ```{r, eval=FALSE}
 create.heatmap( small.cosine.matrix, 
                 number.labels = FALSE,
                 legend.label = "Cosine Similarity",
+                title = "OMIP102_Cosine_Similarity",
                 triangular = TRUE,
                 fixed.scale = TRUE,
                 scale.min = 0, scale.max = 2,
                 color.palette = "plasma",
-                save = FALSE )
+                plot.dir = getwd() )
 ```
+![Cosine heatmap3](figures/OMIP102_Cosine_Similarity_heatmap.jpg)
 
 Finally, we can make x-y biplots of FCS data, which can be useful for quickly checking what's going on. To be fair, this is where programs with graphical user interfaces like FlowJo, FCS Express, SpectroFlo, etc. really excel, so doing it here is in R not really the best option.
 
@@ -89,15 +116,17 @@ omip102.ff <- suppressWarnings( flowCore::read.FCS( omip102.file,
                                           truncate_max_range = FALSE,
                                           emptyValue = FALSE ) )
 omip102.data <- flowCore::exprs( omip102.ff )
-colnames( omip102.data )
 ```
 
 Now we can call the plotting function:
 ```{r, eval=FALSE}
 create.biplot( omip102.data,
                x.dim = "BUV395-A", y.dim = "BUV496-A",
-               asp, save = FALSE )
+               asp,
+               title = "OMIP102_biplot1" )
 ```
+![OMIP102 biplot](figures/OMIP102_biplot1.jpg)
+
 Note that this is currently ungated. You can play around with the automated gating functions in AutoSpectral if you want (these work okay with OMIP-102), but you'll be better off using a graphical interface.
 
 We can change the plot limits, color palette, etc.
@@ -107,8 +136,11 @@ create.biplot( omip102.data,
                x.dim = "BUV395-A", y.dim = "BUV496-A",
                x.min = -15000, x.max = 1e6,
                color.palette = "inferno",
-               asp, save = FALSE )
+               asp, 
+               title = "OMIP102_biplot2" )
 ```
+![OMIP102 biplot](figures/OMIP102_biplot2.jpg)
+
 Currently, there's a limit on the amount of compression that can be applied using the biexponential scale. I'll fix that later. You can, however, apply less compression around zero.
 
 ```{r, eval=FALSE}
@@ -117,8 +149,10 @@ create.biplot( omip102.data,
                x.min = -15000, x.max = 1e6,
                y.width.basis = -250,
                color.palette = "inferno",
-               asp, save = FALSE )
+               asp,  
+               title = "OMIP102_biplot3" )
 ```
+![OMIP102 biplot](figures/OMIP102_biplot3.jpg)
 
 The maximum number of points to be plotted is capped by default at 1e5 to speed up the plotting. Setting an arbitrarily big number will plot everything.
 
@@ -129,7 +163,8 @@ create.biplot( omip102.data,
                y.max = 2e6,
                max.points = 1e8,
                color.palette = "viridis",
-               asp, save = FALSE )
+               asp,   
+               title = "OMIP102_biplot4" )
 ```
-
+![OMIP102 biplot](figures/OMIP102_biplot4.jpg)
 

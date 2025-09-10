@@ -12,7 +12,8 @@ get.af.spectra(
   som.dim = 10,
   figures = TRUE,
   plot.dir = NULL,
-  title = "Autofluorescence spectra"
+  table.dir = NULL,
+  title = NULL
 )
 }
 \arguments{
@@ -36,7 +37,10 @@ the AF signatures. Default is \code{TRUE}.}
 \item{plot.dir}{Directory (folder) where the plots will be saved. Default is
 \code{NULL}, which inherits from \code{asp$figure.af.dir}.}
 
-\item{title}{Title for the output spectral plots. Default is
+\item{table.dir}{Directory (folder) where the spectra csv file will be saved.
+Default is \code{NULL}, which inherits from \code{asp$table.af.dir}.}
+
+\item{title}{Title for the output spectral plots and csv file. Default is
 \verb{Autofluorescence spectra}.}
 }
 \value{
