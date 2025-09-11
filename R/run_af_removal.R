@@ -6,6 +6,9 @@
 #' This function runs the autofluorescence removal process on a list of samples,
 #' using the specified parameters and settings.
 #'
+#' @importFrom future plan multisession
+#' @importFrom future.apply future_lapply
+#'
 #' @param clean.expr List containing cleaned expression data.
 #' @param af.removal.sample Vector of sample names for which autofluorescence
 #' removal is to be performed.
@@ -38,7 +41,16 @@ run.af.removal <- function( clean.expr, af.removal.sample, spectral.channel,
                             scatter.match = TRUE,
                             intermediate.figures = FALSE ) {
 
-  af.remove.expr <- lapply( af.removal.sample, function( sample.name ){
+  # set up parallel processing
+  if ( asp$parallel ){
+    future::plan( future::multisession, workers = asp$worker.process.n )
+    options( future.globals.maxSize = asp$max.memory.n )
+    lapply.function <- future.apply::future_lapply
+  } else {
+    lapply.function <- lapply.sequential
+  }
+
+  af.remove.expr <- lapply.function( af.removal.sample, function( sample.name ){
 
     remove.af( clean.expr, sample.name, spectral.channel, peak.channel,
                universal.negative, asp, scatter.param,

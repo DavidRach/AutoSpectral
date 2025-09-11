@@ -70,7 +70,7 @@ cosine.similarity.plot <- function( spectra,
     scale_fill_viridis_c( option = color.palette ) +
     theme_minimal() +
     coord_fixed( ratio = 1 ) +
-    theme( axis.text.x = element_text( angle = 90, hjust = 1 ) ) +
+    theme( axis.text.x = element_text( angle = 45, hjust = 1 ) ) +
     labs( x = paste( "Condition Number", condition.number ),
           y = NULL, fill = "Cosine Similarity" )
 
