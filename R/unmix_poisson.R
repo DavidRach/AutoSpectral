@@ -63,7 +63,7 @@ unmix.poisson <- function( raw.data, spectra, asp, initial.weights = NULL ) {
       unmixed.data[ cell, ] <- coef( fit )
     else
       unmixed.data[ cell, ] <- unmixed.data.cell
-  })
+  } )
 
   unmixed.data <- do.call( rbind, unmixed.data )
 
