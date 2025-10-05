@@ -10,12 +10,14 @@
 #' match the columns in spectra.
 #' @param spectra Spectral signatures of fluorophores, normalized between 0
 #' and 1, with fluorophores in rows and detectors in columns.
+#' @param weights Dummy argument to allow dynamic switching between OLS and WLS.
+#' Default is `NULL`. Values passed to `weights` will be ignored.
 #'
 #' @return Unmixed data with cells in rows and fluorophores in columns.
 #'
 #' @export
 
-unmix.ols <- function( raw.data, spectra ) {
+unmix.ols <- function( raw.data, spectra, weights = NULL ) {
 
   spectra <- t( spectra )
 

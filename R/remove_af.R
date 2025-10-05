@@ -160,6 +160,15 @@ remove.af <- function( clean.expr, samp, spectral.channel, peak.channel,
 
   gate.population.idx <- which( gate.population.pip == 0 )
 
+  # define negative clean-up for plotting and threshold
+  gate.data.neg <- expr.data.neg[ , c( names( af.peak ), fluor.peak ) ]
+
+  gate.population.pip <- point.in.polygon(
+    gate.data.neg[ , 1 ], gate.data.neg[ , 2 ],
+    af.boundaries$upper$x, af.boundaries$upper$y )
+
+  gate.neg.idx <- which( gate.population.pip == 0 )
+
   # plot data pre/post-removal
   if ( asp$figures ) {
     if ( asp$verbose )
@@ -189,14 +198,7 @@ remove.af <- function( clean.expr, samp, spectral.channel, peak.channel,
     gate.af.sample.plot( gate.data.pos, samp, af.boundary.ggp, asp )
 
     if ( intermediate.figures ) {
-      # define negative clean-up for plotting
-      gate.data.neg <- expr.data.neg[ , c( names( af.peak ), fluor.peak ) ]
 
-      gate.population.pip <- point.in.polygon(
-        gate.data.neg[ , 1 ], gate.data.neg[ , 2 ],
-        af.boundaries$upper$x, af.boundaries$upper$y )
-
-      gate.neg.idx <- which( gate.population.pip == 0 )
       negative.label <- paste( samp, "negative", matching.negative )
 
       # plot negative clean-up

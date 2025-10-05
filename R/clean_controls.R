@@ -230,12 +230,15 @@ clean.controls <- function( flow.control, asp,
                                                       flow.control$fluorophore,
                                                       ignore.case = TRUE ) &
                                                flow.negative != FALSE ]
+
     # exclude AF
     univ.sample <- univ.sample[ univ.sample != "AF" ]
 
     # if AF removal has been done with scatter-matching, run only on beads
-    if ( af.remove )
-      univ.sample <- univ.sample[ flow.control.type == "beads" ]
+    if ( af.remove ) {
+      univ.sample.type <- flow.control.type[ names( flow.control.type ) %in% univ.sample ]
+      univ.sample <- univ.sample[ univ.sample.type == "beads" ]
+    }
 
     # check for remaining samples
     if ( length( univ.sample ) != 0 ) {

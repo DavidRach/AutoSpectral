@@ -34,6 +34,10 @@
 #' using `get.af.spectra`. Required for `AutoSpectral` unmixing. Default is
 #' `NULL` and will thus provoke failure if no spectra are provided and
 #' `AutoSpectral` is selected.
+#' @param spectra.variants Named list (names are fluorophores) carrying matrices
+#' of spectral signature variations for each fluorophore. Prepare using
+#' `get.spectral.variants`. Default is `NULL`. Used for
+#' AutoSpectral unmixing. Required for per-cell fluorophore optimization.
 #' @param output.dir Directory to save the unmixed FCS files
 #' (default is asp$unmixed.fcs.dir).
 #' @param file.suffix A character string to append to the output file name.
@@ -47,7 +51,7 @@
 #' @param use.dist0 Logical, controls whether the selection of the optimal AF
 #' signature for each cell is determined by which unmixing brings the cell
 #' closest to 0 (`use.dist0` = `TRUE`) or by which unmixing minimizes the
-#' per-cell residual (`use.dist0` = `FALSE`). Default is `FALSE`.
+#' per-cell residual (`use.dist0` = `FALSE`). Default is `TRUE`.
 #' @param divergence.threshold Numeric. Used for `FastPoisson` only. Threshold
 #' to trigger reversion towards WLS unmixing when Poisson result diverges.
 #' Default is `1e4`
@@ -67,12 +71,13 @@ unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
                           weighted = FALSE,
                           weights = NULL,
                           af.spectra = NULL,
+                          spectra.variants = NULL,
                           output.dir = NULL,
                           file.suffix = NULL,
                           include.raw = FALSE,
                           include.imaging = FALSE,
-                          calculate.error = TRUE,
-                          use.dist0 = FALSE,
+                          calculate.error = FALSE,
+                          use.dist0 = TRUE,
                           divergence.threshold = 1e4,
                           divergence.handling = "Balance",
                           balance.weight = 0.5 ){
@@ -83,7 +88,7 @@ unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
   files.to.unmix <- list.files( fcs.dir, pattern = ".fcs", full.names = TRUE )
 
   # set up parallel processing
-  if ( asp$parallel && method != "Poisson" && method != "FastPoisson" ){
+  if ( asp$parallel && ( method == "OLS" || method == "WLS" ) ) {
     plan( multisession, workers = asp$worker.process.n )
     options( future.globals.maxSize = asp$max.memory.n )
     lapply.function <- future_lapply
@@ -92,7 +97,8 @@ unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
   }
 
   lapply.function( files.to.unmix, FUN = unmix.fcs, spectra, asp, flow.control,
-                   method, weighted, weights, af.spectra, output.dir, file.suffix,
-                   include.raw,include.imaging, calculate.error, use.dist0,
+                   method, weighted, weights, af.spectra, spectra.variants,
+                   output.dir, file.suffix, include.raw,include.imaging,
+                   calculate.error, use.dist0,
                    divergence.threshold, divergence.handling, balance.weight )
 }

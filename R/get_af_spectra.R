@@ -78,8 +78,11 @@ get.af.spectra <- function( unstained.sample,
                         batch = TRUE, parallel = TRUE,
                         threads = threads )
 
-  af.spectra <- t( apply( map$codes[ , spectral.channels ], 1,
-                          function( x ) x / max( x ) ) )
+  af.spectra <- t(
+    apply( map$codes[ , spectral.channels ], 1, function( x ) {
+      max.x <- ifelse( max( abs( x ) ) > max( x ), min( x ), max( x ) )
+      x / max.x } )
+    )
   rownames( af.spectra ) <- paste0( "AF", 1:nrow( af.spectra ) )
 
   af.spectra <- as.matrix( na.omit( af.spectra ) )
@@ -101,6 +104,9 @@ get.af.spectra <- function( unstained.sample,
 
     if ( !dir.exists( plot.dir ) )
       dir.create( plot.dir )
+
+    if ( is.null( title ) )
+      title <- asp$af.file.name
 
     spectral.trace( af.spectra, title, plot.dir, split.lasers = FALSE )
 

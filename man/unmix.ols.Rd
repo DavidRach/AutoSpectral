@@ -4,7 +4,7 @@
 \alias{unmix.ols}
 \title{unmix.ols}
 \usage{
-unmix.ols(raw.data, spectra)
+unmix.ols(raw.data, spectra, weights = NULL)
 }
 \arguments{
 \item{raw.data}{Expression data from raw fcs files. Cells in rows and
@@ -13,6 +13,9 @@ match the columns in spectra.}
 
 \item{spectra}{Spectral signatures of fluorophores, normalized between 0
 and 1, with fluorophores in rows and detectors in columns.}
+
+\item{weights}{Dummy argument to allow dynamic switching between OLS and WLS.
+Default is \code{NULL}. Values passed to \code{weights} will be ignored.}
 }
 \value{
 Unmixed data with cells in rows and fluorophores in columns.

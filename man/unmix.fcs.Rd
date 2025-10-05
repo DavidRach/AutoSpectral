@@ -13,12 +13,13 @@ unmix.fcs(
   weighted = FALSE,
   weights = NULL,
   af.spectra = NULL,
+  spectra.variants = NULL,
   output.dir = NULL,
   file.suffix = NULL,
   include.raw = FALSE,
   include.imaging = FALSE,
-  calculate.error = TRUE,
-  use.dist0 = FALSE,
+  calculate.error = FALSE,
+  use.dist0 = TRUE,
   divergence.threshold = 10000,
   divergence.handling = "Balance",
   balance.weight = 0.5
@@ -57,6 +58,11 @@ using \code{get.af.spectra}. Required for \code{AutoSpectral} unmixing. Default 
 \code{NULL} and will thus provoke failure if no spectra are provided and
 \code{AutoSpectral} is selected.}
 
+\item{spectra.variants}{Named list (names are fluorophores) carrying matrices
+of spectral signature variations for each fluorophore. Prepare using
+\code{get.spectral.variants}. Default is \code{NULL}. Used for
+AutoSpectral unmixing. Required for per-cell fluorophore optimization.}
+
 \item{output.dir}{A character string specifying the directory to save the
 unmixed FCS file. Default is \code{NULL}.}
 
@@ -75,7 +81,8 @@ accuracy and include it as a keyword in the FCS file.}
 \item{use.dist0}{Logical, controls whether the selection of the optimal AF
 signature for each cell is determined by which unmixing brings the cell
 closest to 0 (\code{use.dist0} = \code{TRUE}) or by which unmixing minimizes the
-per-cell residual (\code{use.dist0} = \code{FALSE}). Default is \code{FALSE}.}
+per-cell residual (\code{use.dist0} = \code{FALSE}). Default is \code{TRUE}. Used for
+AutoSpectral unmixing.}
 
 \item{divergence.threshold}{Numeric. Used for \code{FastPoisson} only.
 Threshold to trigger reversion towards WLS unmixing when Poisson result

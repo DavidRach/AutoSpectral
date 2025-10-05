@@ -57,6 +57,8 @@ get.autospectral.param.s8 <- function( autosp.param )
                                           "Event", "Drop", "Spectral", "Waveform",
                                           "Merged", "Flow", "Packet", "Reserved"  )
 
+  autosp.param$spectral.channel <- "[0-9]\\)-A"
+
   autosp.param$af.channel <- "V6 (515)-A"
 
   autosp.param$data.step <- 5e6

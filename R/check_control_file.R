@@ -129,6 +129,18 @@ check.control.file <- function( control.dir, control.def.file, asp,
     errors$missing.fluorophore <- missing.fluorophore
   }
 
+  # check for duplicated fluorophore names
+  duplicated.fluorophores <- duplicated( control.table$fluorophore )
+  if ( any( duplicated.fluorophores ) ) {
+    dup.fluor <- control.table$fluorophore[ duplicated.fluorophores ]
+    warning( "Duplicate entries exist for fluorophores." )
+    message( "\033[31mThe following fluorophores are duplicated:\033[0m" )
+    message( paste( dup.fluor, collapse = "\n" ) )
+    message( "\033[31mTo run multiple controls per fluorophore, name them uniquely, e.g.,
+             FITC_1, FITC_2, etc.\033[0m" )
+    errors$duplicated.fluorophore <- dup.fluor
+  }
+
   # check that marker has been filled in
   missing.marker.1 <- is.na( control.table$marker )
   missing.marker.2 <- control.table$fluorophore[ control.table$marker == "" ]

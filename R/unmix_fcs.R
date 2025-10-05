@@ -34,6 +34,10 @@
 #' using `get.af.spectra`. Required for `AutoSpectral` unmixing. Default is
 #' `NULL` and will thus provoke failure if no spectra are provided and
 #' `AutoSpectral` is selected.
+#' @param spectra.variants Named list (names are fluorophores) carrying matrices
+#' of spectral signature variations for each fluorophore. Prepare using
+#' `get.spectral.variants`. Default is `NULL`. Used for
+#' AutoSpectral unmixing. Required for per-cell fluorophore optimization.
 #' @param output.dir A character string specifying the directory to save the
 #' unmixed FCS file. Default is `NULL`.
 #' @param file.suffix A character string to append to the output file name.
@@ -47,7 +51,8 @@
 #' @param use.dist0 Logical, controls whether the selection of the optimal AF
 #' signature for each cell is determined by which unmixing brings the cell
 #' closest to 0 (`use.dist0` = `TRUE`) or by which unmixing minimizes the
-#' per-cell residual (`use.dist0` = `FALSE`). Default is `FALSE`.
+#' per-cell residual (`use.dist0` = `FALSE`). Default is `TRUE`. Used for
+#' AutoSpectral unmixing.
 #' @param divergence.threshold Numeric. Used for `FastPoisson` only.
 #' Threshold to trigger reversion towards WLS unmixing when Poisson result
 #' diverges for a given point.
@@ -67,12 +72,13 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
                        weighted = FALSE,
                        weights = NULL,
                        af.spectra = NULL,
+                       spectra.variants = NULL,
                        output.dir = NULL,
                        file.suffix = NULL,
                        include.raw = FALSE,
                        include.imaging = FALSE,
-                       calculate.error = TRUE,
-                       use.dist0 = FALSE,
+                       calculate.error = FALSE,
+                       use.dist0 = TRUE,
                        divergence.threshold = 1e4,
                        divergence.handling = "Balance",
                        balance.weight = 0.5 ){
@@ -93,6 +99,11 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
     }
   }
 
+  if ( is.null( spectra.variants ) )
+    af.only <- TRUE
+  else
+    af.only <- FALSE
+
   # import fcs, without warnings for fcs 3.2
   fcs.data <- suppressWarnings(
     flowCore::read.FCS( fcs.file, transformation = FALSE,
@@ -101,6 +112,7 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
 
   fcs.keywords <- flowCore::keyword( fcs.data )
   file.name <- flowCore::keyword( fcs.data, "$FIL" )
+  RMSE <- NULL
 
   # deal with manufacturer peculiarities in writing fcs files
   if ( asp$cytometer == "ID7000" ) {
@@ -122,9 +134,10 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
   fcs.exprs <- flowCore::exprs( fcs.data )
   rm( fcs.data )
 
-  spectral.exprs <- fcs.exprs[ , flow.control$spectral.channel, drop = FALSE ]
+  spectral.channel <- colnames( spectra )
+  spectral.exprs <- fcs.exprs[ , spectral.channel, drop = FALSE ]
 
-  other.channels <- setdiff( colnames( fcs.exprs ), flow.control$spectral.channel )
+  other.channels <- setdiff( colnames( fcs.exprs ), spectral.channel )
   other.exprs <- fcs.exprs[ , other.channels, drop = FALSE ]
 
   if ( !include.raw )
@@ -150,8 +163,8 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
         weights <- as.numeric( qspe.values[ ( n.channels + 2 ):( n.channels * 2 + 1 ) ] )
         names( weights ) <- channel.names
 
-        if ( all( flow.control$spectral.channel %in% names( weights ) ) ) {
-          weights <- 1 / weights[ flow.control$spectral.channel ]
+        if ( all( spectral.channel %in% names( weights ) ) ) {
+          weights <- 1 / weights[ spectral.channel ]
         } else {
           # fallback to empirical weighting
           channel.var <- colMeans( spectral.exprs )
@@ -170,10 +183,18 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
   unmixed.data <- switch( method,
                          "OLS" = unmix.ols( spectral.exprs, spectra ),
                          "WLS" = unmix.wls( spectral.exprs, spectra, weights ),
-                         "AutoSpectral" = unmix.autospectral( spectral.exprs, spectra,
-                                                              af.spectra, weighted,
-                                                              weights, calculate.error,
-                                                              use.dist0 ),
+                         "AutoSpectral" = unmix.autospectral( spectral.exprs,
+                                                              spectra,
+                                                              af.spectra,
+                                                              spectra.variants,
+                                                              weighted, weights,
+                                                              calculate.error,
+                                                              af.only,
+                                                              use.dist0,
+                                                              asp$verbose,
+                                                              asp$parallel,
+                                                              asp$worker.process.n,
+                                                              asp$max.memory.n ),
                          "Poisson" = unmix.poisson( spectral.exprs, spectra, asp, weights ),
                          "FastPoisson" = {
                            if ( requireNamespace("AutoSpectralRcpp", quietly = TRUE ) &&
@@ -244,7 +265,7 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
 
   params$desc[ !is.na( other.match.idx ) ] <- NA
 
-  parameters( flow.frame ) <- AnnotatedDataFrame( params )
+  parameters( flow.frame ) <- Biobase::AnnotatedDataFrame( params )
 
   # update keywords
   keyword( flow.frame ) <- fcs.keywords
@@ -258,8 +279,8 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
 
   # add weighting values as a keyword
   if ( !is.null( weights ) ) {
-        weights <- paste( c( length( flow.control$spectral.channel ),
-                             flow.control$spectral.channel,
+        weights <- paste( c( length( spectral.channel ),
+                             spectral.channel,
             formatC( weights, digits = 8, format = "fg" ) ), collapse = "," )
 
         keyword( flow.frame )[[ "$WEIGHTS" ]] <- weights

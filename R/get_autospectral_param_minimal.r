@@ -195,6 +195,18 @@ get.autospectral.param.minimal <- function()
       gate.region.max.density.grid.n.beads = 100,
       gate.downsample.n.beads = 10000,
 
+      ### per-cell autofluorescence parameters
+      af.som.dim = 10,
+
+      ### spectral variants parameters
+      variant.n.cells = 2000,
+      variant.som.dim = 10,
+      variant.sim.threshold = 0.98,
+      variant.seed = 42,
+      variant.pos.quantile = 0.995,
+      variant.dir = "./figure_spectral_variants",
+      variant.filename = "Spectral_variants.rds",
+
       ### refine spillover (unmixing) parameters
       rlm.iter.max = 100,
       rlm.trim.factor = 0.003,
