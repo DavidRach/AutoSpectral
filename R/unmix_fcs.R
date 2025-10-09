@@ -62,6 +62,16 @@
 #' Default is `Balance`
 #' @param balance.weight Numeric. Weighting to average non-convergent cells.
 #' Used for `Balance` option under `divergence.handling`. Default is `0.5`.
+#' @param speed Selector for the precision-speed trade-off in AutoSpectral per-cell
+#' fluorophore optimization. Options are the default `fast`, which selects the
+#' best spectral fit per cell by updating the predicted values for each
+#' fluorophore independently without repeating the unnmixing, `medium` which uses
+#' a Woodbury-Sherman-Morrison rank-one updating of the unnmixing matrix for
+#' better results and a moderate slow-down, or `slow`, which explicitly
+#' recomputes the unmixing matrix for each variant for maximum precision. The
+#' `fast` method is only one available in the `AutoSpectral` package and will be
+#' slow in the pure R implementation. Installation of `AutoSpectralRcpp` is
+#' strongly encouraged.
 #'
 #' @return None. The function writes the unmixed FCS data to a file.
 #'
@@ -81,7 +91,8 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
                        use.dist0 = TRUE,
                        divergence.threshold = 1e4,
                        divergence.handling = "Balance",
-                       balance.weight = 0.5 ){
+                       balance.weight = 0.5,
+                       speed = "fast" ){
 
   if ( is.null( output.dir ) )
     output.dir <- asp$unmixed.fcs.dir
@@ -98,11 +109,6 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
       method <- "OLS"
     }
   }
-
-  if ( is.null( spectra.variants ) )
-    af.only <- TRUE
-  else
-    af.only <- FALSE
 
   # import fcs, without warnings for fcs 3.2
   fcs.data <- suppressWarnings(
@@ -183,18 +189,48 @@ unmix.fcs <- function( fcs.file, spectra, asp, flow.control,
   unmixed.data <- switch( method,
                          "OLS" = unmix.ols( spectral.exprs, spectra ),
                          "WLS" = unmix.wls( spectral.exprs, spectra, weights ),
-                         "AutoSpectral" = unmix.autospectral( spectral.exprs,
-                                                              spectra,
-                                                              af.spectra,
-                                                              spectra.variants,
-                                                              weighted, weights,
-                                                              calculate.error,
-                                                              af.only,
-                                                              use.dist0,
-                                                              asp$verbose,
-                                                              asp$parallel,
-                                                              asp$worker.process.n,
-                                                              asp$max.memory.n ),
+                         "AutoSpectral" = {
+                           if ( requireNamespace("AutoSpectralRcpp", quietly = TRUE ) &&
+                                "unmix.autospectral.rcpp" %in% ls( getNamespace( "AutoSpectralRcpp" ) ) ) {
+                             tryCatch(
+                               AutoSpectralRcpp::unmix.autospectral.rcpp( raw.data = spectral.exprs,
+                                                                          spectra = spectra,
+                                                                          af.spectra = af.spectra,
+                                                                          spectra.variants = spectra.variants,
+                                                                          weighted = weighted,
+                                                                          weights = weights,
+                                                                          calculate.error = calculate.error,
+                                                                          use.dist0 = use.dist0,
+                                                                          verbose = asp$verbose,
+                                                                          parallel = TRUE,
+                                                                          threads = asp$worker.process.n,
+                                                                          speed = speed ),
+                               error = function( e ) {
+                                 warning( "AutoSpectralRcpp unmixing failed, falling back to standard AutoSpectral: ", e$message )
+                                 unmix.autospectral( raw.data = spectral.exprs,
+                                                     spectra = spectra,
+                                                     af.spectra = af.spectra,
+                                                     spectra.variants = spectra.variants,
+                                                     weighted = weighted,
+                                                     weights = weights,
+                                                     calculate.error = calculate.error,
+                                                     use.dist0 = use.dist0,
+                                                     verbose = asp$verbose )
+                               }
+                             )
+                           } else {
+                             warning( "AutoSpectralRcpp not available, falling back to standard AutoSpectral" )
+                             unmix.autospectral( raw.data = spectral.exprs,
+                                                 spectra = spectra,
+                                                 af.spectra = af.spectra,
+                                                 spectra.variants = spectra.variants,
+                                                 weighted = weighted,
+                                                 weights = weights,
+                                                 calculate.error = calculate.error,
+                                                 use.dist0 = use.dist0,
+                                                 verbose = asp$verbose )
+                           }
+                         },
                          "Poisson" = unmix.poisson( spectral.exprs, spectra, asp, weights ),
                          "FastPoisson" = {
                            if ( requireNamespace("AutoSpectralRcpp", quietly = TRUE ) &&

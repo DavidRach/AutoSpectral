@@ -61,6 +61,16 @@
 #' where `WLS` and `NonNeg` results will be averaged. Default is `Balance`
 #' @param balance.weight Numeric. Weighting to average non-convergent cells.
 #' Used for `Balance` option under `divergence.handling`. Default is `0.5`
+#' @param speed Selector for the precision-speed trade-off in AutoSpectral per-cell
+#' fluorophore optimization. Options are the default `fast`, which selects the
+#' best spectral fit per cell by updating the predicted values for each
+#' fluorophore independently without repeating the unnmixing, `medium` which uses
+#' a Woodbury-Sherman-Morrison rank-one updating of the unnmixing matrix for
+#' better results and a moderate slow-down, or `slow`, which explicitly
+#' recomputes the unmixing matrix for each variant for maximum precision. The
+#' `fast` method is only one available in the `AutoSpectral` package and will be
+#' slow in the pure R implementation. Installation of `AutoSpectralRcpp` is
+#' strongly encouraged.
 #'
 #' @return None. Saves the unmixed FCS files to the specified output directory.
 #'
@@ -80,7 +90,8 @@ unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
                           use.dist0 = TRUE,
                           divergence.threshold = 1e4,
                           divergence.handling = "Balance",
-                          balance.weight = 0.5 ){
+                          balance.weight = 0.5,
+                          speed = "fast" ){
 
   if ( is.null( output.dir ) )
     output.dir <- asp$unmixed.fcs.dir
@@ -100,5 +111,6 @@ unmix.folder <- function( fcs.dir, spectra, asp, flow.control,
                    method, weighted, weights, af.spectra, spectra.variants,
                    output.dir, file.suffix, include.raw,include.imaging,
                    calculate.error, use.dist0,
-                   divergence.threshold, divergence.handling, balance.weight )
+                   divergence.threshold, divergence.handling, balance.weight,
+                   speed )
 }

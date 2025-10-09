@@ -16,9 +16,6 @@
 #' Prepare using `get.autospectral.param`
 #' @param spectra A matrix containing the spectral data. Fluorophores in rows,
 #' detectors in columns.
-#' @param af.spectra Spectral signatures of autofluorescences, normalized
-#' between 0 and 1, with fluorophores in rows and detectors in columns. Prepare
-#' using `get.af.spectra`.
 #' @param n.cells Numeric, default `2000`. Number of cells to use for defining
 #' the variation in spectra. Up to `n.cells` cells will be selected as positive
 #' events in the peak channel for each fluorophore, above the `pos.quantile` in
@@ -41,7 +38,7 @@
 #'
 #' @export
 
-get.spectral.variants <- function( flow.control, asp, spectra, af.spectra,
+get.spectral.variants <- function( flow.control, asp, spectra,
                                    n.cells = 2000, pos.quantile = 0.995,
                                    som.dim = 10, sim.threshold = 0.98,
                                    plot.dir = NULL ) {
@@ -59,7 +56,6 @@ get.spectral.variants <- function( flow.control, asp, spectra, af.spectra,
 
   fluorophores <- rownames( spectra )[ rownames( spectra ) != "AF" ]
   spectral.channel <- colnames( spectra )
-  af.n <- nrow( af.spectra )
   fluorophore.n <- nrow( spectra )
   detector.n <- ncol( spectra )
 

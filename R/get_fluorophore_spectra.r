@@ -4,19 +4,15 @@
 #'
 #' @description
 #' This function retrieves the fluorophore spectra for flow cytometry data,
-#' optionally using cleaned expression data and biexponential transformation.
+#' optionally using cleaned expression data.
 #' It also plots and saves the spectra, and performs cosine similarity QC for
 #' controls.
-#'
-#' @importFrom flowWorkspace flowjo_biexp
 #'
 #' @param flow.control A list containing flow cytometry control data.
 #' @param asp The AutoSpectral parameter list.
 #' Prepare using `get.autospectral.param`
 #' @param use.clean.expr Logical indicating whether to use cleaned expression
-#' data, default is `FALSE`
-#' @param biexp Logical indicating whether to apply biexponential
-#' transformation, default is `FALSE`
+#' data, default is `TRUE`
 #' @param af.spectra Optional autofluorescence spectra to include.
 #' @param title Optional prefix for plot titles, default is `NULL`, which gives
 #' "Initial" when `use.clean.expr` is `FALSE` and "Clean" when `use.clean.expr`
@@ -26,31 +22,18 @@
 #'
 #' @export
 
-get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
-                                     biexp = FALSE, af.spectra = NULL,
-                                     title = NULL )
+get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = TRUE,
+                                     af.spectra = NULL, title = NULL )
 {
   spectra.zero <- rep( 0, flow.control$spectral.channel.n )
   names( spectra.zero ) <- flow.control$spectral.channel
 
-  if ( !is.null( title ) ) {
+  if ( !is.null( title ) )
     title <- paste( title, asp$spectra.file.name )
-  } else if ( use.clean.expr ) {
+  else if ( use.clean.expr )
     title <- paste( "Clean", asp$spectra.file.name )
-  } else {
+  else
     title <- paste( "Initial", asp$spectra.file.name )
-  }
-
-  if ( biexp ) {
-    biexp.transform <- flowjo_biexp(
-      channelRange = asp$default.transformation.param$length,
-      maxValue = asp$default.transformation.param$max.range,
-      pos = asp$default.transformation.param$pos,
-      neg = asp$default.transformation.param$neg,
-      widthBasis = asp$default.transformation.param$width,
-      inverse = FALSE
-    )
-  }
 
   # iterate only over non-negative samples
   fluorophore.samples <- flow.control$fluorophore[ ! grepl( "negative",
@@ -60,7 +43,18 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
   fluorophore.channels <- flow.control$channel[ ! grepl( "negative",
                                                        flow.control$fluorophore,
                                                        ignore.case = TRUE ) ]
+  # check for data
+  if ( use.clean.expr ) {
+    if ( is.null( flow.control$clean.expr ) )
+      stop( "Cleaned control data could not be found.
+            Run `clean.controls` first." )
+  } else {
+    if ( is.null( flow.control$expr.data ) )
+      stop( "Control data could not be found in `flow.control`.
+            Run `define.flow.control` first." )
+  }
 
+  # extract fluophore spectra using original "dirty" data
   if ( !use.clean.expr ) {
     fluorophore.event.samples <- flow.control$event.sample[ flow.control$event.sample %in%
                                                              fluorophore.samples ]
@@ -68,9 +62,6 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
 
     expr.data <- flow.control$expr.data[ flow.control$event.sample %in%
                                            fluorophore.event.samples, ]
-
-    if ( biexp )
-      expr.data <- apply( expr.data, 2, biexp.transform )
 
     marker.spectra <- lapply( fluorophore.samples, function( samp ) {
 
@@ -112,16 +103,13 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
     rownames( marker.spectra ) <- fluorophore.samples
 
   } else {
+    # extract fluophore spectra using "cleaned" data
     fluorophore.event.samples <- flow.control$clean.event.sample[ flow.control$clean.event.sample %in%
                                                                    fluorophore.samples ]
     fluorophore.event.samples <- droplevels( fluorophore.event.samples )
 
     expr.data <- flow.control$clean.expr[ flow.control$clean.event.sample %in%
                                             fluorophore.event.samples, ]
-
-    if ( biexp ) {
-      expr.data <- apply( expr.data, 2, biexp.transform )
-    }
 
     marker.spectra <- lapply( fluorophore.samples, function( samp ) {
 
@@ -169,9 +157,8 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
 
     fluorophore.spectra.plot <- marker.spectra
 
-    if ( !is.null( af.spectra ) ) {
+    if ( !is.null( af.spectra ) )
       fluorophore.spectra.plot <- rbind( fluorophore.spectra.plot, af.spectra )
-    }
 
     spectral.trace( spectral.matrix = fluorophore.spectra.plot,
                     title = title, plot.dir = asp$figure.spectra.dir,
@@ -182,11 +169,10 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
                       plot.dir = asp$figure.spectra.dir )
   }
 
-  if ( !is.null( asp$table.spectra.dir ) ) {
+  if ( !is.null( asp$table.spectra.dir ) )
     write.csv( fluorophore.spectra.plot,
               file = file.path( asp$table.spectra.dir,
                                sprintf( "%s.csv", title ) ) )
-  }
 
   # cosine similarity QC for controls
   if ( asp$figures )
@@ -229,6 +215,6 @@ get.fluorophore.spectra <- function( flow.control, asp, use.clean.expr = FALSE,
          \033[0m" )
   }
 
-  marker.spectra
+  return( marker.spectra )
 }
 

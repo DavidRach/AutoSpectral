@@ -8,7 +8,6 @@ get.spectral.variants(
   flow.control,
   asp,
   spectra,
-  af.spectra,
   n.cells = 2000,
   pos.quantile = 0.995,
   som.dim = 10,
@@ -24,10 +23,6 @@ Prepare using \code{get.autospectral.param}}
 
 \item{spectra}{A matrix containing the spectral data. Fluorophores in rows,
 detectors in columns.}
-
-\item{af.spectra}{Spectral signatures of autofluorescences, normalized
-between 0 and 1, with fluorophores in rows and detectors in columns. Prepare
-using \code{get.af.spectra}.}
 
 \item{n.cells}{Numeric, default \code{2000}. Number of cells to use for defining
 the variation in spectra. Up to \code{n.cells} cells will be selected as positive

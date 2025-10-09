@@ -6,9 +6,6 @@
 #' Unmix using the AutoSpectral method to extract autofluorescence and optimize
 #' fluorophore signatures at the single cell level.
 #'
-#' @importFrom future plan multisession
-#' @importFrom future.apply future_lapply
-#'
 #' @param raw.data Expression data from raw fcs files. Cells in rows and
 #' detectors in columns. Columns should be fluorescent data only and must
 #' match the columns in spectra.
@@ -27,22 +24,12 @@
 #' channel means (Poisson variance). Only used if `weighted`.
 #' @param calculate.error Logical, whether to calculate the RMSE unmixing model
 #' accuracy and include it as an output. Default is `FALSE`.
-#' @param af.only Logical, controls whether to optimize per-cell autofluorescence
-#' extraction only, `TRUE`, or also per-cell fluorophore signatures, `FALSE`.
 #' @param use.dist0 Logical, controls whether the selection of the optimal AF
 #' signature for each cell is determined by which unmixing brings the cell
 #' closest to 0 (`use.dist0` = `TRUE`) or by which unmixing minimizes the
 #' per-cell residual (`use.dist0` = `FALSE`). Default is `TRUE`.
 #' @param verbose Logical, whether to send messages to the console.
 #' Default is `TRUE`.
-#' @param parallel Logical, whether to use parallel processing for the per-cell
-#' unmixing for fluorophore optimization. Default is `FALSE`.
-#' @param threads Numeric, number of threads to use for parallel processing.
-#' Default is `1`, which is sequential processing. Recommended: use
-#' `asp$worker.process.n`.
-#' @param max.memory Numeric, cap on memory usage per future (thread) in parallel
-#' processing. Default is `2 * 1024^3`, i.e., 2 gigabytes. For large files, use
-#' fewer threads and more memory per thread.
 #'
 #' @return Unmixed data with cells in rows and fluorophores in columns.
 #'
@@ -52,11 +39,8 @@ unmix.autospectral <- function( raw.data, spectra, af.spectra,
                                 spectra.variants = NULL,
                                 weighted = FALSE, weights = NULL,
                                 calculate.error = FALSE,
-                                af.only = TRUE,
                                 use.dist0 = TRUE,
-                                verbose = TRUE,
-                                parallel = FALSE, threads = 1,
-                                max.memory = 2 * 1024^3 ) {
+                                verbose = TRUE ) {
 
   # check for AF in spectra, remove if present
   if ( "AF" %in% rownames( spectra ) )
@@ -73,6 +57,11 @@ unmix.autospectral <- function( raw.data, spectra, af.spectra,
   else
     unmix <- unmix.ols
 
+  if ( weighted & is.null( weights ) ) {
+    weights <- colMeans( raw.data )
+    weights <- 1 / ( weights + 1e-6 )
+  }
+
   fluorophores <- rownames( spectra )
   af.n <- nrow( af.spectra )
   fluorophore.n <- nrow( spectra )
@@ -82,6 +71,7 @@ unmix.autospectral <- function( raw.data, spectra, af.spectra,
   fluors.af <- c( fluorophores, "AF" )
   rownames( combined.spectra ) <- fluors.af
   combined.spectra[ 1:fluorophore.n, ] <- spectra
+  af.only <- is.null( spectra.variants )
 
   # initial unmixing without any AF
   if ( verbose ) message( "Initializing unmix" )
@@ -199,15 +189,7 @@ unmix.autospectral <- function( raw.data, spectra, af.spectra,
   # for fluor optimization, use raw.data with AF fitted component subtracted
   remaining.raw <- raw.data - fitted.af
 
-  if ( parallel ) {
-    future::plan( future::multisession, workers = threads )
-    options( future.globals.maxSize = max.memory )
-    lapply.function <- future.apply::future_lapply
-  } else {
-    lapply.function <- lapply.sequential
-  }
-
-  unmixed.opt <- lapply.function( seq_len( nrow( remaining.raw ) ), function( cell ) {
+  unmixed.opt <- lapply( seq_len( nrow( remaining.raw ) ), function( cell ) {
 
     cell.raw <- remaining.raw[ cell, , drop = FALSE ]
     cell.unmixed <- unmixed[ cell, fluorophores, drop = FALSE ]

@@ -22,7 +22,8 @@ unmix.fcs(
   use.dist0 = TRUE,
   divergence.threshold = 10000,
   divergence.handling = "Balance",
-  balance.weight = 0.5
+  balance.weight = 0.5,
+  speed = "fast"
 )
 }
 \arguments{
@@ -95,6 +96,17 @@ Default is \code{Balance}}
 
 \item{balance.weight}{Numeric. Weighting to average non-convergent cells.
 Used for \code{Balance} option under \code{divergence.handling}. Default is \code{0.5}.}
+
+\item{speed}{Selector for the precision-speed trade-off in AutoSpectral per-cell
+fluorophore optimization. Options are the default \code{fast}, which selects the
+best spectral fit per cell by updating the predicted values for each
+fluorophore independently without repeating the unnmixing, \code{medium} which uses
+a Woodbury-Sherman-Morrison rank-one updating of the unnmixing matrix for
+better results and a moderate slow-down, or \code{slow}, which explicitly
+recomputes the unmixing matrix for each variant for maximum precision. The
+\code{fast} method is only one available in the \code{AutoSpectral} package and will be
+slow in the pure R implementation. Installation of \code{AutoSpectralRcpp} is
+strongly encouraged.}
 }
 \value{
 None. The function writes the unmixed FCS data to a file.

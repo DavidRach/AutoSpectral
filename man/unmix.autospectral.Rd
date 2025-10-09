@@ -12,12 +12,8 @@ unmix.autospectral(
   weighted = FALSE,
   weights = NULL,
   calculate.error = FALSE,
-  af.only = TRUE,
   use.dist0 = TRUE,
-  verbose = TRUE,
-  parallel = FALSE,
-  threads = 1,
-  max.memory = 2 * 1024^3
+  verbose = TRUE
 )
 }
 \arguments{
@@ -46,9 +42,6 @@ channel means (Poisson variance). Only used if \code{weighted}.}
 \item{calculate.error}{Logical, whether to calculate the RMSE unmixing model
 accuracy and include it as an output. Default is \code{FALSE}.}
 
-\item{af.only}{Logical, controls whether to optimize per-cell autofluorescence
-extraction only, \code{TRUE}, or also per-cell fluorophore signatures, \code{FALSE}.}
-
 \item{use.dist0}{Logical, controls whether the selection of the optimal AF
 signature for each cell is determined by which unmixing brings the cell
 closest to 0 (\code{use.dist0} = \code{TRUE}) or by which unmixing minimizes the
@@ -56,17 +49,6 @@ per-cell residual (\code{use.dist0} = \code{FALSE}). Default is \code{TRUE}.}
 
 \item{verbose}{Logical, whether to send messages to the console.
 Default is \code{TRUE}.}
-
-\item{parallel}{Logical, whether to use parallel processing for the per-cell
-unmixing for fluorophore optimization. Default is \code{FALSE}.}
-
-\item{threads}{Numeric, number of threads to use for parallel processing.
-Default is \code{1}, which is sequential processing. Recommended: use
-\code{asp$worker.process.n}.}
-
-\item{max.memory}{Numeric, cap on memory usage per future (thread) in parallel
-processing. Default is \code{2 * 1024^3}, i.e., 2 gigabytes. For large files, use
-fewer threads and more memory per thread.}
 }
 \value{
 Unmixed data with cells in rows and fluorophores in columns.
