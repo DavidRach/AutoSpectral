@@ -48,7 +48,7 @@ spectral.variant.plot <- function( spectra.variants, median.spectrum,
 
   ggplot( variant.data, aes( x = x ) ) +
     geom_ribbon( aes( ymin = min, ymax = max ), fill = "skyblue", alpha = 0.3 ) +
-    geom_line( aes( y = median, group = 1 ), size = 1, color = "blue" ) +
+    geom_line( aes( y = median, group = 1 ), linewidth = 1, color = "blue" ) +
     scale_x_continuous( breaks = variant.data$x, labels = variant.data$detector ) +
     labs( x = "Detector", y = "Intensity",
          title = title ) +

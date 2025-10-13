@@ -8,8 +8,8 @@ downsample.control(
   clean.expr.data,
   samp,
   peak.channels,
-  negative.n,
-  positive.n,
+  negative.n = 500,
+  positive.n = 1000,
   verbose = TRUE
 )
 }
@@ -21,9 +21,9 @@ sample.}
 
 \item{peak.channels}{A vector of peak channels for the samples.}
 
-\item{negative.n}{The number of negative events to select.}
+\item{negative.n}{Number of negative events to select, default \code{500}.}
 
-\item{positive.n}{The number of positive events to select.}
+\item{positive.n}{Number of positive events to select, default \code{1000}.}
 
 \item{verbose}{Logical. Default is \code{TRUE}.}
 }

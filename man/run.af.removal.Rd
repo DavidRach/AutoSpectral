@@ -15,7 +15,10 @@ run.af.removal(
   negative.n = 500,
   positive.n = 1000,
   scatter.match = TRUE,
-  intermediate.figures = FALSE
+  intermediate.figures = FALSE,
+  main.figures = TRUE,
+  parallel = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -49,6 +52,17 @@ region of FSC and SSC based on the distribution of selected positive events.}
 show the inner workings of the cleaning, including definition of low-AF cell
 gates on the PCA-unmixed unstained and spectral ribbon plots of the AF
 exclusion from the unstained.}
+
+\item{main.figures}{Logical, if \code{TRUE} creates the main figures to show the
+impact of intrusive autofluorescent event removal and scatter-matching for
+the negatives.}
+
+\item{parallel}{Logical, default is \code{FALSE}, in which case parallel processing
+will not be used. Parallel processing will likely be faster when many small
+files are read in. If the data is larger, parallel processing may not
+accelerate the process much.}
+
+\item{verbose}{Logical, default is \code{TRUE}. Set to \code{FALSE} to suppress messages.}
 }
 \value{
 A list containing the expression data with autofluorescent events

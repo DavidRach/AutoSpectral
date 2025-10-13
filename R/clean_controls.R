@@ -46,6 +46,14 @@
 #' show the inner workings of the cleaning, including definition of low-AF cell
 #' gates on the PCA-unmixed unstained and spectral ribbon plots of the AF
 #' exclusion from the unstained. Default is `FALSE` to speed up processing.
+#' @param main.figures Logical, if `TRUE` creates the main figures to show the
+#' impact of intrusive autofluorescent event removal and scatter-matching for
+#' the negatives.
+#' @param parallel Logical, default is `FALSE`, in which case parallel processing
+#' will not be used. Parallel processing will likely be faster when many small
+#' files are read in. If the data is larger, parallel processing may not
+#' accelerate the process much.
+#' @param verbose Logical, default is `TRUE`. Set to `FALSE` to suppress messages.
 #'
 #' @return
 #' Returns a modified `flow.control` with the original data intact. New, cleaned
@@ -59,8 +67,14 @@ clean.controls <- function( flow.control, asp,
                             af.remove = FALSE,
                             universal.negative = TRUE, downsample = TRUE,
                             negative.n = asp$negative.n, positive.n = asp$positive.n,
-                            scatter.match = TRUE, scrub = TRUE,
-                            intermediate.figures = FALSE ) {
+                            scatter.match = TRUE, scrub = FALSE,
+                            intermediate.figures = FALSE,
+                            main.figures = TRUE,
+                            parallel = FALSE,
+                            verbose = TRUE ) {
+
+  if ( intermediate.figures & !main.figures )
+    main.figures <- TRUE
 
   flow.sample <- flow.control$sample
   flow.sample.n <- length( flow.sample )
@@ -104,11 +118,12 @@ clean.controls <- function( flow.control, asp,
   # this can be slow and may not show much effect
 
   if ( time.clean ) {
-    if ( !dir.exists( asp$figure.peacoqc.dir ) )
+    if ( !dir.exists( asp$figure.peacoqc.dir ) & main.figures )
       dir.create( asp$figure.peacoqc.dir )
 
-    clean.expr <- run.peacoQC( clean.expr, spectral.channel,
-                               all.channels, asp )
+    clean.expr <- run.peacoQC( clean.expr, spectral.channel, all.channels, asp,
+                               figures = main.figures, parallel = parallel,
+                               verbose = verbose )
   }
 
   ### Stage 2: Trimming -----------------
@@ -149,14 +164,16 @@ clean.controls <- function( flow.control, asp,
   # can be done on a per control basis by specifying clean = TRUE in the fcs_control_file
 
   if ( af.remove ) {
-    if ( !dir.exists( asp$figure.clean.control.dir ) )
-      dir.create( asp$figure.clean.control.dir )
-    if ( !dir.exists( asp$figure.spectral.ribbon.dir ) )
-      dir.create( asp$figure.spectral.ribbon.dir )
-    if ( !dir.exists( asp$figure.af.dir ) )
-      dir.create( asp$figure.af.dir )
-    if ( !dir.exists( asp$figure.scatter.dir.base ) )
-      dir.create( asp$figure.scatter.dir.base )
+    if ( main.figures ) {
+      if ( !dir.exists( asp$figure.clean.control.dir ) )
+        dir.create( asp$figure.clean.control.dir )
+      if ( !dir.exists( asp$figure.spectral.ribbon.dir ) )
+        dir.create( asp$figure.spectral.ribbon.dir )
+      if ( !dir.exists( asp$figure.af.dir ) )
+        dir.create( asp$figure.af.dir )
+      if ( !dir.exists( asp$figure.scatter.dir.base ) )
+        dir.create( asp$figure.scatter.dir.base )
+    }
 
     # identify universal negative cell samples
     univ.neg <- unique( flow.negative )
@@ -195,7 +212,8 @@ clean.controls <- function( flow.control, asp,
                                        flow.negative, asp,
                                        flow.control$scatter.parameter,
                                        negative.n, positive.n, scatter.match,
-                                       intermediate.figures )
+                                       intermediate.figures, main.figures,
+                                       parallel = parallel, verbose = verbose )
 
     # create new negative slot
     clean.universal.negative <- flow.negative
@@ -214,10 +232,12 @@ clean.controls <- function( flow.control, asp,
   # recommended whenever you have an appropriate universal negative
 
   if ( universal.negative ) {
-    if ( !dir.exists( asp$figure.scatter.dir.base ) )
-      dir.create( asp$figure.scatter.dir.base )
-    if ( !dir.exists( asp$figure.spectral.ribbon.dir ) )
-      dir.create( asp$figure.spectral.ribbon.dir )
+    if ( main.figures ) {
+      if ( !dir.exists( asp$figure.scatter.dir.base ) )
+        dir.create( asp$figure.scatter.dir.base )
+      if ( !dir.exists( asp$figure.spectral.ribbon.dir ) )
+        dir.create( asp$figure.spectral.ribbon.dir )
+    }
 
     # use AF-removed universal negative samples if available
     if ( !is.null( clean.universal.negative ) )
@@ -254,7 +274,9 @@ clean.controls <- function( flow.control, asp,
                                                spectral.channel, asp,
                                                flow.control.type,
                                                scatter.match,
-                                               intermediate.figures )
+                                               intermediate.figures,
+                                               main.figures,
+                                               verbose )
 
       # merge in cleaned data
       clean.expr[ names( univ.neg.expr ) ] <- univ.neg.expr
@@ -272,10 +294,12 @@ clean.controls <- function( flow.control, asp,
 
   # downsample only
   if ( !universal.negative & downsample ) {
-    if ( !dir.exists( asp$figure.scatter.dir.base ) )
-      dir.create( asp$figure.scatter.dir.base )
-    if ( !dir.exists( asp$figure.spectral.ribbon.dir ) )
-      dir.create( asp$figure.spectral.ribbon.dir )
+    if ( main.figures ) {
+      if ( !dir.exists( asp$figure.scatter.dir.base ) )
+        dir.create( asp$figure.scatter.dir.base )
+      if ( !dir.exists( asp$figure.spectral.ribbon.dir ) )
+        dir.create( asp$figure.spectral.ribbon.dir )
+    }
 
     # select fluorophore samples to be used
     downsample.sample <- flow.control$fluorophore[ ! grepl( "AF|negative",
@@ -287,7 +311,7 @@ clean.controls <- function( flow.control, asp,
 
     downsample.expr <- run.downsample( clean.expr, downsample.sample,
                                        downsample.peak.channels,
-                                       negative.n, positive.n, asp$verbose )
+                                       negative.n, positive.n, verbose )
 
     # merge in cleaned data
     clean.expr[ names( downsample.expr ) ] <- downsample.expr

@@ -26,11 +26,13 @@
 #' show the inner workings of the cleaning, including definition of low-AF cell
 #' gates on the PCA-unmixed unstained and spectral ribbon plots of the AF
 #' exclusion from the unstained. Default is `FALSE` to speed up processing.
+#' @param main.figures Logical, if `TRUE` creates the main figures to show the
+#' impact of intrusive autofluorescent event removal and scatter-matching for
+#' the negatives.
+#' @param verbose Logical, default is `TRUE`. Set to `FALSE` to suppress messages.
 #'
 #' @return A list containing the processed expression data for each universal
 #' negative sample.
-#'
-#' @export
 
 run.universal.negative <- function( clean.expr, univ.sample,
                                     universal.negatives,
@@ -40,7 +42,9 @@ run.universal.negative <- function( clean.expr, univ.sample,
                                     spectral.channel, asp,
                                     control.type,
                                     scatter.match,
-                                    intermediate.figures = FALSE ) {
+                                    intermediate.figures = FALSE,
+                                    main.figures = TRUE,
+                                    verbose = TRUE ) {
 
   univ.expr <- lapply( univ.sample, function( sample.name ) {
 
@@ -51,7 +55,9 @@ run.universal.negative <- function( clean.expr, univ.sample,
                             spectral.channel, asp,
                             control.type,
                             scatter.match,
-                            intermediate.figures )
+                            intermediate.figures,
+                            main.figures,
+                            verbose )
   } )
 
   names( univ.expr ) <- univ.sample

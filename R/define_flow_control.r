@@ -24,6 +24,11 @@
 #' be performed. If `FALSE`, the FCS files will be imported without automatically
 #' generated gates applied. That is, all data in the files will be used. This is
 #' intended to allow the user to pre-gate the files in commercial software.
+#' @param parallel Logical, default is `FALSE`, in which case parallel processing
+#' will not be used. Parallel processing will likely be faster when many small
+#' files are read in. If the data is larger, parallel processing may not
+#' accelerate the process much.
+#' @param verbose Logical, default is `TRUE`. Set to `FALSE` to suppress messages.
 #'
 #' @return A list (`flow.control`) with the following components:
 #' - `filename`: Names of the single-color control files.
@@ -56,10 +61,11 @@
 #' @export
 
 define.flow.control <- function( control.dir, control.def.file, asp,
-                                      gate = TRUE )
+                                 gate = TRUE, parallel = FALSE,
+                                 verbose = TRUE )
 {
   # set up parallel processing
-  if ( asp$parallel ){
+  if ( parallel ){
     future::plan( future::multisession, workers = asp$worker.process.n )
     options( future.globals.maxSize = asp$max.memory.n )
     lapply.function <- future.apply::future_lapply
@@ -67,14 +73,12 @@ define.flow.control <- function( control.dir, control.def.file, asp,
     lapply.function <- lapply.sequential
   }
 
-  if ( asp$verbose )
-    message( "\033[34m Checking control file for errors \033[0m" )
+  if ( verbose ) message( "\033[34m Checking control file for errors \033[0m" )
 
   check.control.file( control.dir, control.def.file, asp, strict = TRUE )
 
   # read channels from controls
-  if ( asp$verbose )
-    message( "\033[34m Reading control information \033[0m" )
+  if ( verbose ) message( "\033[34m Reading control information \033[0m" )
 
   flow.set.channel.table <- read.channel( control.dir, control.def.file, asp )
 
@@ -116,8 +120,7 @@ define.flow.control <- function( control.dir, control.def.file, asp,
   unique.neg <- unique.neg[ unique.neg$negative != FALSE, , drop = FALSE ]
 
   # define samples (replicate variously gated negatives)
-  if ( asp$verbose )
-    message( "\033[34m Matching negatives for the controls \033[0m" )
+  if ( verbose ) message( "\033[34m Matching negatives for the controls \033[0m" )
 
   if ( nrow( unique.neg != 0 ) ) {
     # match samples with corresponding negative by matching gates
@@ -140,8 +143,7 @@ define.flow.control <- function( control.dir, control.def.file, asp,
   }
 
   # define gates needed
-  if ( asp$verbose )
-    message( "\033[34m Determining the gates that will be needed \033[0m" )
+  if ( verbose ) message( "\033[34m Determining the gates that will be needed \033[0m" )
 
   gate.types <- data.frame( file = control.table$universal.negative,
                             type = control.table$control.type,
@@ -226,8 +228,7 @@ define.flow.control <- function( control.dir, control.def.file, asp,
   names( flow.large.gate ) <- flow.sample
 
   # read scatter parameters
-  if ( asp$verbose )
-    message( "\033[34m Determining channels to be used \033[0m" )
+  if ( verbose ) message( "\033[34m Determining channels to be used \033[0m" )
 
   flow.scatter.parameter <- read.scatter.parameter( asp )
 
@@ -278,15 +279,13 @@ define.flow.control <- function( control.dir, control.def.file, asp,
     asp$data.step
 
   # create figure and table directories
-  if ( asp$verbose )
-    message( "\033[34m Creating output folders \033[0m" )
+  if ( verbose ) message( "\033[34m Creating output folders \033[0m" )
 
   create.directory( asp )
 
   if ( gate ) {
     # define gates on downsampled pooled fcs by type
-    if ( asp$verbose )
-      message( "\033[34m Defining the gates \033[0m" )
+    if ( verbose ) message( "\033[34m Defining the gates \033[0m" )
 
     gate.list <- list()
 
@@ -324,8 +323,7 @@ define.flow.control <- function( control.dir, control.def.file, asp,
     }
 
     # read in fcs files, selecting data within pre-defined gates
-    if ( asp$verbose )
-      message( "\033[34m Reading FCS files \033[0m" )
+    if ( verbose ) message( "\033[34m Reading FCS files \033[0m" )
 
     flow.expr.data <- lapply.function( flow.sample, FUN = get.gated.flow.expression.data,
                                        flow.file.name, control.dir,
@@ -341,6 +339,7 @@ define.flow.control <- function( control.dir, control.def.file, asp,
 
   } else {
     # read in flow data as is
+    if ( verbose ) message( "\033[34m Reading FCS files \033[0m" )
     flow.expr.data <- lapply.function( flow.sample, FUN = get.ungated.flow.expression.data,
                                        flow.file.name, control.dir,
                                        scatter.and.spectral.channel = flow.scatter.and.channel.spectral,
@@ -350,10 +349,8 @@ define.flow.control <- function( control.dir, control.def.file, asp,
     names( flow.expr.data ) <- flow.sample
   }
 
-
   # organize data
-  if ( asp$verbose )
-    message( "\033[34m Organizing control info \033[0m" )
+  if ( verbose ) message( "\033[34m Organizing control info \033[0m" )
 
   flow.sample.event.number.max <- 0
 
@@ -436,10 +433,10 @@ define.flow.control <- function( control.dir, control.def.file, asp,
     expr.data = flow.expr.data
   )
 
-  if ( asp$verbose & gate )
+  if ( verbose & gate )
     message( "\033[32m Control setup complete! \n Review gates in figure_gate. \033[0m" )
-  else if ( asp$verbose )
+  else if ( verbose )
     message( "\033[32m Control setup complete! \033[0m" )
 
-  flow.control
+  return( flow.control )
 }

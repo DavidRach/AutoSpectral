@@ -8,9 +8,9 @@ run.downsample(
   clean.expr.data,
   downsample.sample,
   peak.channels,
-  negative.n,
-  positive.n,
-  asp
+  negative.n = 500,
+  positive.n = 1000,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -20,12 +20,11 @@ run.downsample(
 
 \item{peak.channels}{Named vector mapping samples to their peak channels.}
 
-\item{negative.n}{Number of negative events to select.}
+\item{negative.n}{Number of negative events to select, default \code{500}.}
 
-\item{positive.n}{Number of positive events to select.}
+\item{positive.n}{Number of positive events to select, default \code{1000}.}
 
-\item{asp}{The AutoSpectral parameter list.
-Prepare using \code{get.autospectral.param}}
+\item{verbose}{Logical, default is \code{TRUE}. Set to \code{FALSE} to suppress messages.}
 }
 \value{
 A list containing the downsampled expression data for each sample.

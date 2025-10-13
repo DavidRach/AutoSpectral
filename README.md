@@ -130,3 +130,52 @@ sample.dir <- "./Raw samples"
 # Weighted least squares (WLS or in Sony lingo, WLSM).
 unmix.folder( sample.dir, no.af.spectra, asp, flow.control, method = "WLS" )
 ```
+
+## Go Faster
+
+R is not known for its speed.
+
+For faster processing there are three things you can do, hopefully all
+fairly easy.
+
+First, upgrade the BLAS and LAPACK libraries used by R. These provide
+algorithms for linear algebra, which is the heart of spectral unmixing.
+Simply swapping out your .dll files as in this tutorial can give speed
+ups of 5x. [Install
+OpenBLAS](https://github.com/david-cortes/R-openblas-in-windows) All
+this involves is downloading the files from the internet, placing them
+in the right folder and doing a quick restart.
+
+Do not set multiple threads for the BLAS as this will conflict with
+higher level parallelization, either in AutoSpectral or other packages.
+
+[More on fast BLAS](https://csantill.github.io/RPerformanceWBLAS/)
+
+Second, install AutoSpectralRcpp. This is fully accessible from R and
+integrates with AutoSpectral. But, when it gets to the slow bits in the
+unmixing, it switches over to calculating in C++, so it can be 10-100x
+faster.
+
+[AutoSpectralRcpp](https://github.com/DrCytometer/AutoSpectralRcpp)
+
+You can install the development version of AutoSpectralRcpp like so:
+
+``` r
+devtools::install_github("DrCytometer/AutoSpectralRcpp")
+```
+
+Third, turn on parallel processing in AutoSpectral and AutoSpectralRcpp.
+At the moment, this is not fully optimized in AutoSpectral. The parallel
+processing in AutoSpectralRcpp operates via OpenMP and works well.
+
+To activate parallel processing, either set the `parallel` flag to
+`TRUE` in `asp` or check the function arguments for a `parallel` option.
+Sorry, this will be cleaned up soon.
+
+``` r
+asp$parallel <- TRUE
+```
+
+For unmixing larger data sets, you will do well to use a machine with
+more CPUs. Suggestions for faster processing are welcome. Some modest
+improvements are in the works.

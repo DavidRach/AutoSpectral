@@ -30,11 +30,13 @@
 #' show the inner workings of the cleaning, including definition of low-AF cell
 #' gates on the PCA-unmixed unstained and spectral ribbon plots of the AF
 #' exclusion from the unstained. Default is `FALSE` to speed up processing.
+#' @param main.figures Logical, if `TRUE` creates the main figures to show the
+#' impact of intrusive autofluorescent event removal and scatter-matching for
+#' the negatives.
+#' @param verbose Logical, default is `TRUE`. Set to `FALSE` to suppress messages.
 #'
 #' @return A data frame containing the selected positive and scatter-matched
 #' negative events.
-#'
-#' @export
 
 get.universal.negative <- function( clean.expr.data, samp,
                                     universal.negatives,
@@ -44,9 +46,11 @@ get.universal.negative <- function( clean.expr.data, samp,
                                     spectral.channel, asp,
                                     control.type,
                                     scatter.match = TRUE,
-                                    intermediate.figures = FALSE ) {
+                                    intermediate.figures = FALSE,
+                                    main.figures = TRUE,
+                                    verbose = TRUE ) {
 
-  if ( asp$verbose )
+  if ( verbose )
     message( paste( "\033[34m", "Getting universal negative for", samp, "\033[0m" ) )
 
   pos.control.expr <- clean.expr.data[[ samp ]]
@@ -143,7 +147,7 @@ get.universal.negative <- function( clean.expr.data, samp,
   }
 
 
-  if ( asp$figures ) {
+  if ( main.figures ) {
     scatter.match.plot( pos.selected.expr, neg.scatter.matched, samp,
                         scatter.param, asp )
     if ( intermediate.figures )
@@ -151,6 +155,6 @@ get.universal.negative <- function( clean.expr.data, samp,
                             spectral.channel, asp, samp )
   }
 
-  rbind( pos.selected.expr, neg.scatter.matched )
+  return( rbind( pos.selected.expr, neg.scatter.matched ) )
 
 }

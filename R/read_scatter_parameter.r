@@ -12,8 +12,6 @@
 #' Prepare using `get.autospectral.param`
 #'
 #' @return A vector of scatter parameters.
-#'
-#' @export
 
 read.scatter.parameter <- function( asp )
 {

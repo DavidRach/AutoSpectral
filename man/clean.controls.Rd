@@ -16,8 +16,11 @@ clean.controls(
   negative.n = asp$negative.n,
   positive.n = asp$positive.n,
   scatter.match = TRUE,
-  scrub = TRUE,
-  intermediate.figures = FALSE
+  scrub = FALSE,
+  intermediate.figures = FALSE,
+  main.figures = TRUE,
+  parallel = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -65,6 +68,17 @@ data, provided there are clean data in \code{flow.control}.}
 show the inner workings of the cleaning, including definition of low-AF cell
 gates on the PCA-unmixed unstained and spectral ribbon plots of the AF
 exclusion from the unstained. Default is \code{FALSE} to speed up processing.}
+
+\item{main.figures}{Logical, if \code{TRUE} creates the main figures to show the
+impact of intrusive autofluorescent event removal and scatter-matching for
+the negatives.}
+
+\item{parallel}{Logical, default is \code{FALSE}, in which case parallel processing
+will not be used. Parallel processing will likely be faster when many small
+files are read in. If the data is larger, parallel processing may not
+accelerate the process much.}
+
+\item{verbose}{Logical, default is \code{TRUE}. Set to \code{FALSE} to suppress messages.}
 }
 \value{
 Returns a modified \code{flow.control} with the original data intact. New, cleaned

@@ -29,20 +29,27 @@
 #' show the inner workings of the cleaning, including definition of low-AF cell
 #' gates on the PCA-unmixed unstained and spectral ribbon plots of the AF
 #' exclusion from the unstained.
+#' @param main.figures Logical, if `TRUE` creates the main figures to show the
+#' impact of intrusive autofluorescent event removal and scatter-matching for
+#' the negatives.
+#' @param parallel Logical, default is `FALSE`, in which case parallel processing
+#' will not be used. Parallel processing will likely be faster when many small
+#' files are read in. If the data is larger, parallel processing may not
+#' accelerate the process much.
+#' @param verbose Logical, default is `TRUE`. Set to `FALSE` to suppress messages.
 #'
 #' @return A list containing the expression data with autofluorescent events
 #' removed for each sample.
-#'
-#' @export
 
 run.af.removal <- function( clean.expr, af.removal.sample, spectral.channel,
                             peak.channel, universal.negative, asp, scatter.param,
                             negative.n = 500, positive.n = 1000,
                             scatter.match = TRUE,
-                            intermediate.figures = FALSE ) {
+                            intermediate.figures = FALSE, main.figures = TRUE,
+                            parallel = FALSE, verbose = TRUE ) {
 
   # set up parallel processing
-  if ( asp$parallel ){
+  if ( parallel ){
     future::plan( future::multisession, workers = asp$worker.process.n )
     options( future.globals.maxSize = asp$max.memory.n )
     lapply.function <- future.apply::future_lapply
@@ -54,7 +61,8 @@ run.af.removal <- function( clean.expr, af.removal.sample, spectral.channel,
 
     remove.af( clean.expr, sample.name, spectral.channel, peak.channel,
                universal.negative, asp, scatter.param,
-               negative.n, positive.n, scatter.match, intermediate.figures )
+               negative.n, positive.n, scatter.match,
+               main.figures, intermediate.figures, verbose )
 
   } )
 

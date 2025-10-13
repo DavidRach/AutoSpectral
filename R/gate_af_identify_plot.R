@@ -24,8 +24,6 @@
 #' Prepare using `get.autospectral.param`
 #'
 #' @return Saves the plot as a JPEG file in the specified directory.
-#'
-#' @export
 
 gate.af.identify.plot <- function( gate.data, samp, gate.region,
                                    gate.bound.density, asp ) {

@@ -15,16 +15,22 @@
 #' @param all.channels A character vector specifying all channels.
 #' @param asp The AutoSpectral parameter list.
 #' Prepare using `get.autospectral.param`
+#' @param figures Logical, if `TRUE` creates the main figures to show the
+#' impact of intrusive autofluorescent event removal and scatter-matching for
+#' the negatives.
+#' @param parallel Logical, default is `FALSE`, in which case parallel processing
+#' will not be used. Parallel processing will likely be faster when many small
+#' files are read in. If the data is larger, parallel processing may not
+#' accelerate the process much.
+#' @param verbose Logical, default is `TRUE`. Set to `FALSE` to suppress messages.
 #'
 #' @return A list containing the cleaned expression data for each sample.
-#'
-#' @export
 
-run.peacoQC <- function( expr.data, spectral.channel,
-                              all.channels, asp ){
+run.peacoQC <- function( expr.data, spectral.channel, all.channels, asp,
+                         figures = TRUE, parallel = FALSE, verbose = TRUE ) {
 
   # set up parallel processing
-  if ( asp$parallel ){
+  if ( parallel ){
     plan( multisession, workers = asp$worker.process.n )
     options( future.globals.maxSize = asp$max.memory.n )
     lapply.function <- future_lapply
@@ -57,7 +63,8 @@ run.peacoQC <- function( expr.data, spectral.channel,
   clean.expr <- lapply.function( names( expr.data ), function( sample.name ) {
     do.peacoQC( expr.data[[ sample.name ]], sample.name,
                 spectral.channel, biexp.transform, transform.inv,
-                asp$figure.peacoqc.dir, time.param, all.channels, asp )
+                asp$figure.peacoqc.dir, time.param, all.channels,
+                asp$peacoqc.method, figures, verbose )
 
   }, future.seed = asp$gate.downsample.seed )
 

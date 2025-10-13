@@ -9,7 +9,6 @@
 #' @param error.msg Message to be returned to the user if condition is FALSE.
 #'
 #' @return Returns error.msg and breaks if FALSE, no return if TRUE.
-#' @export
 
 check.critical <- function( condition, error.msg )
 {

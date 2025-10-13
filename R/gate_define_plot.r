@@ -26,8 +26,6 @@
 #' Prepare using `get.autospectral.param`
 #'
 #' @return Saves the plot as a JPEG file in the specified directory.
-#'
-#' @export
 
 gate.define.plot <- function( samp, gate.data, gate.marker, gate.bound,
                               gate.region, gate.population, scatter.and.channel.label, asp )

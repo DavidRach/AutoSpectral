@@ -105,9 +105,9 @@ for AF.
 
 We get output plots of the AF signatures in the `figure_autofluorescence` folder.
 
-![Lung AF](figures/Lung AF 20250909.jpg)
-![Lung AF](figures/Brain AF 20250909.jpg)
-![Lung AF](figures/Spleen AF 20250909.jpg)
+![Lung AF](figures/Lung_AF_20250909.jpg)
+![Lung AF](figures/Brain_AF_20250909.jpg)
+![Lung AF](figures/Spleen_AF_20250909.jpg)
 
 From the variability, I think you can start to understand why it's really hard
 to get good results with single or multiple AF extraction using the standard
@@ -118,7 +118,7 @@ you can probably create some nicer looking plots with some metaclustering or
 a dendrogram to group the AF signatures. We don't use metaclustering on the SOM
 nodes because this gives worse results in the unmixing.
 
-![Lung AF heatmap](figures/Lung AF spectral_heatmap.jpg)
+![Lung AF heatmap](figures/Lung_AF_spectral_heatmap.jpg)
 
 Okay, now we're ready to unmix with per-cell AF extraction.
 

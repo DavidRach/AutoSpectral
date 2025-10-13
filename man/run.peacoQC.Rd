@@ -4,7 +4,15 @@
 \alias{run.peacoQC}
 \title{Run PeacoQC}
 \usage{
-run.peacoQC(expr.data, spectral.channel, all.channels, asp)
+run.peacoQC(
+  expr.data,
+  spectral.channel,
+  all.channels,
+  asp,
+  figures = TRUE,
+  parallel = FALSE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{expr.data}{A list containing the expression data for each sample.}
@@ -15,6 +23,17 @@ run.peacoQC(expr.data, spectral.channel, all.channels, asp)
 
 \item{asp}{The AutoSpectral parameter list.
 Prepare using \code{get.autospectral.param}}
+
+\item{figures}{Logical, if \code{TRUE} creates the main figures to show the
+impact of intrusive autofluorescent event removal and scatter-matching for
+the negatives.}
+
+\item{parallel}{Logical, default is \code{FALSE}, in which case parallel processing
+will not be used. Parallel processing will likely be faster when many small
+files are read in. If the data is larger, parallel processing may not
+accelerate the process much.}
+
+\item{verbose}{Logical, default is \code{TRUE}. Set to \code{FALSE} to suppress messages.}
 }
 \value{
 A list containing the cleaned expression data for each sample.

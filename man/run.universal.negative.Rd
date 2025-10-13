@@ -17,7 +17,9 @@ run.universal.negative(
   asp,
   control.type,
   scatter.match,
-  intermediate.figures = FALSE
+  intermediate.figures = FALSE,
+  main.figures = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -54,6 +56,12 @@ is performed.}
 show the inner workings of the cleaning, including definition of low-AF cell
 gates on the PCA-unmixed unstained and spectral ribbon plots of the AF
 exclusion from the unstained. Default is \code{FALSE} to speed up processing.}
+
+\item{main.figures}{Logical, if \code{TRUE} creates the main figures to show the
+impact of intrusive autofluorescent event removal and scatter-matching for
+the negatives.}
+
+\item{verbose}{Logical, default is \code{TRUE}. Set to \code{FALSE} to suppress messages.}
 }
 \value{
 A list containing the processed expression data for each universal

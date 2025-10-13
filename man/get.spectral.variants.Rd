@@ -5,24 +5,36 @@
 \title{Get Spectral Variations for Fluorophores}
 \usage{
 get.spectral.variants(
-  flow.control,
+  control.dir,
+  control.def.file,
   asp,
   spectra,
+  af.spectra,
   n.cells = 2000,
   pos.quantile = 0.995,
   som.dim = 10,
   sim.threshold = 0.98,
-  plot.dir = NULL
+  figures = TRUE,
+  output.dir = NULL,
+  parallel = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
-\item{flow.control}{A list containing flow cytometry control data.}
+\item{control.dir}{File path to the single-stained control FCS files.}
+
+\item{control.def.file}{CSV file defining the single-color control file names,
+fluorophores they represent, marker names, peak channels, and gating requirements.}
 
 \item{asp}{The AutoSpectral parameter list.
 Prepare using \code{get.autospectral.param}}
 
 \item{spectra}{A matrix containing the spectral data. Fluorophores in rows,
 detectors in columns.}
+
+\item{af.spectra}{Spectral signatures of autofluorescences, normalized
+between 0 and 1, with fluorophores in rows and detectors in columns. Prepare
+using \code{get.af.spectra}.}
 
 \item{n.cells}{Numeric, default \code{2000}. Number of cells to use for defining
 the variation in spectra. Up to \code{n.cells} cells will be selected as positive
@@ -43,16 +55,28 @@ by \code{cosine.similarity} from the optimized spectrum for that fluorophore (fr
 \code{spectra}) will be excluded from output. This helps to exclude autofluorescence
 contamination.}
 
-\item{plot.dir}{File path to whether the figures will be saved. Default is
-\code{NULL}, in which case \code{asp$variant.dir} will be used.}
+\item{figures}{Logical, controls whether the variation in spectra for each
+fluorophore is plotted in \code{output.dir}. Default is \code{TRUE}.}
+
+\item{output.dir}{File path to whether the figures and .rds data file will be
+saved. Default is \code{NULL}, in which case \code{asp$variant.dir} will be used.}
+
+\item{parallel}{Logical, default is \code{FALSE}, in which case sequential processing
+will be used. Parallel processing will likely be faster when many small
+files are read in. If the data is larger, parallel processing may not
+accelerate the process much or may fail outright.}
+
+\item{verbose}{Logical, default is \code{TRUE}. Set to \code{FALSE} to suppress messages.}
 }
 \value{
 A vector with the indexes of events inside the initial gate.
 }
 \description{
-This function cycles through all the fluorophores defined in \code{flow.control},
+This function cycles through all the fluorophores defined in \code{control.def.file},
 identifying variations in spectral profiles. It does this by performing SOM
 clustering on the positive events in the cleaned control data. The output is
 saved as an .rds file, and figures summarizing the variation are saved, if
-desired.
+desired. Note that the .rds file contains all the needed information for
+downstream processing (per-cell unmixing), so you can just load that using
+the \code{readRDS} function) rather than re-running this process.
 }

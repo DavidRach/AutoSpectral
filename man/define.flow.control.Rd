@@ -4,7 +4,14 @@
 \alias{define.flow.control}
 \title{Define Flow Control}
 \usage{
-define.flow.control(control.dir, control.def.file, asp, gate = TRUE)
+define.flow.control(
+  control.dir,
+  control.def.file,
+  asp,
+  gate = TRUE,
+  parallel = FALSE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{control.dir}{File path to the single-stained control FCS files.}
@@ -19,6 +26,13 @@ using \code{get.autospectral.param}.}
 be performed. If \code{FALSE}, the FCS files will be imported without automatically
 generated gates applied. That is, all data in the files will be used. This is
 intended to allow the user to pre-gate the files in commercial software.}
+
+\item{parallel}{Logical, default is \code{FALSE}, in which case parallel processing
+will not be used. Parallel processing will likely be faster when many small
+files are read in. If the data is larger, parallel processing may not
+accelerate the process much.}
+
+\item{verbose}{Logical, default is \code{TRUE}. Set to \code{FALSE} to suppress messages.}
 }
 \value{
 A list (\code{flow.control}) with the following components:

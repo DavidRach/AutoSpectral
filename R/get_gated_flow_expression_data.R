@@ -23,8 +23,6 @@
 #' Prepare using `get.autospectral.param`
 #'
 #' @return A matrix with the gated expression data.
-#'
-#' @export
 
 get.gated.flow.expression.data <- function( samp, file.name, control.dir,
                                             scatter.and.spectral.channel,

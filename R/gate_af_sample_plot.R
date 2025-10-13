@@ -27,8 +27,6 @@
 #' `cividis`, `rocket`, `mako` and `turbo`.
 #'
 #' @return Saves the plot as a JPEG file in the specified directory.
-#'
-#' @export
 
 gate.af.sample.plot <- function( plot.data, samp, af.boundary.upper, asp,
                                  max.points = 1e5,

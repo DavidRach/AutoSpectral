@@ -17,8 +17,6 @@
 #' Prepare using `get.autospectral.param`
 #'
 #' @return A matrix containing the sampled events from the FCS file.
-#'
-#' @export
 
 sample.fcs.file <- function( file.name, control.dir, downsample.n, asp ) {
 

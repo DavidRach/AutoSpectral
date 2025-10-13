@@ -20,29 +20,33 @@
 #' Prepare using `get.autospectral.param`
 #' @param scatter.param Vector of scatter parameters.
 #' @param negative.n Integer. Number of events to include in the downsampled
-#' negative population. Default is `asp$negative.n`.
+#' negative population. Default is `500`.
 #' @param positive.n Integer. Number of events to include in the downsampled
-#' positive population. Default is `asp$positive.n`.
+#' positive population. Default is `1000`.
 #' @param scatter.match Logical, default is `TRUE`. Whether to select negative
 #' events based on scatter profiles matching the positive events. Defines a
 #' region of FSC and SSC based on the distribution of selected positive events.
+#' @param main.figures Logical, if `TRUE` creates the main figures to show the
+#' impact of intrusive autofluorescent event removal and scatter-matching for
+#' the negatives.
 #' @param intermediate.figures Logical, if `TRUE` returns additional figures to
 #' show the inner workings of the cleaning, including definition of low-AF cell
 #' gates on the PCA-unmixed unstained and spectral ribbon plots of the AF
 #' exclusion from the unstained.
+#' @param verbose Logical, default is `TRUE`. Set to `FALSE` to suppress messages.
 #'
 #' @return A matrix containing the expression data with autofluorescent events
 #' removed for the sample.
-#'
-#' @export
 
 remove.af <- function( clean.expr, samp, spectral.channel, peak.channel,
                        universal.negative, asp, scatter.param,
-                       negative.n, positive.n,
+                       negative.n = 500, positive.n = 1000,
                        scatter.match = TRUE,
-                       intermediate.figures = FALSE ) {
+                       main.figures = TRUE,
+                       intermediate.figures = FALSE,
+                       verbose = TRUE ) {
 
-  if ( asp$verbose )
+  if ( verbose )
     message( paste( "\033[34m", "Identifying autofluorescence contamination in",
                     samp, "\033[0m" ) )
 
@@ -147,7 +151,7 @@ remove.af <- function( clean.expr, samp, spectral.channel, peak.channel,
   # optionally later pass af.peak, fluor.peak as variable names
   af.boundaries <- fit.af.spline( af.data, non.af.data, asp )
 
-  if ( asp$verbose )
+  if ( verbose )
     message( paste( "\033[34m", "Removing autofluorescence contamination in",
                     samp, "\033[0m" ) )
 
@@ -170,8 +174,8 @@ remove.af <- function( clean.expr, samp, spectral.channel, peak.channel,
   gate.neg.idx <- which( gate.population.pip == 0 )
 
   # plot data pre/post-removal
-  if ( asp$figures ) {
-    if ( asp$verbose )
+  if ( main.figures ) {
+    if ( verbose )
       message( paste( "\033[34m", "Plotting AF removal for", samp, "\033[0m" ) )
 
     # set limit for plotting of gate
@@ -216,7 +220,7 @@ remove.af <- function( clean.expr, samp, spectral.channel, peak.channel,
   }
 
   if ( scatter.match ) {
-    if ( asp$verbose )
+    if ( verbose )
       message( paste( "\033[34m", "Getting scatter-matched negatives for",
                       samp, "\033[0m" ) )
 
@@ -289,7 +293,7 @@ remove.af <- function( clean.expr, samp, spectral.channel, peak.channel,
 
     neg.scatter.matched <- expr.data.neg[ neg.population.idx, ]
 
-    if ( asp$figures ) {
+    if ( main.figures ) {
       scatter.match.plot( pos.selected.expr, neg.scatter.matched, samp,
                           scatter.param, asp )
 
@@ -298,9 +302,7 @@ remove.af <- function( clean.expr, samp, spectral.channel, peak.channel,
                             spectral.channel, asp, samp )
 
     }
-
     return( rbind( pos.selected.expr, neg.scatter.matched ) )
-
   }
 
   return( clean.expr[[ samp ]][ gate.population.idx, ] )

@@ -13,8 +13,6 @@
 #' events to trim from both ends of the peak channel distribution.
 #'
 #' @return A matrix with the extreme events trimmed.
-#'
-#' @export
 
 trim.extreme.events <- function( expr.data, peak.channel, trim.factor ){
 

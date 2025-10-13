@@ -14,7 +14,8 @@ do.peacoQC(
   time.param,
   all.channels,
   method = "MAD",
-  figures = TRUE
+  figures = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -40,6 +41,8 @@ are \code{all}, \code{MAD} or \code{IT}. Default is \code{MAD}.}
 
 \item{figures}{Logical. Controls whether PeacoQC plots are created. Default
 is \code{TRUE}.}
+
+\item{verbose}{Logical, default is \code{TRUE}. Set to \code{FALSE} to suppress messages.}
 }
 \value{
 A matrix with the cleaned expression data.

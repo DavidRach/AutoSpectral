@@ -16,8 +16,6 @@
 #' @param set.resolution The resolution limit for the spectral channels.
 #'
 #' @return A matrix with the flow expression data.
-#'
-#' @export
 
 get.ungated.flow.expression.data <- function( samp, file.name, control.dir,
                                               scatter.and.spectral.channel,

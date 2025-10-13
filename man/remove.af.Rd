@@ -12,10 +12,12 @@ remove.af(
   universal.negative,
   asp,
   scatter.param,
-  negative.n,
-  positive.n,
+  negative.n = 500,
+  positive.n = 1000,
   scatter.match = TRUE,
-  intermediate.figures = FALSE
+  main.figures = TRUE,
+  intermediate.figures = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -36,19 +38,25 @@ Prepare using \code{get.autospectral.param}}
 \item{scatter.param}{Vector of scatter parameters.}
 
 \item{negative.n}{Integer. Number of events to include in the downsampled
-negative population. Default is \code{asp$negative.n}.}
+negative population. Default is \code{500}.}
 
 \item{positive.n}{Integer. Number of events to include in the downsampled
-positive population. Default is \code{asp$positive.n}.}
+positive population. Default is \code{1000}.}
 
 \item{scatter.match}{Logical, default is \code{TRUE}. Whether to select negative
 events based on scatter profiles matching the positive events. Defines a
 region of FSC and SSC based on the distribution of selected positive events.}
 
+\item{main.figures}{Logical, if \code{TRUE} creates the main figures to show the
+impact of intrusive autofluorescent event removal and scatter-matching for
+the negatives.}
+
 \item{intermediate.figures}{Logical, if \code{TRUE} returns additional figures to
 show the inner workings of the cleaning, including definition of low-AF cell
 gates on the PCA-unmixed unstained and spectral ribbon plots of the AF
 exclusion from the unstained.}
+
+\item{verbose}{Logical, default is \code{TRUE}. Set to \code{FALSE} to suppress messages.}
 }
 \value{
 A matrix containing the expression data with autofluorescent events

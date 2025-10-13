@@ -10,19 +10,17 @@
 #' sample.
 #' @param samp The sample identifier.
 #' @param peak.channels A vector of peak channels for the samples.
-#' @param negative.n The number of negative events to select.
-#' @param positive.n The number of positive events to select.
+#' @param negative.n Number of negative events to select, default `500`.
+#' @param positive.n Number of positive events to select, default `1000`.
 #' @param verbose Logical. Default is `TRUE`.
 #'
 #' @return A matrix with the selected expression data.
-#' @export
 
 downsample.control <- function( clean.expr.data, samp, peak.channels,
-                                negative.n, positive.n,
-                                verbose = TRUE ){
+                                negative.n = 500, positive.n = 1000,
+                                verbose = TRUE ) {
 
-  if ( verbose )
-    message( paste( "\033[34m", "Downsampling", samp, "\033[0m" ) )
+  if ( verbose ) message( paste( "\033[34m", "Downsampling", samp, "\033[0m" ) )
 
   # should just pass control's data
   pos.control.expr <- clean.expr.data[[ samp ]]
@@ -37,6 +35,6 @@ downsample.control <- function( clean.expr.data, samp, peak.channels,
   # recover full data
   selected.expr <- pos.control.expr[ names( c( pos.selected, neg.selected ) ), ]
 
-  selected.expr
+  return( selected.expr )
 
 }

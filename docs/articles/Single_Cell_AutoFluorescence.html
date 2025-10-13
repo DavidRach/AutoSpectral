@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">AutoSpectral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.5</span>
       </span>
     </div>
 
@@ -191,7 +191,7 @@ messy samples, you could play around with larger SOMs, but the default
 settings work well for mouse lung, which is pretty terrible for AF.</p>
 <p>We get output plots of the AF signatures in the
 <code>figure_autofluorescence</code> folder.</p>
-<p><img src="figures/Lung%20AF%2020250909.jpg" alt="Lung AF"><img src="figures/Brain%20AF%2020250909.jpg" alt="Lung AF"><img src="figures/Spleen%20AF%2020250909.jpg" alt="Lung AF"></p>
+<p><img src="figures/Lung_AF_20250909.jpg" alt="Lung AF"><img src="figures/Brain_AF_20250909.jpg" alt="Lung AF"><img src="figures/Spleen_AF_20250909.jpg" alt="Lung AF"></p>
 <p>From the variability, I think you can start to understand why it’s
 really hard to get good results with single or multiple AF extraction
 using the standard method.</p>
@@ -201,7 +201,7 @@ metaclustering or a dendrogram to group the AF signatures. We don’t use
 metaclustering on the SOM nodes because this gives worse results in the
 unmixing.</p>
 <div class="float">
-<img src="figures/Lung%20AF%20spectral_heatmap.jpg" alt="Lung AF heatmap"><div class="figcaption">Lung AF heatmap</div>
+<img src="figures/Lung_AF_spectral_heatmap.jpg" alt="Lung AF heatmap"><div class="figcaption">Lung AF heatmap</div>
 </div>
 <p>Okay, now we’re ready to unmix with per-cell AF extraction.</p>
 <p>If you are working with multiple sources like in this example, be

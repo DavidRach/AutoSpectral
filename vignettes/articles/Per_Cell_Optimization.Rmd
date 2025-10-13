@@ -81,7 +81,8 @@ set to exclude anything less than 0.98.
 It's important to bear in mind that we're only allowing variation within the range
 seen in the single-colour control, nothing more.
 
-We get output plots of the variant signatures, which should appear in the `figure_spectral_variants` folder, unless you change the `plot.dir` argument from 
+We get output plots of the variant signatures, which should appear in the 
+`figure_spectral_variants` folder, unless you change the `plot.dir` argument from 
 the default `NULL`.
 
 Here's what BUV661 really looks like, at least on the anti-mouse CD19 BUV661 I

@@ -23,18 +23,23 @@
 #' are `all`, `MAD` or `IT`. Default is `MAD`.
 #' @param figures Logical. Controls whether PeacoQC plots are created. Default
 #' is `TRUE`.
+#' @param verbose Logical, default is `TRUE`. Set to `FALSE` to suppress messages.
 #'
 #' @return A matrix with the cleaned expression data.
-#' @export
 
 do.peacoQC <- function( dirty.expr, sample.name, spectral.channel,
                         biexp.transform, transform.inv,
                         output.dir, time.param, all.channels,
                         method = "MAD",
-                        figures = TRUE ) {
+                        figures = TRUE,
+                        verbose = TRUE ) {
 
-  if ( !dir.exists( output.dir ) )
+  if ( !dir.exists( output.dir ) & figures )
     dir.create( output.dir )
+
+  if ( verbose )
+    message( paste( "\033[34m", "Performing time-based cleaning of", sample.name,
+                    "using PeacoQC", "\033[0m" ) )
 
   transform.list <- transformList( spectral.channel, biexp.transform )
 
@@ -55,10 +60,9 @@ do.peacoQC <- function( dirty.expr, sample.name, spectral.channel,
     report = FALSE, time_channel_parameter = time.param
     ) )
 
-  if ( figures ){
+  if ( figures )
     PlotPeacoQC( dirty.ff, spectral.channel, output.dir,
                  display_peaks = peacoQC.result )
-  }
 
   transform.list <- transformList( spectral.channel, transform.inv )
 
@@ -66,6 +70,6 @@ do.peacoQC <- function( dirty.expr, sample.name, spectral.channel,
 
   clean.expr <- flowCore::exprs( peacoQC.result$FinalFF )[ , all.channels ]
 
-  clean.expr
+  return( clean.expr )
 
 }

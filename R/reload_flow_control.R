@@ -35,6 +35,10 @@ reload.flow.control <- function( control.dir, control.def.file, asp ) {
   flow.spectral.channel <- flow.set.channel[ !grepl( non.spectral.channel,
                                                      flow.set.channel ) ]
 
+  if ( grepl( "Discover", asp$cytometer ) )
+    flow.spectral.channel <- flow.spectral.channel[ grep( asp$spectral.channel,
+                                                          flow.spectral.channel ) ]
+
   flow.spectral.channel.n <- length( flow.spectral.channel )
 
   control.table <- read.csv( control.def.file, na.strings = "",
