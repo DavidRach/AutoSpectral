@@ -33,7 +33,7 @@ create.control.file(control.dir, asp)
 ```
 
 For now, we'll use the pre-filled control file, which you can get from Mendeley 
-Data.
+Data at https://data.mendeley.com/datasets/xzt3h3gnx9/1
 ```{r, eval=FALSE}
 control.file <- "~/AutoSpectral_data/Aurora_example/aurora_fcs_control_file.csv"
 ```
@@ -85,8 +85,11 @@ Spectral heatmap:
 ![Spectral heatmap](figures/Viridis_spectral_heatmap.jpg)
 
 Now we can unmix.
-By default, AutoSpectral extracts a single AF parameter. To unmix without AF 
-extraction, remove this from the spectral matrix:
+In this example we're just going to cover basic unmixing using ordinary least 
+squares, which is what you'll get in SpectroFlo on the Aurora. By default, 
+AutoSpectral extracts a single AF parameter, much like selecting the "spectral 
+unmixing with autofluorescence extraction" option. To unmix without AF extraction, 
+remove this from the spectral matrix:
 ```{r, eval=FALSE}
 fluorophore.only.spectra <- spectra[rownames(spectra) != "AF", ]
 ```

@@ -23,6 +23,8 @@ library(AutoSpectral)
 To start, we need to get the relevant parameters for the cytometer. This tells
 AutoSpectral a lot about what you're doing. In this example, we'll use data from
 the Cytek Aurora. These are the same data as in the Aurora_example article.
+https://data.mendeley.com/datasets/xzt3h3gnx9/1
+
 ```{r, eval=FALSE}
 asp <- get.autospectral.param(cytometer = "aurora")
 ```
@@ -72,7 +74,7 @@ automatically be used to generate a median autofluorescence signature, as you
 might get with single-parameter autofluorescence extraction on most cytometers.
 Don't change the name of the `Unstained` cell sample--leave it as `AF`.
 
-Next we have `control.type`. This is important to get right. For Aurora samples
+Next, we have `control.type`. This is important to get right. For Aurora samples,
 as part of a Reference Group, you automatically get `Cells` or `Beads` as part
 of the file name, and AutoSpectral will parse this, as it has done here. For
 other platforms, you'll need to enter the type of control for each single-stained

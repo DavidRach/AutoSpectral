@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">AutoSpectral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.6</span>
       </span>
     </div>
 
@@ -52,16 +52,25 @@
       <a href="../articles/Aurora_example.html">Aurora_example</a>
     </li>
     <li>
+      <a href="../articles/Cleaning.html">Cleaning</a>
+    </li>
+    <li>
       <a href="../articles/Control_File_example.html">Control_File_example</a>
     </li>
     <li>
       <a href="../articles/Gating.html">Gating</a>
     </li>
     <li>
+      <a href="../articles/Per_Cell_Optimization.html">Per Cell Optimization</a>
+    </li>
+    <li>
       <a href="../articles/Plotting.html">Plotting</a>
     </li>
     <li>
       <a href="../articles/Reload_AutoSpectral.html">Re-running_AutoSpectral</a>
+    </li>
+    <li>
+      <a href="../articles/Single_Cell_AutoFluorescence.html">Single Cell Autofluorescence</a>
     </li>
   </ul>
 </li>
@@ -97,7 +106,10 @@
     
     
 <p>In this article, let’s look at a couple of the functions that
-AutoSpectral offers for plotting your spectra and data.</p>
+AutoSpectral offers for plotting your spectra and data. AutoSpectral
+isn’t intended to replace flow analysis software like FlowJo or FCS
+Express, but it’s essential to have some options for visualizing the
+outputs.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span> <span class="va"><a href="https://github.com/DrCytometer/AutoSpectral" class="external-link">AutoSpectral</a></span> <span class="op">)</span></span></code></pre></div>
 <p>Let’s load in some spectra, here from OMIP-102.</p>
@@ -143,7 +155,9 @@ fluorophores:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/spectral.trace.html">spectral.trace</a></span><span class="op">(</span> <span class="va">chorus.spectra</span>, title <span class="op">=</span> <span class="st">"OMIP102"</span>, split.lasers <span class="op">=</span> <span class="cn">TRUE</span> <span class="op">)</span></span></code></pre></div>
 <p><img src="figures/OMIP102_by_laser.jpg" alt="Spectral Trace"> In
 this case, the laser data are out of order because OMIP-102 was produced
-on an early version of the BD FACSDiscoverS8.</p>
+on an early version of the BD FACSDiscoverS8. I’ll fix this eventually,
+but it hasn’t been an issue on any other data I’ve tried unless the
+files have been exported by FlowJo first.</p>
 <p>We can create a cosine similarity matrix plot in one of two ways.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cosine.similarity.plot.html">cosine.similarity.plot</a></span><span class="op">(</span> <span class="va">chorus.spectra</span>, title <span class="op">=</span> <span class="st">"Cosine_OMIP102"</span>, </span>
@@ -238,9 +252,12 @@ implemented a rainbow palette like FlowJo has yet.</p>
 <div class="float">
 <img src="figures/OMIP102_biplot2.jpg" alt="OMIP102 biplot"><div class="figcaption">OMIP102 biplot</div>
 </div>
-<p>Currently, there’s a limit on the amount of compression that can be
-applied using the biexponential scale. I’ll fix that later. You can,
-however, apply less compression around zero.</p>
+<p>Change the width basis parameter to compress the data more or less
+around zero. As we’re using a replica of the FlowJo biexponential
+transform in R, the width basis caps out at -1000. I’ve rigged it so
+that putting in values less than -1000 will increase compression by
+altering the positive log decades, the other parameter you can use in
+FlowJo.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/create.biplot.html">create.biplot</a></span><span class="op">(</span> <span class="va">omip102.data</span>,</span>
 <span>               x.dim <span class="op">=</span> <span class="st">"BUV395-A"</span>, y.dim <span class="op">=</span> <span class="st">"BUV496-A"</span>,</span>

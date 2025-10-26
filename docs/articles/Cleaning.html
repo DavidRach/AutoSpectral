@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">AutoSpectral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.6</span>
       </span>
     </div>
 
@@ -61,10 +61,16 @@
       <a href="../articles/Gating.html">Gating</a>
     </li>
     <li>
+      <a href="../articles/Per_Cell_Optimization.html">Per Cell Optimization</a>
+    </li>
+    <li>
       <a href="../articles/Plotting.html">Plotting</a>
     </li>
     <li>
       <a href="../articles/Reload_AutoSpectral.html">Re-running_AutoSpectral</a>
+    </li>
+    <li>
+      <a href="../articles/Single_Cell_AutoFluorescence.html">Single Cell Autofluorescence</a>
     </li>
   </ul>
 </li>
@@ -103,7 +109,7 @@
 offers for cleaning your single-stained control data.</p>
 <p>If you want to follow along with this, you can download the data for
 this set from Mendeley Data. Alternatively, adapt it to your own
-samples.</p>
+samples. <a href="https://data.mendeley.com/datasets/y2zp5xx2hg/2" class="external-link uri">https://data.mendeley.com/datasets/y2zp5xx2hg/2</a></p>
 <p>First off, what do we mean by “cleaning”? When we use single-stained
 cells, they are never really single colour controls. There’s always
 autofluoresences. This is true for beads in a way–they have
@@ -201,9 +207,10 @@ all the gated data.</p>
 <p><img src="figures/Cleaning_RLM_spectral_heatmap.jpg" alt="Cell RLM spectra"> See those horizontal line? That’s the
 autofluorescence “dirt” in the controls. An autofluorescence spectrum is
 across the bottom and there’s some similarity.</p>
-<div class="float">
-<img src="figures/Cleaning_RLM_cosine_similarity.jpg" alt="Cell RLM spectra"><div class="figcaption">Cell RLM spectra</div>
-</div>
+<p><img src="figures/Cleaning_RLM_cosine_similarity.jpg" alt="Cell RLM spectra"> Keep an eye on that mixing matrix condition
+number as we progress through the cleaning steps. The condition number
+more or less tells you how much trouble you’ll have unmixing the data
+(lower is better).</p>
 <p>It’s recommended to at least do the first cleaning step: setting
 universal negatives. This restricts the calculations to the brightest
 events plus scatter-matched negative events from the universal negative.
@@ -295,8 +302,8 @@ doesn’t do so well with beads.</p>
 <img src="figures/AF_removal_BUV615.jpg" alt="BUV615 control"><div class="figcaption">BUV615 control</div>
 </div>
 <p>We also get spectral ribbon plots, this time to show us what the data
-look like with and without the removal process in place. You’ll
-definitely want to check these.</p>
+look like with and without the removal process in place. You’ll want to
+check these because they’ll help you appreciate what’s going on.</p>
 <div class="float">
 <img src="figures/AF_removal_BUV615_spectral_ribbon_plot.jpg" alt="BUV615 control"><div class="figcaption">BUV615 control</div>
 </div>
@@ -304,7 +311,7 @@ definitely want to check these.</p>
 across the top, which is honestly just a bunch of noise. With the
 cleaned data in the middle, though, we can start to pick out the two
 expected peaks for BUV615: middle UV (UV10) and narrow YG (YG3). It’s
-just a hint, but it’s there. And across the bottome, the junk we’re
+just a hint, but it’s there. And across the bottom, the junk we’re
 excluding, which is basically a bunch of macrophages getting in the
 way.</p>
 <p>We can now extract the spectra using the cleaned data without AF
@@ -316,9 +323,8 @@ events.</p>
 <div class="float">
 <img src="figures/Cleaning_Cells_AF_Removed_heatmap.jpg" alt="Cell AF Removal spectra"><div class="figcaption">Cell AF Removal spectra</div>
 </div>
-<div class="float">
-<img src="figures/Cells_AF_removed_similarity.jpg" alt="Spectral changes"><div class="figcaption">Spectral changes</div>
-</div>
+<p><img src="figures/Cells_AF_removed_similarity.jpg" alt="Spectral changes"> Remember where we started with the condition
+number? It was over 80. Same panel, same controls, different result.</p>
 <p>What has changed with this cleaning procedure?</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">delta.cells.rlm.af</span> <span class="op">&lt;-</span> <span class="va">spectra.cells.rlm</span> <span class="op">-</span> <span class="va">spectra.cells.af</span></span>
@@ -329,6 +335,8 @@ events.</p>
 <div class="float">
 <img src="figures/AF_removal_change_heatmap.jpg" alt="Spectral changes"><div class="figcaption">Spectral changes</div>
 </div>
+<p>A value of 0.5 corresponds to 50% peak emission, in other words, a
+massive change.</p>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">AutoSpectral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.6</span>
       </span>
     </div>
 
@@ -52,13 +52,25 @@
       <a href="../articles/Aurora_example.html">Aurora_example</a>
     </li>
     <li>
+      <a href="../articles/Cleaning.html">Cleaning</a>
+    </li>
+    <li>
       <a href="../articles/Control_File_example.html">Control_File_example</a>
     </li>
     <li>
       <a href="../articles/Gating.html">Gating</a>
     </li>
     <li>
+      <a href="../articles/Per_Cell_Optimization.html">Per Cell Optimization</a>
+    </li>
+    <li>
+      <a href="../articles/Plotting.html">Plotting</a>
+    </li>
+    <li>
       <a href="../articles/Reload_AutoSpectral.html">Re-running_AutoSpectral</a>
+    </li>
+    <li>
+      <a href="../articles/Single_Cell_AutoFluorescence.html">Single Cell Autofluorescence</a>
     </li>
   </ul>
 </li>
@@ -94,17 +106,19 @@
 
     
     
-<p>You may wish to return to an experiment to unmix it again. If you
-want to create new spectra, perhaps trying a new cleaning method or
-changing the gating, start as you would normally. If however, all you
-want to do is re-unmix or change the parameter names on the created FCS
-files, you don’t need to go through the whole process of loading the
-single-stained control files, gating, cleaning and extracting the
-spectra. In this article, we’re going to look at the short, quick
-workflow to allow you to return to a previous AutoSpectral run and go
-straight to unmixing. Note that this workflow can be adapted to use
-spectral matrices obtained using other methods, such as FlowJo or
-SpectroFlo, if you prefer. Some details on that at the end.</p>
+<p>In this article, we’ll cover some shortcuts to allow you to return to
+AutoSpectral once you’ve already run an experiment. You may wish to
+return to an experiment to unmix it again. If you want to create new
+spectra, perhaps trying a new cleaning method or changing the gating,
+start as you would normally. If however, all you want to do is re-unmix
+or change the parameter names on the created FCS files, you don’t need
+to go through the whole process of loading the single-stained control
+files, gating, cleaning and extracting the spectra. In this article,
+we’re going to look at the short, quick workflow to allow you to return
+to a previous AutoSpectral run and go straight to unmixing. Note that
+this workflow can be adapted to use spectral matrices obtained using
+other methods, such as FlowJo or SpectroFlo, if you prefer. Some details
+on that at the end.</p>
 <p>We’re going to start, as always, by loading AutoSpectral and setting
 the parameters for our cytometer. We also need the folder containing the
 single-stained controls and the control file spreadsheet. You should
@@ -144,6 +158,7 @@ we’re using weighted least squares by calling <code>WLS</code>.</p>
 current working directory, or, if you prefer, to the folder of your
 choice if you specify this to unmix.folder as an argument to
 <code>output.dir</code>.</p>
+<hr>
 <p>You can also load a spectral matrix you’ve prepared using something
 else. For instance, we can spectra that we isolate in FlowJo or directly
 pull them from the SpectroFlo Experiment file. Why would you want to do
@@ -169,7 +184,10 @@ Values. Then, right click on the plot and “Copy Content”. Paste this
 into your favorite spreadsheet program (e.g., Excel), which will
 probably give you a mess like this:</p>
 <div class="float">
-<img src="figures/Reformatting_FlowJo_Matrix.jpg" alt="FlowJo Matrix Formatting"><div class="figcaption">FlowJo Matrix Formatting</div>
+<img src="figures/FlowJo_matrix_formatting.png" alt="FlowJo Matrix Formatting"><div class="figcaption">FlowJo Matrix Formatting</div>
+</div>
+<div class="float">
+<img src="figures/Reformatted_FlowJo_Matrix.jpg" alt="FlowJo Matrix Formatting"><div class="figcaption">FlowJo Matrix Formatting</div>
 </div>
 <p>To reformat it, click on the clipboard icon and select “Use Text
 Import Wizard”. Select “delimited”, hit “Next”, then select “Comma” and
@@ -181,12 +199,13 @@ finally “Finish”.</p>
 <img src="figures/Reformatted_FlowJo_Matrix.jpg" alt="FlowJo Matrix Reformatted"><div class="figcaption">FlowJo Matrix Reformatted</div>
 </div>
 <p>The spectra are normalized to 100 in FlowJo, whereas in AutoSpectral
-and in SpectroFlo everything is normalized to 1. This doesn’t matter as
-long as all the spillover rows are normalized to the same maximum value.
-If you start combining data from different sources with different
-normalization schemes, re-normalize before unmixing or the normalization
-will carry over into the scaling of the unmixed data, which you don’t
-want.</p>
+and in SpectroFlo everything is normalized to 1. You’ll need to
+re-normalize to 1 (i.e., divide by 100) if you want to use this for
+unmixing. If you start combining data from different sources with
+different normalization schemes, re-normalize before unmixing or the
+normalization will carry over into the scaling of the unmixed data,
+which you don’t want. This renormalization happens automatically if you
+use the read.spectra function below.</p>
 <p>You should probably rename the stuff in column A to be the names of
 the fluorophores, as this is what you’ll be importing into R.</p>
 <p>Save the spreadsheet as a CSV file. Then you can read it into R as
@@ -223,6 +242,10 @@ control and where you have run the unmixing in Chorus.</p>
 <code class="sourceCode R"><span><span class="va">s8.fcs</span> <span class="op">&lt;-</span> <span class="st">"~/AutoSpectral_data/S8_data/BP0323502_1.fcs"</span></span>
 <span><span class="va">chorus.spectra</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read.bd.spectra.html">read.bd.spectra</a></span><span class="op">(</span><span class="va">s8.fcs</span><span class="op">)</span></span>
 <span><span class="va">chorus.spectra</span></span></code></pre></div>
+<p>A plea to instrument manufacturers: Please, please start doing what
+BD is doing. Including the fluorophore spectra used for the unmixing
+calculation in the FCS file provides really important information for QC
+and reproducibility.</p>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

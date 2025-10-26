@@ -9,6 +9,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+The aim of this article is to explain a bit more about how we go about optimizing the fluorophore signatures used for unmixing on a per-cell basis in AutoSpectral. Let me know if the explanation doesn't make sense. There are days when I think it's really weird that we can actually figure this stuff out from the data. Also, this is not the only way of doing this, just the best one I've found so far.
+
 Okay, so we're basically going to play some Tetris with your unmixing. You can
 also think of this as "theme and variations" if you're musically inclined, or
 multiverse unmixing, if you prefer comics.
@@ -130,7 +132,7 @@ electronic noise and measurement error in the mix. Anyway, we get some cells wit
 more red emission and some with less, which will create variability in amount of
 red signal from BUV661. This means that if we put a fluorophore in our unmixing
 that uses R1 and/or R2 heavily, say APC, we will observe variability in the cells
-that are positive for BUV661 with respect to APC. Hence, spillover spread.
+that are positive for BUV661 with respect to APC. Hence, spillover spread. There are some broader implications here for panel design and other issues in the field, I think.
 
 Here's PE-Vio770 (anti-ACSA-2), which is essentially PE-Cy7. See that there's a
 wide light blue region around YG1, which is where the base donor PE molecule emits.
@@ -167,7 +169,7 @@ determining the variation in each cell's spectral signatures, but the other
 options I have tried result in an increase in unmixing-dependent spread due to
 the carryover of noise.
 
-Anyway, running this in pure R is slow. The faster implementation is in C++ and
+Anyway, running this in pure R is exceedingly slow. The faster implementation is in C++ and
 requires installation of `AutoSpectralRcpp`. I strongly encourage you to install
 that prior to running unmixing as below. Also, be sure that you have the fast 
 BLAS and LAPACK installed. Please reach out if you have suggestions for faster implementation (I'm not a computer scientist).
@@ -249,5 +251,13 @@ unmix.fcs( file.path( fully.stained.dir, "C3 Lung_GFP_003_Samples.fcs" ),
            speed = "slow" )
 ```
 
+To demonstrate the effectiveness and accuracy of this approach, we created a set of synthetic data. In this 42-colour data set from the Aurora, BUV661 and APC are used to detect CD19 and Foxp3, markers that are not co-expressed. We created a set of data in silico where the raw data for BUV661+ and APC+ events (based on OLS unmixing) were combined or maintained as separate original events. In this way, ground truth is available for BUV661+, APC+ and BUV661+APC+ events. When unmixed using OLS, populations containing BUV661 suffered from misclassification with respect to a positivity threshold for APC set based on a value double that of the 99.5th percentile on the unstained sample. These false positivity errors were reduced when per-cell spectral selection was performed, and the median absolute deviation of ground truth BUV661+APC- events in the APC channel was reduced from 2194 to 723. 
 
+![Synthetic per-cell fluorophore optimization](figures/Synthetic_perCell_fluor.jpg)
+Synthetic data showing that per-cell optimization of the fluorophore signatures reduces spillover spread.
+
+Correspondingly, the cosine similarity between the model’s predictions for BUV661 and the actual data for BUV661 was closer to 1 (identity), consistent with more accurate modelling of the underlying data.
+
+![Matching the underlying spectrum](figures/perCellFluor_similarity.jpg)
+Distribution of cosine similarity values between the ground truth and the assigned spectrum for BUV661. Comparison between standard OLS unmixing and AutoSpectral with per-cell fluorophore optimization on synthetic data. Stats by Komogorov-Smirnov test.
 

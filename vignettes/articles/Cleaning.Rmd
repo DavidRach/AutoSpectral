@@ -12,6 +12,7 @@ knitr::opts_chunk$set(
 In this article, we'll try to cover the functions that AutoSpectral offers for cleaning your single-stained control data.
 
 If you want to follow along with this, you can download the data for this set from Mendeley Data. Alternatively, adapt it to your own samples.
+https://data.mendeley.com/datasets/y2zp5xx2hg/2
 
 First off, what do we mean by "cleaning"? When we use single-stained cells, they are never really single colour controls. There's always autofluoresences. This is true for beads in a way--they have background--however with beads, the background is homogeneous (hopefully), whereas with cells we are almost always working with a heterogenous mixtures. That means some cells are more autofluorescent than others, and we can get some cells popping up as "positive" in your data for the fluorophores. AutoSpectral provides some tools to help reduce the influence of these problems, aiming to give you cleaner spectra. Cleaner spectra should lead to more accurate, more precise and more reproducible unmixing.
 
@@ -71,7 +72,7 @@ spectra.cells.rlm <- get.fluorophore.spectra( flow.control.cells, asp,
 See those horizontal line? That's the autofluorescence "dirt" in the controls. An autofluorescence spectrum is across the bottom and there's some similarity.
 
 ![Cell RLM spectra](figures/Cleaning_RLM_cosine_similarity.jpg)
-
+Keep an eye on that mixing matrix condition number as we progress through the cleaning steps. The condition number more or less tells you how much trouble you'll have unmixing the data (lower is better).
 
 It's recommended to at least do the first cleaning step: setting universal negatives. This restricts the calculations to the brightest events plus scatter-matched negative events from the universal negative. This speeds things up considerably.
 
@@ -146,11 +147,11 @@ Of course, a good solution might be to use compensation beads for controls like 
 
 ![BUV615 control](figures/AF_removal_BUV615.jpg)
 
-We also get spectral ribbon plots, this time to show us what the data look like with and without the removal process in place. You'll definitely want to check these.
+We also get spectral ribbon plots, this time to show us what the data look like with and without the removal process in place. You’ll want to check these because they'll help you appreciate what's going on.
 
 ![BUV615 control](figures/AF_removal_BUV615_spectral_ribbon_plot.jpg)
 
-This is one of the parts I really like. We get the original data across the top, which is honestly just a bunch of noise. With the cleaned data in the middle, though, we can start to pick out the two expected peaks for BUV615: middle UV (UV10) and narrow YG (YG3). It's just a hint, but it's there. And across the bottome, the junk we're excluding, which is basically a bunch of macrophages getting in the way.
+This is one of the parts I really like. We get the original data across the top, which is honestly just a bunch of noise. With the cleaned data in the middle, though, we can start to pick out the two expected peaks for BUV615: middle UV (UV10) and narrow YG (YG3). It's just a hint, but it's there. And across the bottom, the junk we're excluding, which is basically a bunch of macrophages getting in the way.
 
 We can now extract the spectra using the cleaned data without AF events.
 ```{r, eval=FALSE}
@@ -162,6 +163,7 @@ spectra.cells.af <- get.fluorophore.spectra( clean.control.cells.af, asp,
 ![Cell AF Removal spectra](figures/Cleaning_Cells_AF_Removed_heatmap.jpg)
 
 ![Spectral changes](figures/Cells_AF_removed_similarity.jpg)
+Remember where we started with the condition number? It was over 80. Same panel, same controls, different result.
 
 What has changed with this cleaning procedure?
 
@@ -175,7 +177,7 @@ create.heatmap( t( delta.cells.rlm.af ),
 
 ![Spectral changes](figures/AF_removal_change_heatmap.jpg)
 
-
+A value of 0.5 corresponds to 50% peak emission, in other words, a massive change.
 
 
 

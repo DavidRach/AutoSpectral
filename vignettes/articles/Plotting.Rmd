@@ -9,7 +9,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-In this article, let's look at a couple of the functions that AutoSpectral offers for plotting your spectra and data.
+In this article, let's look at a couple of the functions that AutoSpectral offers for plotting your spectra and data. AutoSpectral isn't intended to replace flow analysis software like FlowJo or FCS Express, but it's essential to have some options for visualizing the outputs.
 
 ```{r setup}
 library( AutoSpectral )
@@ -54,7 +54,7 @@ It's also better to split it up by laser when there are many fluorophores:
 spectral.trace( chorus.spectra, title = "OMIP102", split.lasers = TRUE )
 ```
 ![Spectral Trace](figures/OMIP102_by_laser.jpg)
-In this case, the laser data are out of order because OMIP-102 was produced on an early version of the BD FACSDiscoverS8.
+In this case, the laser data are out of order because OMIP-102 was produced on an early version of the BD FACSDiscoverS8. I'll fix this eventually, but it hasn't been an issue on any other data I've tried unless the files have been exported by FlowJo first.
 
 We can create a cosine similarity matrix plot in one of two ways.
 
@@ -141,7 +141,7 @@ create.biplot( omip102.data,
 ```
 ![OMIP102 biplot](figures/OMIP102_biplot2.jpg)
 
-Currently, there's a limit on the amount of compression that can be applied using the biexponential scale. I'll fix that later. You can, however, apply less compression around zero.
+Change the width basis parameter to compress the data more or less around zero. As we're using a replica of the FlowJo biexponential transform in R, the width basis caps out at -1000. I've rigged it so that putting in values less than -1000 will increase compression by altering the positive log decades, the other parameter you can use in FlowJo.
 
 ```{r, eval=FALSE}
 create.biplot( omip102.data,

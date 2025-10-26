@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">AutoSpectral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.6</span>
       </span>
     </div>
 
@@ -52,10 +52,25 @@
       <a href="../articles/Aurora_example.html">Aurora_example</a>
     </li>
     <li>
+      <a href="../articles/Cleaning.html">Cleaning</a>
+    </li>
+    <li>
       <a href="../articles/Control_File_example.html">Control_File_example</a>
     </li>
     <li>
+      <a href="../articles/Gating.html">Gating</a>
+    </li>
+    <li>
+      <a href="../articles/Per_Cell_Optimization.html">Per Cell Optimization</a>
+    </li>
+    <li>
+      <a href="../articles/Plotting.html">Plotting</a>
+    </li>
+    <li>
       <a href="../articles/Reload_AutoSpectral.html">Re-running_AutoSpectral</a>
+    </li>
+    <li>
+      <a href="../articles/Single_Cell_AutoFluorescence.html">Single Cell Autofluorescence</a>
     </li>
   </ul>
 </li>
@@ -101,7 +116,7 @@ lot of the information automatically. Let’s see how this works.</p>
 <p>To start, we need to get the relevant parameters for the cytometer.
 This tells AutoSpectral a lot about what you’re doing. In this example,
 we’ll use data from the Cytek Aurora. These are the same data as in the
-Aurora_example article.</p>
+Aurora_example article. <a href="https://data.mendeley.com/datasets/xzt3h3gnx9/1" class="external-link uri">https://data.mendeley.com/datasets/xzt3h3gnx9/1</a></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">asp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get.autospectral.param.html">get.autospectral.param</a></span><span class="op">(</span>cytometer <span class="op">=</span> <span class="st">"aurora"</span><span class="op">)</span></span></code></pre></div>
 <p>Create a folder containing only the single-stained control FCS files
@@ -147,8 +162,8 @@ be used to generate a median autofluorescence signature, as you might
 get with single-parameter autofluorescence extraction on most
 cytometers. Don’t change the name of the <code>Unstained</code> cell
 sample–leave it as <code>AF</code>.</p>
-<p>Next we have <code>control.type</code>. This is important to get
-right. For Aurora samples as part of a Reference Group, you
+<p>Next, we have <code>control.type</code>. This is important to get
+right. For Aurora samples, as part of a Reference Group, you
 automatically get <code>Cells</code> or <code>Beads</code> as part of
 the file name, and AutoSpectral will parse this, as it has done here.
 For other platforms, you’ll need to enter the type of control for each

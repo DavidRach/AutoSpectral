@@ -8,12 +8,7 @@ date: "2025-07-10"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-You may wish to return to an experiment to unmix it again. If you want to create
-new spectra, perhaps trying a new cleaning method or changing the gating, start
-as you would normally. If however, all you want to do is re-unmix or change the
-parameter names on the created FCS files, you don't need to go through the whole
-process of loading the single-stained control files, gating, cleaning and 
-extracting the spectra. In this article, we're going to look at the short, quick
+In this article, we'll cover some shortcuts to allow you to return to AutoSpectral once you've already run an experiment. You may wish to return to an experiment to unmix it again. If you want to create new spectra, perhaps trying a new cleaning method or changing the gating, start as you would normally. If however, all you want to do is re-unmix or change the parameter names on the created FCS files, you don't need to go through the whole process of loading the single-stained control files, gating, cleaning and extracting the spectra. In this article, we're going to look at the short, quick
 workflow to allow you to return to a previous AutoSpectral run and go straight 
 to unmixing. Note that this workflow can be adapted to use spectral matrices
 obtained using other methods, such as FlowJo or SpectroFlo, if you prefer. Some
@@ -68,7 +63,7 @@ working directory, or, if you prefer, to the folder of your choice if you
 specify this to unmix.folder as an argument to `output.dir`.
 
 
-
+----------
 
 You can also load a spectral matrix you've prepared using something else. For
 instance, we can spectra that we isolate in FlowJo or directly pull them from
@@ -91,13 +86,15 @@ https://docs.flowjo.com/flowjo/advanced-features/spectral-populations/
 
 ![FlowJo Spectral Viewer](figures/FlowJo_Spectral_Viewer.jpg)
 
-
 To get the spectral (spillover) data, first set the Spectral Viewer Plot to
 normalized values by going to Options/Normalized/Only Positive Values. Then,
 right click on the plot and "Copy Content". Paste this into your favorite
 spreadsheet program (e.g., Excel), which will probably give you a mess like this:
 
-![FlowJo Matrix Formatting](figures/Reformatting_FlowJo_Matrix.jpg)
+![FlowJo Matrix Formatting](figures/FlowJo_matrix_formatting.png)
+
+
+![FlowJo Matrix Formatting](figures/Reformatted_FlowJo_Matrix.jpg)
 
 
 To reformat it, click on the clipboard icon and select "Use Text Import Wizard".
@@ -109,12 +106,7 @@ Select "delimited", hit "Next", then select "Comma" and finally "Finish".
 ![FlowJo Matrix Reformatted](figures/Reformatted_FlowJo_Matrix.jpg)
 
 
-The spectra are normalized to 100 in FlowJo, whereas in AutoSpectral and in 
-SpectroFlo everything is normalized to 1. This doesn't matter as long as all
-the spillover rows are normalized to the same maximum value. If you start
-combining data from different sources with different normalization schemes,
-re-normalize before unmixing or the normalization will carry over into the 
-scaling of the unmixed data, which you don't want.
+The spectra are normalized to 100 in FlowJo, whereas in AutoSpectral and in SpectroFlo everything is normalized to 1. You'll need to re-normalize to 1 (i.e., divide by 100) if you want to use this for unmixing. If you start combining data from different sources with different normalization schemes, re-normalize before unmixing or the normalization will carry over into the scaling of the unmixed data, which you don’t want. This renormalization happens automatically if you use the read.spectra function below.
 
 You should probably rename the stuff in column A to be the names of the
 fluorophores, as this is what you'll be importing into R.
@@ -156,6 +148,9 @@ chorus.spectra <- read.bd.spectra(s8.fcs)
 chorus.spectra
 ```
 
+A plea to instrument manufacturers: Please, please start doing what BD is doing.
+Including the fluorophore spectra used for the unmixing calculation in the FCS 
+file provides really important information for QC and reproducibility.
 
 
 
