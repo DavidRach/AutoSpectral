@@ -11,7 +11,11 @@ spectral.variant.plot(
   save = FALSE,
   plot.width = NULL,
   plot.height = 5,
-  plot.dir = "./figure_spectral_variants"
+  plot.dir = "./figure_spectral_variants",
+  variant.fill.color = "red",
+  variant.fill.alpha = 0.7,
+  median.line.color = "black",
+  median.linewidth = 1
 )
 }
 \arguments{
@@ -37,6 +41,19 @@ of detectors in the data.}
 
 \item{plot.dir}{Directory where the files will be saved if \code{save = TRUE}.
 Default is \code{./figure_spectral_variants}.}
+
+\item{variant.fill.color}{Color for the shaded region indicating the range of
+variation in the spectra. Feeds to \code{fill} in \code{geom_ribbon}. Default is "red".}
+
+\item{variant.fill.alpha}{Transparency (alpha) for the color in
+\code{variant.fill.color}. How intense the color of the variant spectra will be.
+Default is \code{0.7}}
+
+\item{median.line.color}{Color for the line representing the median or
+optimized single spectrum. Default is "black".}
+
+\item{median.linewidth}{Width of the line for the single optimized spectrum.
+Default is \code{1}.}
 }
 \value{
 Plots are displayed to the Viewer. Files are saved if saving enabled.
