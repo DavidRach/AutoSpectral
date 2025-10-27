@@ -10,8 +10,9 @@
 AutoSpectral is AutoSpill updated for the spectral flow era.
 
 It is also pretty complex and newly released, so there will be bugs.
-Sorry. Please read the help pages and articles before submitting bug
-reports. There’s a lot of info there.
+Sorry. Please read the [help pages and
+articles](https://drcytometer.github.io/AutoSpectral/) before submitting
+bug reports. There’s a lot of info there.
 
 The goal of AutoSpectral is to provide you with the best possible
 spectral signatures of the fluorophores in your single-stained controls.
